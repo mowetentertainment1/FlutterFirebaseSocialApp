@@ -16,7 +16,7 @@ class LoginScreen extends StatelessWidget {
               child: Text(
                 "Skip",
                 style: GoogleFonts.poppins(
-                  color: Colors.white,
+                  color: Colors.blueAccent,
                   fontSize: 16,
                   fontWeight: FontWeight.w600,
                 ),
