@@ -37,25 +37,28 @@ class LoginScreen extends StatelessWidget {
           Text(
             "Dive into the world of Amigo",
             style: GoogleFonts.tajawal(
-              fontSize: 55,
+              fontSize: 45,
               fontWeight: FontWeight.bold,
               letterSpacing: 0.5,
             ),
             textAlign: TextAlign.center,
           ),
 
-          const SizedBox(height: 120),
+          const SizedBox(height: 100),
           const SightInBtn(),
-          const SizedBox(height: 40),
-          Text(
-            "By signing in you agree to our user agreement and acknowledge reading our privacy policy ",
-            style: GoogleFonts.tajawal(
-              fontSize: 15,
-              fontWeight: FontWeight.bold,
-              letterSpacing: 0.5,
+          const SizedBox(height: 60),
+        Padding(
+            padding:  const EdgeInsets.symmetric(horizontal: 10),
+            child: Text(
+              "By signing in you agree to our user agreement and acknowledge reading our privacy policy ",
+              style: GoogleFonts.tajawal(
+                fontSize: 15,
+                fontWeight: FontWeight.bold,
+                letterSpacing: 0.5,
+              ),
+              textAlign: TextAlign.center,
             ),
-            textAlign: TextAlign.center,
-          ),
+        ),
         ]));
   }
 }

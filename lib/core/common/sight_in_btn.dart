@@ -8,14 +8,14 @@ import '../../features/auth/controller/auth_controller.dart';
 class SightInBtn extends ConsumerWidget {
   const SightInBtn({super.key});
 
-  void signInWithGoogle(WidgetRef ref) {
-    ref.read(authControllerProvider).signInWithGoogle();
+  void signInWithGoogle(BuildContext context, WidgetRef ref) {
+    ref.read(authControllerProvider).signInWithGoogle(context  );
   }
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return ElevatedButton.icon(
-        onPressed: () => signInWithGoogle(ref),
+        onPressed: () => signInWithGoogle(context, ref),
         icon: Image.asset(Constants.googlePath, height: 60, width: 100),
         label: Text("Sign in with Google ",
             style: GoogleFonts.poppins(
