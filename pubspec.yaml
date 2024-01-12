@@ -44,6 +44,7 @@ dependencies:
   riverpod: ^2.4.9
   fpdart: ^1.1.0
   routemaster: ^1.0.1
+
 androidx:
   activity:activity:1:
     6:
@@ -55,17 +56,24 @@ dev_dependencies:
   build_runner:
   custom_lint:
   riverpod_generator: ^2.3.9
+  flutter_launcher_icons: ^0.13.1
   riverpod_lint: ^2.3.7
   # The "flutter_lints" package below contains a set of recommended lints to
   # encourage good coding practices. The lint set provided by the package is
   # activated in the `analysis_options.yaml` file located at the root of your
   # package. See that file for information about deactivating specific lint
   # rules and activating additional ones.
-  flutter_lints: ^2.0.0
+  flutter_lints: ^3.0.1
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
-
+flutter_launcher_icons:
+  android: true
+  ios: true
+  image_path: "assets/images/logo.jpg"
+  adaptive_icon_background: "#FFFFFF00"
+  adaptive_icon_foreground: "assets/images/logo.jpg"
+  adaptive_icon_mask: true
 # The following section is specific to Flutter packages.
 flutter:
 
@@ -78,7 +86,8 @@ flutter:
   assets:
     - assets/images/google.png
     - assets/images/loginEmote.png
-    - assets/images/logo.png
+    - assets/images/logo.jpg
+    - lib/features/community/repository/
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware
