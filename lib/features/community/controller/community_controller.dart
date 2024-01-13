@@ -8,8 +8,13 @@ import '../../../core/utils.dart';
 import '../../auth/controller/auth_controller.dart';
 import '../repository/community_repo.dart';
 
+final userCommunitiesProvider = StreamProvider((ref)  {
+  final communityController = ref.watch(communityControllerProvider.notifier);
+  return communityController.getCommunities();
+});
+
 final communityControllerProvider =
-    StateNotifierProvider.autoDispose<CommunityController, bool>((ref) {
+    StateNotifierProvider<CommunityController, bool>((ref) {
   return CommunityController(
       communityRepo: ref.watch(communityRepoProvider), ref: ref);
 });
@@ -43,5 +48,9 @@ class CommunityController extends StateNotifier<bool> {
               Routemaster.of(context).pop()
             });
     state = false;
+  }
+  Stream<List<Community>> getCommunities() {
+    final userUid = _ref.read(userProvider)?.uid ?? "";
+    return _communityRepo.getCommunities(userUid);
   }
 }
