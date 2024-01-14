@@ -27,6 +27,7 @@ class Assets {
   static const String providersFirebaseProviders = 'lib/core/providers/firebase_providers.dart';
   static const String repositoryAuthRepository = 'lib/features/auth/repository/auth_repository.dart';
   static const String repositoryCommunityRepo = 'lib/features/community/repository/community_repo.dart';
+  static const String screensCommunityScreen = 'lib/features/community/screens/community_screen.dart';
   static const String screensCreateCommunityScreen = 'lib/features/community/screens/create_community_screen.dart';
   static const String screensHomeScreen = 'lib/features/home/screens/home_screen.dart';
   static const String screensLoginScreen = 'lib/features/auth/screens/login_screen.dart';

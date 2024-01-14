@@ -8,9 +8,14 @@ import '../../../core/utils.dart';
 import '../../auth/controller/auth_controller.dart';
 import '../repository/community_repo.dart';
 
-final userCommunitiesProvider = StreamProvider((ref)  {
-  final communityController = ref.watch(communityControllerProvider.notifier);
-  return communityController.getCommunities();
+final userCommunitiesProvider = StreamProvider((ref) {
+  return ref.watch(communityControllerProvider.notifier).getCommunities();
+});
+final communityNameProvider =
+    StreamProvider.family((ref, String communityName) {
+  return ref
+      .watch(communityControllerProvider.notifier)
+      .getCommunityName(communityName);
 });
 
 final communityControllerProvider =
@@ -49,8 +54,13 @@ class CommunityController extends StateNotifier<bool> {
             });
     state = false;
   }
+
   Stream<List<Community>> getCommunities() {
     final userUid = _ref.read(userProvider)?.uid ?? "";
     return _communityRepo.getCommunities(userUid);
+  }
+
+  Stream<Community> getCommunityName(String communityName) {
+    return _communityRepo.getCommunityName(communityName);
   }
 }

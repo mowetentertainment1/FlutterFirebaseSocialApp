@@ -5,6 +5,8 @@ import 'package:untitled/core/common/error_text.dart';
 import 'package:untitled/core/common/loader.dart';
 import 'package:untitled/features/community/controller/community_controller.dart';
 
+import '../../../model/community_model.dart';
+
 class CommunityListDrawer extends ConsumerWidget {
   const CommunityListDrawer({super.key});
 
@@ -12,37 +14,42 @@ class CommunityListDrawer extends ConsumerWidget {
     Routemaster.of(context).push('/create-community');
   }
 
+  void navigateToCommunity(BuildContext context, Community community) {
+    Routemaster.of(context).push('/r/${community.name}');
+  }
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return Drawer(
         child: SafeArea(
             child: Column(
-              children: [
-                ListTile(
-                  title: const Text("Create a Community"),
-                  leading: const Icon(Icons.add),
-                  onTap: () => navigateToCreateCommunity(context),
+      children: [
+        ListTile(
+          title: const Text("Create a Community"),
+          leading: const Icon(Icons.add),
+          onTap: () => navigateToCreateCommunity(context),
+        ),
+        ref.watch(userCommunitiesProvider).when(
+            data: (communities) => Expanded(
+                  child: ListView.builder(
+                    itemCount: 1,
+                    itemBuilder: (BuildContext context, int index) {
+                      final community = communities[index];
+                      return ListTile(
+                        title: Text('r/${community.name}'),
+                        leading: CircleAvatar(
+                          backgroundImage: NetworkImage(community.avatar),
+                        ),
+                        onTap: () {
+                          navigateToCommunity(context, community);
+                        },
+                      );
+                    },
+                  ),
                 ),
-                ref.watch(userCommunitiesProvider).when(data: (communities) =>
-                    Expanded(
-                      child: ListView.builder(itemCount: 1,
-                        itemBuilder: (BuildContext context, int index) {
-                        final community = communities[index];
-                          return ListTile(
-                            title: Text('r/${community.name}'),
-                            leading: CircleAvatar(
-                              backgroundImage: NetworkImage(community.avatar),
-                            ),
-                            onTap: () {
-                              Routemaster.of(context).push('/community/${community.name}');
-                            },
-                          );
-                        },),
-                    ),
-                    error: (error, stackTrace) =>
-                        ErrorText(error: error.toString()),
-                    loading: () => const Loader())
-              ],
-            )));
+            error: (error, stackTrace) => ErrorText(error: error.toString()),
+            loading: () => const Loader())
+      ],
+    )));
   }
 }
