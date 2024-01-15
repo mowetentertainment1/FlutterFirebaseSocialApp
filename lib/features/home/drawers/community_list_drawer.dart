@@ -32,7 +32,7 @@ class CommunityListDrawer extends ConsumerWidget {
         ref.watch(userCommunitiesProvider).when(
             data: (communities) => Expanded(
                   child: ListView.builder(
-                    itemCount: 1,
+                    itemCount: communities.length,
                     itemBuilder: (BuildContext context, int index) {
                       final community = communities[index];
                       return ListTile(

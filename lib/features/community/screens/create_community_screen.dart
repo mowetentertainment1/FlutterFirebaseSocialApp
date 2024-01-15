@@ -14,17 +14,20 @@ class CreateCommunityScreen extends ConsumerStatefulWidget {
 class _CreateCommunityScreenState extends ConsumerState<CreateCommunityScreen> {
   final TextEditingController _communityNameController =
       TextEditingController();
+  final TextEditingController _communityDesController =
+      TextEditingController();
 
   @override
   void dispose() {
     super.dispose();
     _communityNameController.dispose();
+    _communityDesController.dispose();
   }
 
   void createCommunity() {
     ref
         .read(communityControllerProvider.notifier)
-        .createCommunity(_communityNameController.text.trim(), context);
+        .createCommunity(_communityNameController.text.trim(),_communityDesController.text.trim(), context);
   }
 
   @override
@@ -48,10 +51,21 @@ class _CreateCommunityScreenState extends ConsumerState<CreateCommunityScreen> {
                     controller: _communityNameController,
                     decoration: const InputDecoration(
                       border: OutlineInputBorder(),
-                      hintText: 'r/Community_name',
+                      hintText: 'Community_name',
                       contentPadding: EdgeInsets.all(10),
                     ),
                     maxLength: 21,
+                  ), const Align(
+                      alignment: Alignment.centerLeft,
+                      child: Text('Description:')),
+                  const SizedBox(height: 14),
+                  TextField(
+                    controller: _communityDesController,
+                    decoration: const InputDecoration(
+                      border: OutlineInputBorder(),
+                      contentPadding: EdgeInsets.all(10),
+                    ),
+                    maxLength: 50,
                   ),
                   const SizedBox(height: 34),
                   ElevatedButton(

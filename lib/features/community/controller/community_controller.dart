@@ -35,12 +35,13 @@ class CommunityController extends StateNotifier<bool> {
         _ref = ref,
         super(false);
 
-  void createCommunity(String name, BuildContext context) async {
+  void createCommunity(String name,String des, BuildContext context) async {
     state = true;
     final userUid = _ref.read(userProvider)?.uid ?? "";
     Community community = Community(
         id: name,
         name: name,
+        description: des,
         banner: Constants.bannerDefault,
         avatar: Constants.avatarDefault,
         members: [userUid],
