@@ -1,16 +1,23 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:routemaster/routemaster.dart';
 import 'package:untitled/core/common/loader.dart';
 
+import '../../auth/controller/auth_controller.dart';
 import '../controller/community_controller.dart';
 
 class CommunityScreen extends ConsumerWidget {
   final String communityName;
 
+  void navigateToModTools(BuildContext context) {
+    Routemaster.of(context).push('/mod-tools/$communityName');
+  }
+
   const CommunityScreen({super.key, required this.communityName});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final user = ref.watch(userProvider)!;
     return Scaffold(
         body: ref.watch(communityNameProvider(communityName)).when(
             data: (community) => NestedScrollView(
@@ -32,50 +39,65 @@ class CommunityScreen extends ConsumerWidget {
                         sliver: SliverList(
                             delegate: SliverChildListDelegate([
                           Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               CircleAvatar(
                                 backgroundImage: NetworkImage(community.avatar),
                                 radius: 35,
                               ),
                               const SizedBox(width: 10),
-                              Expanded(
-                                child: Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
+                              SizedBox(
+                                width: 150,
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Text(
-                                            'r/${community.name.substring(0, 10)}',
-                                            overflow: TextOverflow.ellipsis,
-                                            style: const TextStyle(
-                                                fontSize: 20,
-                                                fontWeight: FontWeight.bold)),
-                                        const SizedBox(height: 5),
-                                        Text(
-                                          'Members: ${community.members.length}',
-                                          style: const TextStyle(fontSize: 15),
-                                        ),
-                                      ],
+                                    Text('r/${community.name}',
+                                        overflow: TextOverflow.ellipsis,
+                                        style: const TextStyle(
+                                            fontSize: 16,
+                                            fontWeight: FontWeight.bold)),
+                                    const SizedBox(height: 5),
+                                    Text(
+                                      'Members: ${community.members.length}',
+                                      style: const TextStyle(fontSize: 12),
                                     ),
-                                    OutlinedButton(
-                                        onPressed: () {},
-                                        style: ElevatedButton.styleFrom(
-                                            shape: RoundedRectangleBorder(
-                                                borderRadius:
-                                                    BorderRadius.circular(20))),
-                                        child: const Text('Join')),
                                   ],
                                 ),
                               ),
+                              community.mods.contains(user.uid)
+                                  ? ElevatedButton(
+                                      onPressed: () {
+                                        navigateToModTools(context);
+                                      },
+                                      style: ElevatedButton.styleFrom(
+                                          backgroundColor: Colors.blueAccent,
+                                          shape: RoundedRectangleBorder(
+                                              borderRadius:
+                                                  BorderRadius.circular(20))),
+                                      child: const Text('Mod Tools',
+                                          style: TextStyle(
+                                              fontSize: 12,
+                                              color: Colors.white)))
+                                  : OutlinedButton(
+                                      onPressed: () {},
+                                      style: ElevatedButton.styleFrom(
+                                          shape: RoundedRectangleBorder(
+                                              borderRadius:
+                                                  BorderRadius.circular(20))),
+                                      child: Text(
+                                          community.members.contains(user.uid)
+                                              ? 'Join'
+                                              : 'Joined',
+                                          style:
+                                              const TextStyle(fontSize: 12))),
                             ],
                           ),
                           const SizedBox(height: 10),
-                          Text(
-                            'Members: ${community.members.length}',
-                            style: const TextStyle(fontSize: 15),
+                          SizedBox(
+                            child: Text(
+                              ' ${community.description}',
+                              style: const TextStyle(fontSize: 15),
+                            ),
                           ),
                         ])))
                   ];
