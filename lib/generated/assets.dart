@@ -25,6 +25,7 @@ class Assets {
   static const String modelPostModel = 'lib/model/post_model.dart';
   static const String modelUser = 'lib/model/user.dart';
   static const String providersFirebaseProviders = 'lib/core/providers/firebase_providers.dart';
+  static const String providersStorageRepository = 'lib/core/providers/storage_repository_provider.dart';
   static const String repositoryAuthRepository = 'lib/features/auth/repository/auth_repository.dart';
   static const String repositoryCommunityRepo = 'lib/features/community/repository/community_repo.dart';
   static const String screensCommunityScreen = 'lib/features/community/screens/community_screen.dart';
