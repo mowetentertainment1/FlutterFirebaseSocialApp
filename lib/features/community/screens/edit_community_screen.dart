@@ -31,7 +31,9 @@ class _EditCommunityScreenState extends ConsumerState<EditCommunityScreen> {
     super.initState();
     ref.read(getCommunityByNameProvider(widget.communityName)).when(
         data: (community) {
-          _communityDesController.text = community.description;
+          setState(() {
+            _communityDesController.text = community.description;
+          });
         },
         loading: () => const Loader(),
         error: (error, stackTrace) => ErrorText(

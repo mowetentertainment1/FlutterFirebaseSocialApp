@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:untitled/features/home/delegates/search_community_delegates.dart';
 import 'package:untitled/features/home/drawers/community_list_drawer.dart';
 
 import '../../auth/controller/auth_controller.dart';
@@ -29,7 +30,10 @@ class HomeScreen extends ConsumerWidget {
         actions: [
           IconButton(
             icon: const Icon(CupertinoIcons.search),
-            onPressed: () {},
+            onPressed: () {
+              showSearch(
+                  context: context, delegate: SearchCommunityScreen(ref: ref));
+            },
           ),
           IconButton(
             icon: Padding(
