@@ -5,6 +5,9 @@ import 'package:untitled/features/auth/controller/auth_controller.dart';
 
 class ProflieDrawner extends ConsumerWidget {
   const ProflieDrawner({super.key});
+  void logOut(WidgetRef ref) {
+    ref.read(authControllerProvider.notifier).logOut();
+  }
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -37,7 +40,7 @@ class ProflieDrawner extends ConsumerWidget {
           ListTile(
             title: const Text("Log out"),
             leading: const Icon(Icons.logout, color: Colors.red),
-            onTap: () {},
+            onTap: () => logOut(ref),
           ),
           Switch.adaptive(value: true, onChanged: (val) {})
         ],
