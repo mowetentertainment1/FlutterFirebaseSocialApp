@@ -45,6 +45,37 @@ class CommunityRepo {
     });
   }
 
+  FutureVoid joinCommunity(String communityName, String uid) async {
+    try {
+      var communityDoc = await _communities.doc(communityName).get();
+      if (!communityDoc.exists) {
+        throw Exception("Community doesn't exists");
+      }
+      return right(_communities.doc(communityName).update({
+        "members": FieldValue.arrayUnion([uid])
+      }));
+    } on FirebaseException catch (e) {
+      throw e.message!;
+    } catch (e) {
+      return left(Failure(e.toString()));
+    }
+  }
+  FutureVoid leaveCommunity(String communityName, String uid) async {
+    try {
+      var communityDoc = await _communities.doc(communityName).get();
+      if (!communityDoc.exists) {
+        throw Exception("Community doesn't exists");
+      }
+      return right(_communities.doc(communityName).update({
+        "members": FieldValue.arrayRemove([uid])
+      }));
+    } on FirebaseException catch (e) {
+      throw e.message!;
+    } catch (e) {
+      return left(Failure(e.toString()));
+    }
+  }
+
   Stream<Community> getCommunityName(String communityName) {
     return _communities.doc(communityName).snapshots().map(
         (event) => Community.fromMap(event.data() as Map<String, dynamic>));

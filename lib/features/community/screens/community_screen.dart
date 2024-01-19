@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:routemaster/routemaster.dart';
 import 'package:untitled/core/common/loader.dart';
+import 'package:untitled/model/community_model.dart';
 
 import '../../auth/controller/auth_controller.dart';
 import '../controller/community_controller.dart';
@@ -11,6 +12,12 @@ class CommunityScreen extends ConsumerWidget {
 
   void navigateToModTools(BuildContext context) {
     Routemaster.of(context).push('/mod-tools/$communityName');
+  }
+
+  void joinCommunity(WidgetRef ref, Community community, BuildContext context) {
+    ref
+        .read(communityControllerProvider.notifier)
+        .joinCommunity(community, context);
   }
 
   const CommunityScreen({super.key, required this.communityName});
@@ -79,15 +86,16 @@ class CommunityScreen extends ConsumerWidget {
                                               fontSize: 12,
                                               color: Colors.white)))
                                   : OutlinedButton(
-                                      onPressed: () {},
+                                      onPressed: () => joinCommunity(
+                                          ref, community, context),
                                       style: ElevatedButton.styleFrom(
                                           shape: RoundedRectangleBorder(
                                               borderRadius:
                                                   BorderRadius.circular(20))),
                                       child: Text(
                                           community.members.contains(user.uid)
-                                              ? 'Join'
-                                              : 'Joined',
+                                              ? 'Leave'
+                                              : 'Join',
                                           style:
                                               const TextStyle(fontSize: 12))),
                             ],

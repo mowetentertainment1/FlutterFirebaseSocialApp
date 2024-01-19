@@ -2,10 +2,12 @@ import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:fpdart/fpdart.dart';
 import 'package:routemaster/routemaster.dart';
 import 'package:untitled/core/constants/constants.dart';
 import 'package:untitled/model/community_model.dart';
 
+import '../../../core/failure.dart';
 import '../../../core/providers/storage_repository_provider.dart';
 import '../../../core/utils.dart';
 import '../../auth/controller/auth_controller.dart';
@@ -74,6 +76,23 @@ class CommunityController extends StateNotifier<bool> {
             });
     state = false;
   }
+  void joinCommunity(Community community, BuildContext context) async {
+    final user = _ref.read(userProvider)!;
+    Either<Failure, void> res;
+    if (community.members.contains(user.uid)) {
+      res = await _communityRepo.leaveCommunity(community.name, user.uid);
+    } else {
+      res = await _communityRepo.joinCommunity(community.name, user.uid);
+      res.fold((l) => showSnackBar(context, l.message), (r) => {
+        if (community.members.contains(user.uid)) {
+          showSnackBar(context, "Leaved community ${community.name}"),
+        } else {
+          showSnackBar(context, " Joined community ${community.name}"),
+
+        }
+      });
+    }
+ }
 
   Stream<List<Community>> getCommunities() {
     final userUid = _ref.read(userProvider)?.uid ?? "";
