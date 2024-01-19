@@ -12,6 +12,7 @@ class Assets {
   static const String coreFailure = 'lib/core/failure.dart';
   static const String coreTypeDefs = 'lib/core/type_defs.dart';
   static const String coreUtils = 'lib/core/utils.dart';
+  static const String delegatesSearchCommunityDelegates = 'lib/features/home/delegates/search_community_delegates.dart';
   static const String drawersCommunityListDrawer = 'lib/features/home/drawers/community_list_drawer.dart';
   static const String generatedAssets = 'lib/generated/assets.dart';
   static const String imagesGoogle = 'assets/images/google.png';
@@ -25,15 +26,17 @@ class Assets {
   static const String modelPostModel = 'lib/model/post_model.dart';
   static const String modelUser = 'lib/model/user.dart';
   static const String providersFirebaseProviders = 'lib/core/providers/firebase_providers.dart';
-  static const String providersStorageRepository = 'lib/core/providers/storage_repository_provider.dart';
+  static const String providersStorageRepositoryProvider = 'lib/core/providers/storage_repository_provider.dart';
   static const String repositoryAuthRepository = 'lib/features/auth/repository/auth_repository.dart';
   static const String repositoryCommunityRepo = 'lib/features/community/repository/community_repo.dart';
+  static const String screensAddModsSreen = 'lib/features/community/screens/add_mods_sreen.dart';
   static const String screensCommunityScreen = 'lib/features/community/screens/community_screen.dart';
   static const String screensCreateCommunityScreen = 'lib/features/community/screens/create_community_screen.dart';
   static const String screensEditCommunityScreen = 'lib/features/community/screens/edit_community_screen.dart';
   static const String screensHomeScreen = 'lib/features/home/screens/home_screen.dart';
   static const String screensLoginScreen = 'lib/features/auth/screens/login_screen.dart';
   static const String screensModToolScreen = 'lib/features/community/screens/mod_tool_screen.dart';
+  static const String screensProfileDrawner = 'lib/features/home/screens/profile_drawner.dart';
   static const String themePallete = 'lib/theme/pallete.dart';
 
 }

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:routemaster/routemaster.dart';
+import 'package:untitled/features/community/screens/add_mods_sreen.dart';
 import 'package:untitled/features/community/screens/community_screen.dart';
 import 'package:untitled/features/community/screens/create_community_screen.dart';
 import 'package:untitled/features/community/screens/edit_community_screen.dart';
@@ -24,5 +25,8 @@ final loggedInRoute = RouteMap(routes: {
           communityName: routeData.pathParameters['communityName']!)),
   '/edit-community/:communityName': (routeData) => MaterialPage(
       child: EditCommunityScreen(
+          communityName: routeData.pathParameters['communityName']!)),
+  '/add_mods/:communityName': (routeData) => MaterialPage(
+      child: AddModsScreen(
           communityName: routeData.pathParameters['communityName']!)),
 });
