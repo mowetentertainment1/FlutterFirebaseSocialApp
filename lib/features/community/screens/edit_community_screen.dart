@@ -25,21 +25,22 @@ class _EditCommunityScreenState extends ConsumerState<EditCommunityScreen> {
   File? bannerFile;
   File? avatarFile;
   final TextEditingController _communityDesController = TextEditingController();
+  int count = 0;
 
   @override
-  void initState() {
-    super.initState();
-    ref.read(getCommunityByNameProvider(widget.communityName)).when(
-        data: (community) {
-          setState(() {
-            _communityDesController.text = community.description;
-          });
-        },
-        loading: () => const Loader(),
-        error: (error, stackTrace) => ErrorText(
-              error: error.toString(),
-            ));
-  }
+  // void initState() {
+  //   super.initState();
+  //   ref.read(getCommunityByNameProvider(widget.communityName)).when(
+  //       data: (community) {
+  //         setState(() {
+  //           _communityDesController.text = community.description;
+  //         });
+  //       },
+  //       loading: () => const Loader(),
+  //       error: (error, stackTrace) => ErrorText(
+  //             error: error.toString(),
+  //           ));
+  // }
 
   @override
   void dispose() {
@@ -78,7 +79,12 @@ class _EditCommunityScreenState extends ConsumerState<EditCommunityScreen> {
   Widget build(BuildContext context) {
     final isLoading = ref.watch(communityControllerProvider);
     return ref.watch(getCommunityByNameProvider(widget.communityName)).when(
-          data: (community) => Scaffold(
+          data: (community) {
+            if (count == 0) {
+              _communityDesController.text = community.description;
+              count++;
+            }
+            return Scaffold(
             appBar: AppBar(
               backgroundColor: Pallete.darkModeAppTheme.backgroundColor,
               title: const Text('Edit Community'),
@@ -155,12 +161,13 @@ class _EditCommunityScreenState extends ConsumerState<EditCommunityScreen> {
                             contentPadding: EdgeInsets.all(10),
                           ),
                           maxLength: 50,
+
                           controller: _communityDesController,
                         ),
                       ],
                     ),
                   ),
-          ),
+          );},
           loading: () => const Loader(),
           error: (error, stackTrace) => ErrorText(
             error: error.toString(),
