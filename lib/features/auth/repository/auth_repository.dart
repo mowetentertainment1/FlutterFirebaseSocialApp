@@ -51,6 +51,7 @@ class AuthRepository {
           name: userCredential.user!.displayName?.trim() ?? 'unknown',
           profilePic: userCredential.user!.photoURL ?? Constants.avatarDefault,
           banner: Constants.bannerDefault,
+          description: 'Hey there! I am using Amigo',
           uid: userCredential.user!.uid,
           isAuthenticated: true,
           karma: 0,
