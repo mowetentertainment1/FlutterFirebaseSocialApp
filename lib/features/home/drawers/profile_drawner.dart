@@ -1,12 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:routemaster/routemaster.dart';
 import 'package:untitled/features/auth/controller/auth_controller.dart';
 
-class ProflieDrawner extends ConsumerWidget {
-  const ProflieDrawner({super.key});
+class ProfileDrawer extends ConsumerWidget {
+  const ProfileDrawer({super.key});
+
   void logOut(WidgetRef ref) {
     ref.read(authControllerProvider.notifier).logOut();
+  }
+
+  void navigateToUserProfile(BuildContext context, String uid) {
+    Routemaster.of(context).push('/u/$uid');
   }
 
   @override
@@ -32,10 +38,9 @@ class ProflieDrawner extends ConsumerWidget {
           const SizedBox(height: 15),
           const Divider(),
           ListTile(
-            title: const Text("My profile"),
-            leading: const Icon(Icons.person),
-            onTap: () {},
-          ),
+              title: const Text("My profile"),
+              leading: const Icon(Icons.person),
+              onTap: () => navigateToUserProfile(context, user.uid)),
           const Divider(),
           ListTile(
             title: const Text("Log out"),

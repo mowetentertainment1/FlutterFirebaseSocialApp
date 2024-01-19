@@ -4,7 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:untitled/features/home/delegates/search_community_delegates.dart';
 import 'package:untitled/features/home/drawers/community_list_drawer.dart';
-import 'package:untitled/features/home/screens/profile_drawner.dart';
+import 'package:untitled/features/home/drawers/profile_drawner.dart';
 
 import '../../auth/controller/auth_controller.dart';
 
@@ -24,7 +24,7 @@ class HomeScreen extends ConsumerWidget {
     final user = ref.watch(userProvider);
     return Scaffold(
       drawer: const CommunityListDrawer(),
-      endDrawer: const ProflieDrawner(),
+      endDrawer: const ProfileDrawer(),
       appBar: AppBar(
         leading: Builder(builder: (context) {
           return IconButton(

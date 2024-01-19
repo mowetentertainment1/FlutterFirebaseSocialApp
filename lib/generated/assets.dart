@@ -14,6 +14,7 @@ class Assets {
   static const String coreUtils = 'lib/core/utils.dart';
   static const String delegatesSearchCommunityDelegates = 'lib/features/home/delegates/search_community_delegates.dart';
   static const String drawersCommunityListDrawer = 'lib/features/home/drawers/community_list_drawer.dart';
+  static const String drawersProfileDrawner = 'lib/features/home/drawers/profile_drawner.dart';
   static const String generatedAssets = 'lib/generated/assets.dart';
   static const String imagesGoogle = 'assets/images/google.png';
   static const String imagesLoginEmote = 'assets/images/loginEmote.png';
@@ -36,7 +37,7 @@ class Assets {
   static const String screensHomeScreen = 'lib/features/home/screens/home_screen.dart';
   static const String screensLoginScreen = 'lib/features/auth/screens/login_screen.dart';
   static const String screensModToolScreen = 'lib/features/community/screens/mod_tool_screen.dart';
-  static const String screensProfileDrawner = 'lib/features/home/screens/profile_drawner.dart';
+  static const String screensUserProfileScreen = 'lib/features/home/user_profile/screens/user_profile_screen.dart';
   static const String themePallete = 'lib/theme/pallete.dart';
 
 }
