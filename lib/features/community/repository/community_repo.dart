@@ -111,6 +111,23 @@ class CommunityRepo {
     });
   }
 
+  FutureVoid addMod(String communityName, List<String> uids) async {
+    try {
+      var communityDoc = await _communities.doc(communityName).get();
+      if (!communityDoc.exists) {
+        throw Exception("Community doesn't exists");
+      }
+      return right(_communities.doc(communityName).update({
+        "mods": uids
+      }));
+    } on FirebaseException catch (e) {
+      throw e.message!;
+    } catch (e) {
+      return left(Failure(e.toString()));
+    }
+  }
+
+
   CollectionReference get _communities =>
       _firestore.collection(FirebaseConstants.communitiesCollection);
 }

@@ -28,5 +28,5 @@ final loggedInRoute = RouteMap(routes: {
           communityName: routeData.pathParameters['communityName']!)),
   '/add_mods/:communityName': (routeData) => MaterialPage(
       child: AddModsScreen(
-          communityName: routeData.pathParameters['communityName']!)),
+          name: routeData.pathParameters['communityName']!)),
 });
