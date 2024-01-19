@@ -15,13 +15,18 @@ class AddModsScreen extends ConsumerStatefulWidget {
 }
 
 class _AddModsScreenState extends ConsumerState<AddModsScreen> {
-  final TextEditingController _modNameController = TextEditingController();
-
-  @override
-  void dispose() {
-    super.dispose();
-    _modNameController.dispose();
-  }
+Set<String> uids = {};
+int count = 0;
+void addUid(String uid) {
+  setState(() {
+    uids.add(uid);
+  });
+}
+void removeUid(String uid) {
+  setState(() {
+    uids.add(uid);
+  });
+}
 
   // void addMod() {
   //   ref.read(communityControllerProvider.notifier).addMod(
@@ -50,10 +55,23 @@ class _AddModsScreenState extends ConsumerState<AddModsScreen> {
                   itemBuilder: (context, index) {
                     final member = community.members[index];
                   return  ref.watch(getUserDataProvider(member)).when(
-                        data: (user) => CheckboxListTile(
-                            title: Text(user.name),
-                            value: false,
-                            onChanged: (value) {}),
+                        data: (user) {
+                          if (community.mods.contains(member) && count == 0)
+                            {
+                              uids.add(member);
+                            }
+                          count++;
+                          return CheckboxListTile(
+                              title: Text(user.name),
+                              value: uids.contains(user.uid),
+                              onChanged: (value) {
+                                if (value!) {
+                                  addUid(user.uid);
+                                } else {
+                                  removeUid(user.uid);
+                                }
+                              },);
+                        },
                         loading: () => const Loader(),
                         error: (error, stackTrace) => const Text('Error'));
                   }),
