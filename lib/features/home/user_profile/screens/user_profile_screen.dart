@@ -39,13 +39,12 @@ class UserProfileScreen extends ConsumerWidget {
                                 backgroundImage: NetworkImage(user.profilePic),
                                 radius: 35,
                               ),
-                              const SizedBox(width: 10),
                               SizedBox(
-                                width: 150,
+                                width: 180,
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    Text('r/${user.name}',
+                                    Text('u/${user.name}',
                                         overflow: TextOverflow.ellipsis,
                                         style: const TextStyle(
                                             fontSize: 16,
@@ -60,16 +59,19 @@ class UserProfileScreen extends ConsumerWidget {
                               ),
                               OutlinedButton(
                                   onPressed: () {},
-                                  style: ElevatedButton.styleFrom(
+                                  style: OutlinedButton.styleFrom(
+                                      side: const BorderSide(
+                                          color: Colors.blue, width: 1),
+
                                       shape: RoundedRectangleBorder(
                                           borderRadius:
                                           BorderRadius.circular(20))),
-                                  child: const Text('Edit profile',
-                                      style:
-                                      TextStyle(fontSize: 12))),
+
+                                  child: const Icon(Icons.edit,
+                                      size: 20)),
                             ],
                           ),
-                          const SizedBox(height: 10),
+                          const SizedBox(height: 20),
                           SizedBox(
                             child: Text(
                               ' ${user.description}',
