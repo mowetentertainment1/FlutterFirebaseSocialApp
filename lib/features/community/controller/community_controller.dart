@@ -25,11 +25,10 @@ final communityNameProvider =
 
 final communityControllerProvider =
     StateNotifierProvider<CommunityController, bool>((ref) {
-  final storageRepository = ref.watch(storageRepositoryProvider);
   return CommunityController(
       communityRepo: ref.watch(communityRepoProvider),
       ref: ref,
-      storageRepository: storageRepository);
+      storageRepository: ref.watch(storageRepositoryProvider));
 });
 
 final getCommunityByNameProvider = StreamProvider.family((ref, String name) {

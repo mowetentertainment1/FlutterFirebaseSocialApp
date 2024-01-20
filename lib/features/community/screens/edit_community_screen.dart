@@ -26,22 +26,6 @@ class _EditCommunityScreenState extends ConsumerState<EditCommunityScreen> {
   File? avatarFile;
   final TextEditingController _communityDesController = TextEditingController();
   int count = 0;
-
-  @override
-  // void initState() {
-  //   super.initState();
-  //   ref.read(getCommunityByNameProvider(widget.communityName)).when(
-  //       data: (community) {
-  //         setState(() {
-  //           _communityDesController.text = community.description;
-  //         });
-  //       },
-  //       loading: () => const Loader(),
-  //       error: (error, stackTrace) => ErrorText(
-  //             error: error.toString(),
-  //           ));
-  // }
-
   @override
   void dispose() {
     super.dispose();

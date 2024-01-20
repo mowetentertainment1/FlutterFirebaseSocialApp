@@ -1,11 +1,11 @@
 import 'dart:io';
-
 import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:fpdart/fpdart.dart';
 import 'package:flutter/material.dart';
 import 'package:untitled/features/auth/controller/auth_controller.dart';
+import 'package:untitled/features/home/user_profile/controller/user_profile_controller.dart';
+import 'package:untitled/model/user.dart';
 
 import '../../../../core/common/error_text.dart';
 import '../../../../core/common/loader.dart';
@@ -25,18 +25,18 @@ class EditProfileScreen extends ConsumerStatefulWidget {
 class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
   File? bannerFile;
   File? avatarFile;
-  late TextEditingController _communityDesController ;
+  late TextEditingController _userDesController ;
   late TextEditingController _userNameController ;
   @override
   void initState() {
     super.initState();
-    _communityDesController = TextEditingController(text: ref.read(userProvider)!.description);
+    _userDesController = TextEditingController(text: ref.read(userProvider)!.description);
     _userNameController = TextEditingController(text: ref.read(userProvider)!.name);
   }
   @override
   void dispose() {
     super.dispose();
-    _communityDesController.dispose();
+    _userDesController.dispose();
     _userNameController.dispose();
   }
 
@@ -58,37 +58,37 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
     }
   }
 
-  // void save(Community community) {
-  //   ref.read(communityControllerProvider.notifier).editCommunity(
-  //       avatarFile: avatarFile,
-  //       bannerFile: bannerFile,
-  //       context: context,
-  //       community: community,
-  //       description: _communityDesController.text);
-  // }
+  void save(UserModel user) {
+    ref.read(userProfileControllerProvider.notifier).editUser(
+        avatarFile: avatarFile,
+        bannerFile: bannerFile,
+        context: context,
+        name: _userNameController.text.trim(),
+        description: _userDesController.text);
+  }
 
   @override
   Widget build(BuildContext context) {
-    // final isLoading = ref.watch(communityControllerProvider);
+    final isLoading = ref.watch(userProfileControllerProvider);
     return ref.watch(getUserDataProvider(widget.uid)).when(
-      data: (community) {
+      data: (user) {
         return Scaffold(
           appBar: AppBar(
             backgroundColor: Pallete.darkModeAppTheme.backgroundColor,
-            title: const Text('Edit Community'),
+            title: const Text('Edit profile'),
             actions: [
               TextButton(
                   onPressed: () {
-                    // save(community);
+                    save(user);
                   },
                   child: const Text('Save',
                       style: TextStyle(color: Colors.blue)))
             ],
           ),
           body:
-          // isLoading
-          //     ? const Loader()
-          //     :
+          isLoading
+              ? const Loader()
+              :
           Padding(
             padding: const EdgeInsets.all(4.0),
             child: Column(
@@ -113,13 +113,13 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
                           width: double.infinity,
                           child: bannerFile != null
                               ? Image.file(bannerFile!)
-                              : community.banner.isEmpty ||
-                              community.banner ==
+                              : user.banner.isEmpty ||
+                              user.banner ==
                                   Constants.bannerDefault
                               ? const Center(
                               child: Icon(Icons.add_a_photo,
                                   size: 40))
-                              : Image.network(community.banner,
+                              : Image.network(user.banner,
                               fit: BoxFit.cover),
                         ),
                       ),
@@ -137,7 +137,7 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
                           )
                               : CircleAvatar(
                             backgroundImage:
-                            NetworkImage(community.profilePic),
+                            NetworkImage(user.profilePic),
                             radius: 35,
                           ),
                         ))
@@ -161,7 +161,7 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
                     contentPadding: EdgeInsets.all(10),
                   ),
                   maxLength: 50,
-                  controller: _communityDesController,
+                  controller: _userDesController,
                 ),
               ],
             ),
