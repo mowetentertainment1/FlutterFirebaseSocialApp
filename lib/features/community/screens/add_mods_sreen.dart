@@ -7,10 +7,10 @@ import '../../../core/common/loader.dart';
 import '../controller/community_controller.dart';
 
 class AddModsScreen extends ConsumerStatefulWidget {
-  final String name;
+  final String communityName;
   const AddModsScreen({
     super.key,
-    required this.name,
+    required this.communityName,
   });
 
   @override
@@ -35,7 +35,7 @@ class _AddModsScreenState extends ConsumerState<AddModsScreen> {
 
   void saveMods() {
     ref.read(communityControllerProvider.notifier).addMods(
-      widget.name,
+      widget.communityName,
       uids.toList(),
       context,
     );
@@ -53,7 +53,7 @@ class _AddModsScreenState extends ConsumerState<AddModsScreen> {
           ),
         ],
       ),
-      body: ref.watch(getCommunityByNameProvider(widget.name)).when(
+      body: ref.watch(getCommunityByNameProvider(widget.communityName)).when(
         data: (community) => ListView.builder(
           itemCount: community.members.length,
           itemBuilder: (BuildContext context, int index) {

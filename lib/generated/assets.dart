@@ -16,6 +16,7 @@ class Assets {
   static const String delegatesSearchCommunityDelegates = 'lib/features/home/delegates/search_community_delegates.dart';
   static const String drawersCommunityListDrawer = 'lib/features/home/drawers/community_list_drawer.dart';
   static const String drawersProfileDrawner = 'lib/features/home/drawers/profile_drawner.dart';
+  static const String enumsEnums = 'lib/core/enums/enums.dart';
   static const String generatedAssets = 'lib/generated/assets.dart';
   static const String imagesGoogle = 'assets/images/google.png';
   static const String imagesLoginEmote = 'assets/images/loginEmote.png';

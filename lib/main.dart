@@ -47,7 +47,7 @@ class _MyAppState extends ConsumerState<MyApp> {
         data: (data) => MaterialApp.router(
               debugShowCheckedModeBanner: false,
               title: 'Amigo',
-              theme: Pallete.darkModeAppTheme,
+              theme: ref.watch(themeNotifierProvider),
               routerDelegate: RoutemasterDelegate(
                 routesBuilder: (context) {
                   if (data != null) {

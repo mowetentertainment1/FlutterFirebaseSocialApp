@@ -26,6 +26,7 @@ class _EditCommunityScreenState extends ConsumerState<EditCommunityScreen> {
   File? avatarFile;
   final TextEditingController _communityDesController = TextEditingController();
   int count = 0;
+
   @override
   void dispose() {
     super.dispose();
@@ -62,6 +63,7 @@ class _EditCommunityScreenState extends ConsumerState<EditCommunityScreen> {
   @override
   Widget build(BuildContext context) {
     final isLoading = ref.watch(communityControllerProvider);
+    final currentTheme = ref.watch(themeNotifierProvider);
     return ref.watch(getCommunityByNameProvider(widget.communityName)).when(
           data: (community) {
             if (count == 0) {
@@ -69,89 +71,88 @@ class _EditCommunityScreenState extends ConsumerState<EditCommunityScreen> {
               count++;
             }
             return Scaffold(
-            appBar: AppBar(
-              backgroundColor: Pallete.darkModeAppTheme.backgroundColor,
-              title: const Text('Edit Community'),
-              actions: [
-                TextButton(
-                    onPressed: () {
-                      save(community);
-                    },
-                    child: const Text('Save',
-                        style: TextStyle(color: Colors.blue)))
-              ],
-            ),
-            body: isLoading
-                ? const Loader()
-                : Padding(
-                    padding: const EdgeInsets.all(4.0),
-                    child: Column(
-                      children: [
-                        SizedBox(
-                          height: 200,
-                          child: Stack(children: [
-                            GestureDetector(
-                              onTap: () => selectBannerImage(),
-                              child: DottedBorder(
-                                borderType: BorderType.RRect,
-                                radius: const Radius.circular(10),
-                                dashPattern: const [12, 4],
-                                strokeCap: StrokeCap.round,
-                                color: Pallete.darkModeAppTheme.textTheme
-                                    .bodyText2!.color!,
-                                child: Container(
-                                  height: 150,
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(10),
+              appBar: AppBar(
+                title: const Text('Edit Community'),
+                actions: [
+                  TextButton(
+                      onPressed: () {
+                        save(community);
+                      },
+                      child: const Text('Save',
+                          style: TextStyle(color: Colors.blue)))
+                ],
+              ),
+              body: isLoading
+                  ? const Loader()
+                  : Padding(
+                      padding: const EdgeInsets.all(4.0),
+                      child: Column(
+                        children: [
+                          SizedBox(
+                            height: 200,
+                            child: Stack(children: [
+                              GestureDetector(
+                                onTap: () => selectBannerImage(),
+                                child: DottedBorder(
+                                  borderType: BorderType.RRect,
+                                  radius: const Radius.circular(10),
+                                  dashPattern: const [12, 4],
+                                  strokeCap: StrokeCap.round,
+                                  color: currentTheme.textTheme
+                                      .bodyText2!.color!,
+                                  child: Container(
+                                    height: 150,
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(10),
+                                    ),
+                                    width: double.infinity,
+                                    child: bannerFile != null
+                                        ? Image.file(bannerFile!)
+                                        : community.banner.isEmpty ||
+                                                community.banner ==
+                                                    Constants.bannerDefault
+                                            ? const Center(
+                                                child: Icon(Icons.add_a_photo,
+                                                    size: 40))
+                                            : Image.network(community.banner,
+                                                fit: BoxFit.cover),
                                   ),
-                                  width: double.infinity,
-                                  child: bannerFile != null
-                                      ? Image.file(bannerFile!)
-                                      : community.banner.isEmpty ||
-                                              community.banner ==
-                                                  Constants.bannerDefault
-                                          ? const Center(
-                                              child: Icon(Icons.add_a_photo,
-                                                  size: 40))
-                                          : Image.network(community.banner,
-                                              fit: BoxFit.cover),
                                 ),
                               ),
-                            ),
-                            Positioned(
-                                bottom: 20,
-                                left: 30,
-                                child: GestureDetector(
-                                  onTap: () => selectAvatarImage(),
-                                  child: avatarFile != null
-                                      ? CircleAvatar(
-                                          backgroundImage:
-                                              FileImage(avatarFile!),
-                                          radius: 35,
-                                        )
-                                      : CircleAvatar(
-                                          backgroundImage:
-                                              NetworkImage(community.avatar),
-                                          radius: 35,
-                                        ),
-                                ))
-                          ]),
-                        ),
-                        const SizedBox(height: 10),
-                        TextField(
-                          decoration: const InputDecoration(
-                            labelText: 'Description',
-                            border: OutlineInputBorder(),
-                            contentPadding: EdgeInsets.all(10),
+                              Positioned(
+                                  bottom: 20,
+                                  left: 30,
+                                  child: GestureDetector(
+                                    onTap: () => selectAvatarImage(),
+                                    child: avatarFile != null
+                                        ? CircleAvatar(
+                                            backgroundImage:
+                                                FileImage(avatarFile!),
+                                            radius: 35,
+                                          )
+                                        : CircleAvatar(
+                                            backgroundImage:
+                                                NetworkImage(community.avatar),
+                                            radius: 35,
+                                          ),
+                                  ))
+                            ]),
                           ),
-                          maxLength: 50,
-
-                          controller: _communityDesController,
-                        ),
-                      ],
+                          const SizedBox(height: 10),
+                          TextField(
+                            decoration: const InputDecoration(
+                              labelText: 'Description',
+                              border: OutlineInputBorder(),
+                              contentPadding: EdgeInsets.all(10),
+                            ),
+                            maxLength: 50,
+                            controller: _communityDesController,
+                          ),
+                        ],
+                      ),
                     ),
-                  ),
-          );},
+            );
+          },
           loading: () => const Loader(),
           error: (error, stackTrace) => ErrorText(
             error: error.toString(),

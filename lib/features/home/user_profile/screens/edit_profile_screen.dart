@@ -74,7 +74,6 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
       data: (user) {
         return Scaffold(
           appBar: AppBar(
-            backgroundColor: Pallete.darkModeAppTheme.backgroundColor,
             title: const Text('Edit profile'),
             actions: [
               TextButton(

@@ -51,7 +51,6 @@ class _CreateCommunityScreenState extends ConsumerState<CreateCommunityScreen> {
                     controller: _communityNameController,
                     decoration: const InputDecoration(
                       border: OutlineInputBorder(),
-                      hintText: 'Community_name',
                       contentPadding: EdgeInsets.all(10),
                     ),
                     maxLength: 21,

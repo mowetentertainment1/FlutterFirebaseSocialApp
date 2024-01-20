@@ -4,8 +4,14 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:routemaster/routemaster.dart';
 import 'package:untitled/features/auth/controller/auth_controller.dart';
 
+import '../../../theme/pallete.dart';
+
 class ProfileDrawer extends ConsumerWidget {
   const ProfileDrawer({super.key});
+
+  void toggleTheme(WidgetRef ref) {
+    ref.read(themeNotifierProvider.notifier).toggleTheme();
+  }
 
   void logOut(WidgetRef ref) {
     ref.read(authControllerProvider.notifier).logOut();
@@ -47,7 +53,18 @@ class ProfileDrawer extends ConsumerWidget {
             leading: const Icon(Icons.logout, color: Colors.red),
             onTap: () => logOut(ref),
           ),
-          Switch.adaptive(value: true, onChanged: (val) {})
+          const Divider(),
+
+          SizedBox(
+            child: ListTile(
+              title: const Text("Dark Mode"),
+              leading: const Icon(Icons.dark_mode),
+              trailing: Switch.adaptive(
+                value: ref.watch(themeNotifierProvider.notifier).mode == ThemeMode.dark,
+                onChanged: (val) => toggleTheme(ref),
+              ),
+            ),
+          ),
         ],
       )),
     );

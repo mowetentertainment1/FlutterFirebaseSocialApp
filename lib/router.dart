@@ -29,7 +29,8 @@ final loggedInRoute = RouteMap(routes: {
       child: EditCommunityScreen(
           communityName: routeData.pathParameters['communityName']!)),
   '/add_mods/:communityName': (routeData) => MaterialPage(
-      child: AddModsScreen(name: routeData.pathParameters['name']!)),
+      child: AddModsScreen(
+          communityName: routeData.pathParameters['communityName']!)),
   '/u/:uid': (routeData) => MaterialPage(
       child: UserProfileScreen(uid: routeData.pathParameters['uid']!)),
   '/edit-profile/:uid': (routeData) => MaterialPage(
