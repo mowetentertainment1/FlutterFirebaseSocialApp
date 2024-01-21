@@ -6,6 +6,45 @@ class AddPostScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return Container();
+    return Wrap(
+      children: [
+        Container(
+          padding: const EdgeInsets.all(8.0),
+          child: const TextField(
+            decoration: InputDecoration(
+              border: OutlineInputBorder(),
+              hintText: 'What\'s on your mind?',
+            ),
+            maxLines: 5,
+          ),
+        ),
+        Container(
+          padding: const EdgeInsets.all(8.0),
+          child: Row(
+            children: [
+              IconButton(
+                icon: const Icon(Icons.image),
+                onPressed: () {},
+              ),
+              IconButton(
+                icon: const Icon(Icons.linked_camera),
+                onPressed: () {},
+              ),
+              IconButton(
+                icon: const Icon(Icons.link),
+                onPressed: () {},
+              ),
+              IconButton(
+                icon: const Icon(Icons.emoji_emotions),
+                onPressed: () {},
+              ),
+              IconButton(
+                icon: const Icon(Icons.more_horiz),
+                onPressed: () {},
+              ),
+            ],
+          ),
+        ),
+      ],);
   }
 }
