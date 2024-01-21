@@ -17,6 +17,7 @@ class Assets {
   static const String drawersCommunityListDrawer = 'lib/features/home/drawers/community_list_drawer.dart';
   static const String drawersProfileDrawner = 'lib/features/home/drawers/profile_drawner.dart';
   static const String enumsEnums = 'lib/core/enums/enums.dart';
+  static const String feedFeedScreen = 'lib/features/feed/feed_screen.dart';
   static const String generatedAssets = 'lib/generated/assets.dart';
   static const String imagesGoogle = 'assets/images/google.png';
   static const String imagesLoginEmote = 'assets/images/loginEmote.png';
@@ -28,12 +29,15 @@ class Assets {
   static const String modelCommunityModel = 'lib/model/community_model.dart';
   static const String modelPostModel = 'lib/model/post_model.dart';
   static const String modelUser = 'lib/model/user.dart';
+  static const String notificationNotificationScreen = 'lib/features/notification/notification_screen.dart';
   static const String providersFirebaseProviders = 'lib/core/providers/firebase_providers.dart';
   static const String providersStorageRepositoryProvider = 'lib/core/providers/storage_repository_provider.dart';
   static const String repositoryAuthRepository = 'lib/features/auth/repository/auth_repository.dart';
   static const String repositoryCommunityRepo = 'lib/features/community/repository/community_repo.dart';
   static const String repositoryUserProfileRepo = 'lib/features/home/user_profile/repository/user_profile_repo.dart';
   static const String screensAddModsSreen = 'lib/features/community/screens/add_mods_sreen.dart';
+  static const String screensAddPostScreen = 'lib/features/post/screens/add_post_screen.dart';
+  static const String screensChatScreen = 'lib/features/chat/screens/chat_screen.dart';
   static const String screensCommunityScreen = 'lib/features/community/screens/community_screen.dart';
   static const String screensCreateCommunityScreen = 'lib/features/community/screens/create_community_screen.dart';
   static const String screensEditCommunityScreen = 'lib/features/community/screens/edit_community_screen.dart';

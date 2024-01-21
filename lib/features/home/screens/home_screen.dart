@@ -6,22 +6,26 @@ import 'package:untitled/features/home/delegates/search_community_delegates.dart
 import 'package:untitled/features/home/drawers/community_list_drawer.dart';
 import 'package:untitled/features/home/drawers/profile_drawner.dart';
 
+import '../../../core/constants/constants.dart';
 import '../../../theme/pallete.dart';
 import '../../auth/controller/auth_controller.dart';
 
 class HomeScreen extends ConsumerStatefulWidget {
   const HomeScreen({super.key});
+
   @override
-  ConsumerState<ConsumerStatefulWidget> createState() =>
-      _HomeScreenState();
+  ConsumerState<ConsumerStatefulWidget> createState() => _HomeScreenState();
 }
+
 class _HomeScreenState extends ConsumerState<HomeScreen> {
   int _page = 0;
-void onPageChange(int index){
-  setState(() {
-    _page = index;
-  });
-}
+
+  void onPageChange(int index) {
+    setState(() {
+      _page = index;
+    });
+  }
+
   void displayDrawer(BuildContext context) {
     Scaffold.of(context).openDrawer();
   }
@@ -33,39 +37,8 @@ void onPageChange(int index){
   @override
   Widget build(BuildContext context) {
     final user = ref.watch(userProvider);
-    final currenrTheme = ref.watch(themeNotifierProvider);
+    final currentTheme = ref.watch(themeNotifierProvider);
     return Scaffold(
-      drawer: const CommunityListDrawer(),
-      endDrawer: const ProfileDrawer(),
-      bottomNavigationBar: CupertinoTabBar(
-        activeColor: currenrTheme.iconTheme.color,
-        backgroundColor: currenrTheme.backgroundColor,
-        border: const Border(
-          top: BorderSide(
-            color: Colors.grey,
-            width: 0.5,
-          ),
-        ),
-        items: const [
-          BottomNavigationBarItem(
-            icon: Icon(CupertinoIcons.home),
-            label: 'Home'
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(CupertinoIcons.add),
-            label: 'Create',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(CupertinoIcons.chat_bubble),
-            label: 'Chat',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(CupertinoIcons.bell),
-            label: 'Notification',
-          ),
-        ],
-        onTap: onPageChange ,
-      ),
       appBar: AppBar(
         leading: Builder(builder: (context) {
           return IconButton(
@@ -95,8 +68,39 @@ void onPageChange(int index){
           })
         ],
       ),
+      drawer: const CommunityListDrawer(),
+      endDrawer: const ProfileDrawer(),
+      body: Constants.tabWidgets[_page],
+      bottomNavigationBar: CupertinoTabBar(
+        height: 60,
+
+        currentIndex: _page,
+        activeColor: currentTheme.iconTheme.color,
+        backgroundColor: currentTheme.backgroundColor,
+        border: const Border(
+          top: BorderSide(
+            color: Colors.grey,
+            width: 0.5,
+          ),
+        ),
+        items: const [
+          BottomNavigationBarItem(
+              icon: Icon(CupertinoIcons.home), label: 'Home'),
+          BottomNavigationBarItem(
+            icon: Icon(CupertinoIcons.add),
+            label: 'Create',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(CupertinoIcons.chat_bubble),
+            label: 'Chat',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(CupertinoIcons.bell),
+            label: 'Notification',
+          ),
+        ],
+        onTap: onPageChange,
+      ),
     );
   }
-
-
 }
