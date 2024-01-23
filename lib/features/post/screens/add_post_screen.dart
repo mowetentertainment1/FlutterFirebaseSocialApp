@@ -3,8 +3,11 @@ import 'dart:io';
 import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:untitled/features/community/controller/community_controller.dart';
 
+import '../../../core/common/loader.dart';
 import '../../../core/utils.dart';
+import '../../../model/community_model.dart';
 import '../../../theme/pallete.dart';
 
 class AddPostScreen extends ConsumerStatefulWidget {
@@ -16,6 +19,7 @@ class AddPostScreen extends ConsumerStatefulWidget {
   class _CreateAddPostScreenState extends ConsumerState<AddPostScreen> {
   final titleController = TextEditingController();
   final bodyController = TextEditingController();
+  Community? selectedCommunity;
 
   @override
   void dispose() {
@@ -91,6 +95,56 @@ class AddPostScreen extends ConsumerStatefulWidget {
           ),
         )
             : const SizedBox(height: 0),
+        const SizedBox(height: 20),
+        const Padding(
+          padding: EdgeInsets.symmetric(horizontal: 8.0),
+          child: Align(
+            alignment: Alignment.centerLeft,
+            child: Text('Select Community:', style: TextStyle(fontSize: 16)),
+
+          ),
+        ),
+        ref.watch(userCommunitiesProvider).when(
+            data: (communities) {
+              if (communities.isEmpty) {
+                return const Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 8.0),
+                  child: Text('You have not joined any community yet'),
+                );
+              }
+              return Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 8.0),
+
+                child: DropdownButton<String>(
+                  value: selectedCommunity != null
+                      ? selectedCommunity!.name
+                      : communities.first.name,
+                  icon: const Icon(Icons.arrow_downward),
+                  iconSize: 24,
+                  elevation: 16,
+                  style:  TextStyle(color:currentTheme.textTheme.bodyText2!.color!),
+                  underline: Container(
+                    height: 2,
+                    color: currentTheme.textTheme.bodyText2!.color!,
+                  ),
+                  onChanged: (String? newValue) {
+                    setState(() {
+                      selectedCommunity = communities.firstWhere(
+                              (element) => element.name == newValue);
+                    });
+                  },
+                  items: communities
+                      .map<DropdownMenuItem<String>>((Community value) {
+                    return DropdownMenuItem<String>(
+                      value:  value.name,
+                      child: Text(value.name),
+                    );
+                  }).toList(),
+                ),
+              );
+            },
+            loading: () => const Loader(),
+            error: (error, stackTrace) => Text(error.toString())),
         Container(
           padding: const EdgeInsets.all(8.0),
           child: Row(
