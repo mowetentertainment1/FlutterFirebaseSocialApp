@@ -4,6 +4,7 @@ class Assets {
 
   static const String commonErrorText = 'lib/core/common/error_text.dart';
   static const String commonLoader = 'lib/core/common/loader.dart';
+  static const String commonPostCard = 'lib/core/common/post_card.dart';
   static const String commonSightInBtn = 'lib/core/common/sight_in_btn.dart';
   static const String constantsConstants = 'lib/core/constants/constants.dart';
   static const String constantsFirebaseConstants = 'lib/core/constants/firebase_constants.dart';

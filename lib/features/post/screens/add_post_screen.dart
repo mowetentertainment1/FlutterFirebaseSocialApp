@@ -147,10 +147,10 @@ class AddPostScreen extends ConsumerStatefulWidget {
                   icon: const Icon(Icons.arrow_downward),
                   iconSize: 24,
                   elevation: 16,
-                  style:  TextStyle(color:currentTheme.textTheme.bodyText2!.color!),
+                  style:  TextStyle(color:currentTheme.textTheme.bodyText2!.color!.withOpacity(0.8),),
                   underline: Container(
                     height: 2,
-                    color: currentTheme.textTheme.bodyText2!.color!,
+                    color: currentTheme.textTheme.bodyText2!.color!.withOpacity(0.8),
                   ),
                   onChanged: (String? newValue) {
                     setState(() {
