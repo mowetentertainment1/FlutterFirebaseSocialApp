@@ -21,7 +21,9 @@ final postControllerProvider = StateNotifierProvider<PostController, bool>((ref)
     ref: ref,
   );
 });
-
+final userPostsProvider = StreamProvider.family<List<Post>, List<Community>>((ref, communities) {
+  return ref.watch(postControllerProvider.notifier).getPosts(communities);
+});
 class PostController extends StateNotifier<bool> {
   final PostRepo _postRepo;
 
@@ -116,5 +118,11 @@ class PostController extends StateNotifier<bool> {
       Routemaster.of(context).push('/');
     });
   }
-
+Stream<List<Post>> getPosts(List<Community> communities) {
+    if (communities.isNotEmpty) {
+      return _postRepo.getPosts(communities);
+    } else {
+      return const Stream.empty();
+    }
+  }
 }
