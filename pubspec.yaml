@@ -49,6 +49,7 @@ dependencies:
   shared_preferences: ^2.2.2
   image_picker: ^1.0.7
   video_player: ^2.8.2
+  uuid: ^4.3.3
 
 androidx:
   activity:activity:1:
