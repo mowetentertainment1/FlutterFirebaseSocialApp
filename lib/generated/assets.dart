@@ -9,6 +9,7 @@ class Assets {
   static const String constantsFirebaseConstants = 'lib/core/constants/firebase_constants.dart';
   static const String controllerAuthController = 'lib/features/auth/controller/auth_controller.dart';
   static const String controllerCommunityController = 'lib/features/community/controller/community_controller.dart';
+  static const String controllerPostController = 'lib/features/post/controller/post_controller.dart';
   static const String controllerUserProfileController = 'lib/features/home/user_profile/controller/user_profile_controller.dart';
   static const String coreFailure = 'lib/core/failure.dart';
   static const String coreTypeDefs = 'lib/core/type_defs.dart';
@@ -34,6 +35,7 @@ class Assets {
   static const String providersStorageRepositoryProvider = 'lib/core/providers/storage_repository_provider.dart';
   static const String repositoryAuthRepository = 'lib/features/auth/repository/auth_repository.dart';
   static const String repositoryCommunityRepo = 'lib/features/community/repository/community_repo.dart';
+  static const String repositoryPostRepo = 'lib/features/post/repository/post_repo.dart';
   static const String repositoryUserProfileRepo = 'lib/features/home/user_profile/repository/user_profile_repo.dart';
   static const String screensAddModsSreen = 'lib/features/community/screens/add_mods_sreen.dart';
   static const String screensAddPostScreen = 'lib/features/post/screens/add_post_screen.dart';

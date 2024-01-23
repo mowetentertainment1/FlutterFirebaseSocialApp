@@ -9,6 +9,7 @@ import '../../../core/common/loader.dart';
 import '../../../core/utils.dart';
 import '../../../model/community_model.dart';
 import '../../../theme/pallete.dart';
+import '../controller/post_controller.dart';
 
 class AddPostScreen extends ConsumerStatefulWidget {
   const AddPostScreen({super.key});
@@ -18,14 +19,12 @@ class AddPostScreen extends ConsumerStatefulWidget {
 
   class _CreateAddPostScreenState extends ConsumerState<AddPostScreen> {
   final titleController = TextEditingController();
-  final bodyController = TextEditingController();
   Community? selectedCommunity;
-
+  List<Community> communities = [];
   @override
   void dispose() {
     super.dispose();
     titleController.dispose();
-    bodyController.dispose();
   }
   List<File> imageFiles = [];
   File? avatarFile;
@@ -47,16 +46,29 @@ class AddPostScreen extends ConsumerStatefulWidget {
       });
     }
   }
+  void sharePost() {
+      ref.read(postControllerProvider.notifier).shareImagePost(
+        context: context,
+        title: titleController.text.trim(),
+        selectedCommunity: selectedCommunity ?? communities[0],
+        file: imageFiles,
+        // webFile: bannerWebFile,
+      );
+    }
   @override
   Widget build(BuildContext context) {
     final currentTheme = ref.watch(themeNotifierProvider);
+    final isLoading = ref.watch(postControllerProvider);
 
-    return Wrap(
+    return isLoading
+        ? const Loader()
+        : Wrap(
       children: [
     Container(
       padding: const EdgeInsets.all(8.0),
-      child: const TextField(
-      decoration: InputDecoration(
+      child:  TextField(
+      controller: titleController,
+      decoration: const InputDecoration(
       hintText: 'What\'s on your mind?',
       ),
       maxLines: 5,
@@ -106,6 +118,7 @@ class AddPostScreen extends ConsumerStatefulWidget {
         ),
         ref.watch(userCommunitiesProvider).when(
             data: (communities) {
+              communities = communities;
               if (communities.isEmpty) {
                 return const Padding(
                   padding: EdgeInsets.symmetric(horizontal: 8.0),
@@ -171,7 +184,7 @@ class AddPostScreen extends ConsumerStatefulWidget {
               ),
               const Spacer(),
               ElevatedButton(
-                onPressed: () {},
+                onPressed: () => sharePost(),
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.blueAccent,
                 ),
