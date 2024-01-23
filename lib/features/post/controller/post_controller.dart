@@ -77,8 +77,44 @@ class PostController extends StateNotifier<bool> {
       state = false;
       res.fold((l) => showSnackBar(context, l.message), (r) {
         showSnackBar(context, 'Posted successfully!');
-        Routemaster.of(context).pop();
+        Routemaster.of(context).push('/');
       });
     });
   }
-}}
+}
+  void shareTextPost({
+    required BuildContext context,
+    required String title,
+    required Community selectedCommunity,
+    required String description,
+  }) async {
+    state = true;
+    String postId = const Uuid().v1();
+    final user = _ref.read(userProvider)!;
+
+    final Post post = Post(
+      id: postId,
+      title: title,
+      communityName: selectedCommunity.name,
+      communityProfilePic: selectedCommunity.avatar,
+      upvotes: [],
+      downvotes: [],
+      commentCount: 0,
+      username: user.name,
+      uid: user.uid,
+      type: 'text',
+      createdAt: DateTime.now(),
+      awards: [],
+      description: description, linkImage: [],
+    );
+
+    final res = await _postRepo.addPost(post);
+    // _ref.read(userProfileControllerProvider.notifier).updateUserKarma(UserKarma.textPost);
+    state = false;
+    res.fold((l) => showSnackBar(context, l.message), (r) {
+      showSnackBar(context, 'Posted successfully!');
+      Routemaster.of(context).push('/');
+    });
+  }
+
+}

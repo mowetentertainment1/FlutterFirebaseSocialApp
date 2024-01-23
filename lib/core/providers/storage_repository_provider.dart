@@ -33,7 +33,6 @@ class StorageRepository {
       {required String path, required String id, required List<File> files}) async {
     try {
       List<String> urls = [];
-
       for (File file in files) {
         final ref = _firebaseStorage.ref().child(path).child(id).child(file.path);
         UploadTask uploadTask = ref.putFile(file);

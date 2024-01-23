@@ -20,7 +20,7 @@ class AddPostScreen extends ConsumerStatefulWidget {
   class _CreateAddPostScreenState extends ConsumerState<AddPostScreen> {
   final titleController = TextEditingController();
   Community? selectedCommunity;
-  List<Community> communities = [];
+  List<Community> communitie = [];
   @override
   void dispose() {
     super.dispose();
@@ -47,13 +47,25 @@ class AddPostScreen extends ConsumerStatefulWidget {
     }
   }
   void sharePost() {
+    if (imageFiles.isNotEmpty && titleController.text.isNotEmpty) {
       ref.read(postControllerProvider.notifier).shareImagePost(
         context: context,
         title: titleController.text.trim(),
-        selectedCommunity: selectedCommunity ?? communities[0],
+        selectedCommunity: selectedCommunity ?? communitie[0],
         file: imageFiles,
         // webFile: bannerWebFile,
       );
+    } else if (titleController.text.isNotEmpty) {
+      ref.read(postControllerProvider.notifier).shareTextPost(
+        context: context,
+        title: titleController.text.trim(),
+        selectedCommunity: selectedCommunity ?? communitie[0],
+        description: '',
+      );
+    } else {
+      showSnackBar(context, 'Please enter title');
+    }
+
     }
   @override
   Widget build(BuildContext context) {
@@ -118,7 +130,7 @@ class AddPostScreen extends ConsumerStatefulWidget {
         ),
         ref.watch(userCommunitiesProvider).when(
             data: (communities) {
-              communities = communities;
+              communitie = communities;
               if (communities.isEmpty) {
                 return const Padding(
                   padding: EdgeInsets.symmetric(horizontal: 8.0),
