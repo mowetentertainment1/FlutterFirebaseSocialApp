@@ -29,4 +29,20 @@ class StorageRepository {
       return left(Failure(e.toString()));
     }
   }
+  Future<Either<Failure, List<String>>> storeMultipleFiles(
+      {required String path, required String id, required List<File> files}) async {
+    try {
+      List<String> urls = [];
+
+      for (File file in files) {
+        final ref = _firebaseStorage.ref().child(path).child(id).child(file.path);
+        UploadTask uploadTask = ref.putFile(file);
+        TaskSnapshot taskSnapshot = await uploadTask;
+        String url = await taskSnapshot.ref.getDownloadURL();
+        urls.add(url);
+      }     return right(urls);
+    } catch (e) {
+      return left(Failure(e.toString()));
+    }
+  }
 }
