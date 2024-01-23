@@ -35,14 +35,14 @@ class AddPostScreen extends ConsumerStatefulWidget {
       });
     }
   }
-  // void pickImageFromCamera() async {
-  //   final res = await pickImageCamera();
-  //   if (res != null) {
-  //     setState(() {
-  //         imageFiles.add(File(res.path));
-  //     });
-  //   }
-  // }
+  void pickImageFromCamera() async {
+    final res = await pickImageCamera();
+    if (res != null) {
+      setState(() {
+          imageFiles.add(File(res.path));
+      });
+    }
+  }
   @override
   Widget build(BuildContext context) {
     final currentTheme = ref.watch(themeNotifierProvider);
@@ -101,7 +101,7 @@ class AddPostScreen extends ConsumerStatefulWidget {
               ),
               IconButton(
                 icon: const Icon(Icons.linked_camera),
-                onPressed: () {},
+                onPressed: () =>pickImageFromCamera(),
               ),
               IconButton(
                 icon: const Icon(Icons.video_collection),

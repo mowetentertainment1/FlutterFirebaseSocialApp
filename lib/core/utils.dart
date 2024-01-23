@@ -27,14 +27,14 @@ Future<List<XFile>?> pickMultipleImages() async {
     return null;
   }
 }
-// Future<XFile?> pickImageCamera() async {
-//   try {
-//     final pickedImage = await ImagePicker().pickImage(source: ImageSource.camera);
-//     return pickedImage;
-//   } catch (e) {
-//     return null;
-//   }
-// }
+Future<XFile?> pickImageCamera() async {
+  try {
+    final pickedImage = await ImagePicker().pickImage(source: ImageSource.camera);
+    return pickedImage;
+  } catch (e) {
+    return null;
+  }
+}
 // Future<List<File>?> pickVideos() async {
 //   try {
 //     FilePickerResult? result = await FilePicker.platform.pickFiles(
