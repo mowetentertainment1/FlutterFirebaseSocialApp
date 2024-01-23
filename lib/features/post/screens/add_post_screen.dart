@@ -59,38 +59,38 @@ class AddPostScreen extends ConsumerStatefulWidget {
       ),
     ),
         const SizedBox(height: 20),
-        // imageFiles.isNotEmpty
-        //     ? SizedBox(
-        //   height: 200,
-        //   child: GridView.builder(
-        //     scrollDirection: Axis.horizontal,
-        //     gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-        //       crossAxisCount: 1,
-        //     ),
-        //     itemCount: imageFiles.length,
-        //     itemBuilder: (BuildContext context, int index) {
-        //       return Padding(
-        //         padding: const EdgeInsets.all(8.0),
-        //         child: DottedBorder(
-        //           borderType: BorderType.RRect,
-        //           radius: const Radius.circular(10),
-        //           dashPattern: const [12, 4],
-        //           strokeCap: StrokeCap.round,
-        //           color: currentTheme.textTheme.bodyText2!.color!,
-        //           child: Container(
-        //             height: 200,
-        //             decoration: BoxDecoration(
-        //               borderRadius: BorderRadius.circular(10),
-        //             ),
-        //             width: double.infinity,
-        //             child: Image.file(imageFiles[index]),
-        //           ),
-        //         ),
-        //       );
-        //     },
-        //   ),
-        // )
-        //     : const SizedBox(height: 0),
+        imageFiles.isNotEmpty
+            ? SizedBox(
+          height: 200,
+          child: GridView.builder(
+            scrollDirection: Axis.horizontal,
+            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: 1,
+            ),
+            itemCount: imageFiles.length,
+            itemBuilder: (BuildContext context, int index) {
+              return Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: DottedBorder(
+                  borderType: BorderType.RRect,
+                  radius: const Radius.circular(10),
+                  dashPattern: const [12, 4],
+                  strokeCap: StrokeCap.round,
+                  color: currentTheme.textTheme.bodyText2!.color!,
+                  child: Container(
+                    height: 200,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    width: double.infinity,
+                    child: Image.file(imageFiles[index]),
+                  ),
+                ),
+              );
+            },
+          ),
+        )
+            : const SizedBox(height: 0),
         Container(
           padding: const EdgeInsets.all(8.0),
           child: Row(
