@@ -7,7 +7,6 @@ class ImageZoomScreen extends StatefulWidget {
   final List<String> imageUrls;
   final int initialIndex;
 
-
   const ImageZoomScreen({
     Key? key,
     required this.imageUrls,
@@ -20,7 +19,14 @@ class ImageZoomScreen extends StatefulWidget {
 
 class _ImageZoomScreenState extends State<ImageZoomScreen> {
   bool isZoomed = false;
-
+  int currentIndex = 0;
+  late PageController pageController;
+  @override
+  void initState() {
+    super.initState();
+    pageController = PageController(initialPage: widget.initialIndex);
+    currentIndex = widget.initialIndex;
+  }
   @override
   Widget build(BuildContext context) {
     double _progress = 0;
@@ -46,10 +52,17 @@ class _ImageZoomScreenState extends State<ImageZoomScreen> {
           backgroundDecoration: const BoxDecoration(
             color: Colors.black,
           ),
-          pageController: PageController(initialPage: widget.initialIndex),
+          pageController: pageController,
+          onPageChanged: (index) {
+            setState(() {
+              currentIndex = index;
+            });
+          },
         ),
 
       ),
+
+  
       floatingActionButton: Row(
         mainAxisAlignment: MainAxisAlignment.end,
 
@@ -85,9 +98,39 @@ class _ImageZoomScreenState extends State<ImageZoomScreen> {
             tooltip: 'Download Image',
             child: const Icon(Icons.download),
           ),
+          const SizedBox(width: 10),
+          FloatingActionButton(
+            onPressed: () {
+              navigateToNextImage();
+            },
+            tooltip: 'Next Image',
+            child: const Icon(Icons.arrow_forward),
+          ),
         ],
       ),
-
     );
+  }
+
+  void navigateToNextImage() {
+    final nextIndex = currentIndex + 1;
+    if (nextIndex < widget.imageUrls.length) {
+      setState(() {
+        currentIndex = nextIndex;
+      });
+      pageController.jumpToPage(nextIndex);
+    } else {
+      // Optional: Handle when there are no more images
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('No more images'),
+        ),
+      );
+    }
+  }
+
+  @override
+  void dispose() {
+    pageController.dispose();
+    super.dispose();
   }
 }
