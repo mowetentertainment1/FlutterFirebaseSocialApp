@@ -130,6 +130,10 @@ class PostController extends StateNotifier<bool> {
     final userId = _ref.read(userProvider)!.uid;
     _postRepo.upVotePost(post, userId);
   }
+  void downVotePost(Post post) async {
+    final userId = _ref.read(userProvider)!.uid;
+    _postRepo.downvote(post, userId);
+  }
 Stream<List<Post>> getPosts(List<Community> communities) {
     if (communities.isNotEmpty) {
       return _postRepo.getPosts(communities);
