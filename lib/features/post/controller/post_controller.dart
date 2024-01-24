@@ -126,6 +126,10 @@ class PostController extends StateNotifier<bool> {
       showSnackBar(context, 'Post deleted.');
     });
   }
+  void upVotePost(Post post) async {
+    final userId = _ref.read(userProvider)!.uid;
+    _postRepo.upVotePost(post, userId);
+  }
 Stream<List<Post>> getPosts(List<Community> communities) {
     if (communities.isNotEmpty) {
       return _postRepo.getPosts(communities);

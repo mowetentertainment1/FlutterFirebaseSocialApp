@@ -17,6 +17,9 @@ import '../../features/post/controller/post_controller.dart';
     void deletePost(BuildContext context, WidgetRef ref) {
       ref.read(postControllerProvider.notifier).deletePost( post, context);
     }
+    void upvotePost(WidgetRef ref) {
+      ref.read(postControllerProvider.notifier).upVotePost( post);
+    }
 
     @override
     Widget build(BuildContext context, WidgetRef ref) {
@@ -188,8 +191,11 @@ import '../../features/post/controller/post_controller.dart';
                                   Row(
                                     children: [
                                       IconButton(
-                                        onPressed: () {},
+                                        onPressed: () =>upvotePost(ref),
                                         icon: const Icon(Icons.arrow_upward),
+                                        color: post.upvotes.contains(user.uid)
+                                            ? Colors.green
+                                            : null,
                                       ),
                                       Text(
                                         post.upvotes.length.toString(),
@@ -201,8 +207,11 @@ import '../../features/post/controller/post_controller.dart';
                                         ),
                                       ),
                                       IconButton(
-                                        onPressed: () {},
+                                        onPressed: () =>upvotePost(ref),
                                         icon: const Icon(Icons.arrow_downward),
+                                        color: post.downvotes.contains(user.uid)
+                                            ? Colors.red
+                                            : null,
                                       ),
                                       Text(
                                         post.downvotes.length.toString(),
