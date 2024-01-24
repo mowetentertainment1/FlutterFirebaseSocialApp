@@ -7,11 +7,16 @@ import 'package:google_fonts/google_fonts.dart';
   import 'package:untitled/theme/pallete.dart';
 
   import '../../features/auth/controller/auth_controller.dart';
+import '../../features/post/controller/post_controller.dart';
 
   class PostCard extends ConsumerWidget {
     final Post post;
 
     const PostCard({super.key, required this.post});
+
+    void deletePost(BuildContext context, WidgetRef ref) {
+      ref.read(postControllerProvider.notifier).deletePost( post, context);
+    }
 
     @override
     Widget build(BuildContext context, WidgetRef ref) {
@@ -102,9 +107,7 @@ import 'package:google_fonts/google_fonts.dart';
                                             //   ),
                                             // );
                                           } else {
-                                            // _ref
-                                            //     .read(postControllerProvider.notifier)
-                                            //     .deletePost(post.id);
+                                            deletePost(context, ref);
                                           }
                                         }),
                                 ],
@@ -118,6 +121,12 @@ import 'package:google_fonts/google_fonts.dart';
                                     letterSpacing: 0.5,
 
                                 ),
+                                // style: currentTheme.textTheme.bodyText2!.copyWith(
+                                //   color: currentTheme.textTheme.bodyText2!.color!
+                                //       .withOpacity(0.8),
+                                //   fontSize: 16,
+                                //
+                                // ),
                               ),
                               const SizedBox(height: 10),
                               if (isTypeImage)
@@ -206,10 +215,29 @@ import 'package:google_fonts/google_fonts.dart';
                                       ),
                                     ],
                                   ),
-                                  IconButton(
-                                    onPressed: () {},
-                                    icon: const Icon(Icons.comment),
+                                  Row(
+                                    children: [
+                                      IconButton(
+                                        onPressed: () {},
+                                        icon: const Icon(Icons.comment),
+                                      ),
+                                      Text(
+                                        post.commentCount.toString(),
+                                        style: currentTheme.textTheme.bodyText2!
+                                            .copyWith(
+                                          color: currentTheme
+                                              .textTheme.bodyText2!.color!
+                                              .withOpacity(0.8),
+                                        ),
+                                      ),
+                                      IconButton(
+                                        onPressed: () {},
+                                        icon: const Icon(Icons.share),
+                                      ),
+                                    ],
                                   ),
+
+
                                 ],
                               ),
                             ],

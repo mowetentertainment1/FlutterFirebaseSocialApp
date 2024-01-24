@@ -78,7 +78,7 @@ class PostController extends StateNotifier<bool> {
       // _ref.read(userProfileControllerProvider.notifier).updateUserKarma(UserKarma.imagePost);
       state = false;
       res.fold((l) => showSnackBar(context, l.message), (r) {
-        showSnackBar(context, 'Posted successfully!');
+        showSnackBar(context, 'Posted.');
         Routemaster.of(context).push('/');
       });
     });
@@ -114,8 +114,16 @@ class PostController extends StateNotifier<bool> {
     // _ref.read(userProfileControllerProvider.notifier).updateUserKarma(UserKarma.textPost);
     state = false;
     res.fold((l) => showSnackBar(context, l.message), (r) {
-      showSnackBar(context, 'Posted successfully!');
+      showSnackBar(context, 'Posted.');
       Routemaster.of(context).push('/');
+    });
+  }
+  void deletePost(Post post, BuildContext context) async {
+    state = true;
+    final res = await _postRepo.deletePost(post);
+    state = false;
+    res.fold((l) => showSnackBar(context, l.message), (r) {
+      showSnackBar(context, 'Post deleted.');
     });
   }
 Stream<List<Post>> getPosts(List<Community> communities) {
