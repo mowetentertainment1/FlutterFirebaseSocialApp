@@ -1,9 +1,7 @@
-import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:flutter_file_downloader/flutter_file_downloader.dart';
 import 'package:photo_view/photo_view.dart';
 import 'package:photo_view/photo_view_gallery.dart';
-import 'package:dio/dio.dart';
-import 'package:path_provider/path_provider.dart';
 
 class ImageZoomScreen extends StatefulWidget {
   final List<String> imageUrls;
@@ -25,6 +23,7 @@ class _ImageZoomScreenState extends State<ImageZoomScreen> {
 
   @override
   Widget build(BuildContext context) {
+    double _progress = 0;
     return Scaffold(
       appBar: AppBar(
       ),
@@ -49,42 +48,46 @@ class _ImageZoomScreenState extends State<ImageZoomScreen> {
           ),
           pageController: PageController(initialPage: widget.initialIndex),
         ),
+
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          downloadImage(widget.imageUrls[widget.initialIndex]);
-        },
-        tooltip: 'Download Image',
-        child: const Icon(Icons.download),
+      floatingActionButton: Row(
+        mainAxisAlignment: MainAxisAlignment.end,
+
+        children: [
+          FloatingActionButton(
+            onPressed: () {
+              setState(() {
+                isZoomed = !isZoomed;
+              });
+            },
+            child: Icon(isZoomed ? Icons.zoom_out : Icons.zoom_in),
+          ),
+          const SizedBox(width: 10),
+          FloatingActionButton(
+            onPressed: () {
+              FileDownloader.downloadFile(url:  widget.imageUrls[widget.initialIndex], onDownloadError: (e) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    content: Text('Failed to download image: $e'),
+                  ),
+                );
+              }, onDownloadCompleted: (String path) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text('File saved at: $path'),
+                    ));
+              }, onProgress: (fileName, progress) {
+                _progress = progress;
+              }
+              );
+              // downloadImage(widget.imageUrls[widget.initialIndex]);
+            },
+            tooltip: 'Download Image',
+            child: const Icon(Icons.download),
+          ),
+        ],
       ),
+
     );
-  }
-
-  Future<void> downloadImage(String imageUrl) async {
-    // Capture the context before entering the asynchronous code
-    final context = this.context;
-
-    Dio dio = Dio();
-    try {
-      final response = await dio.get(imageUrl, options: Options(responseType: ResponseType.bytes));
-
-      final externalDir = await getDownloadsDirectory();
-      final filePath = '${externalDir!.path}/downloaded_image.jpg';
-
-      File file = File(filePath);
-      await file.writeAsBytes(response.data);
-
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text('File saved at: $filePath'),
-        ),
-      );
-    } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text('Failed to download image: $e'),
-        ),
-      );
-    }
   }
 }

@@ -87,7 +87,7 @@ class PostCard extends ConsumerWidget {
                                 child: GridView.builder(
                                   scrollDirection: Axis.horizontal,
                                   gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                                    crossAxisCount: 1, // Adjust this based on the number of columns you want
+                                    crossAxisCount: 1,
                                   ),
                                   itemCount: post.linkImage.length,
                                   itemBuilder: (BuildContext context, int index) {
@@ -117,7 +117,7 @@ class PostCard extends ConsumerWidget {
                                               borderRadius: BorderRadius.circular(10),
                                             ),
                                             width: double.infinity,
-                                            child: Image.network(post.linkImage[index]),
+                                            child: Image.network(post.linkImage[index],),
                                           ),
                                         ),
                                       ),
