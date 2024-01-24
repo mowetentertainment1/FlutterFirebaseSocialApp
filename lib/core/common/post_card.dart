@@ -1,5 +1,7 @@
+import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:untitled/core/common/photo_view.dart';
 import 'package:untitled/model/post_model.dart';
 import 'package:untitled/theme/pallete.dart';
 
@@ -20,8 +22,7 @@ class PostCard extends ConsumerWidget {
               color: currentTheme.drawerTheme.backgroundColor,
               borderRadius: BorderRadius.circular(10),
             ),
-            padding: const EdgeInsets.symmetric(vertical: 10),
-            margin: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+            margin: const EdgeInsets.symmetric(vertical: 4),
             child: Row(
               children: [
                 Expanded(
@@ -29,8 +30,7 @@ class PostCard extends ConsumerWidget {
                     children: [
                       Container(
                         padding: const EdgeInsets.symmetric(
-                                horizontal: 16, vertical: 4)
-                            .copyWith(right: 0),
+                                horizontal: 16, vertical: 4),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
@@ -38,7 +38,7 @@ class PostCard extends ConsumerWidget {
                               crossAxisAlignment: CrossAxisAlignment.center,
                               children: [
                                 CircleAvatar(
-                                  radius: 20,
+                                  radius: 25,
                                   backgroundImage:
                                       NetworkImage(post.communityProfilePic),
                                 ),
@@ -54,6 +54,8 @@ class PostCard extends ConsumerWidget {
                                           color: currentTheme
                                               .textTheme.bodyText2!.color!
                                               .withOpacity(0.8),
+                                          fontSize: 16,
+                                          fontWeight: FontWeight.bold,
                                         ),
                                       ),
                                       Text(
@@ -80,13 +82,48 @@ class PostCard extends ConsumerWidget {
                             ),
                             const SizedBox(height: 10),
                             if (isTypeImage)
-                              Container(
+                              SizedBox(
                                 height: 200,
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(10),
+                                child: GridView.builder(
+                                  scrollDirection: Axis.horizontal,
+                                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                                    crossAxisCount: 1, // Adjust this based on the number of columns you want
+                                  ),
+                                  itemCount: post.linkImage.length,
+                                  itemBuilder: (BuildContext context, int index) {
+                                    return Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: DottedBorder(
+                                        borderType: BorderType.RRect,
+                                        radius: const Radius.circular(10),
+                                        dashPattern: const [12, 4],
+                                        strokeCap: StrokeCap.round,
+                                        color: currentTheme.textTheme.bodyText2!.color!,
+                                        child: InkWell(
+                                          onTap: () {
+                                            Navigator.push(
+                                              context,
+                                              MaterialPageRoute(
+                                                builder: (context) => ImageZoomScreen(
+                                                  imageUrls: post.linkImage,
+                                                  initialIndex: index,
+                                                ),
+                                              ),
+                                            );
+                                          },
+                                          child: Container(
+                                            height: 200,
+                                            decoration: BoxDecoration(
+                                              borderRadius: BorderRadius.circular(10),
+                                            ),
+                                            width: double.infinity,
+                                            child: Image.network(post.linkImage[index]),
+                                          ),
+                                        ),
+                                      ),
+                                    );
+                                  },
                                 ),
-                                width: double.infinity,
-                                child: Image.network(post.linkImage[0]),
                               ),
                             const SizedBox(height: 10),
                             Row(
