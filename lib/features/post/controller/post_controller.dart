@@ -22,7 +22,7 @@ final postControllerProvider = StateNotifierProvider<PostController, bool>((ref)
   );
 });
 final userPostsProvider = StreamProvider.family<List<Post>, List<Community>>((ref, communities) {
-  return ref.watch(postControllerProvider.notifier).getPosts(communities);
+  return ref.read(postControllerProvider.notifier).getPosts(communities);
 });
 class PostController extends StateNotifier<bool> {
   final PostRepo _postRepo;
@@ -132,7 +132,7 @@ class PostController extends StateNotifier<bool> {
   }
   void downVotePost(Post post) async {
     final userId = _ref.read(userProvider)!.uid;
-    _postRepo.downvote(post, userId);
+    _postRepo.downVotePost(post, userId);
   }
 Stream<List<Post>> getPosts(List<Community> communities) {
     if (communities.isNotEmpty) {

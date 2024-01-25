@@ -152,12 +152,6 @@ class PostCard extends ConsumerWidget {
                                 fontSize: 16,
                                 letterSpacing: 0.5,
                               ),
-                              // style: currentTheme.textTheme.bodyText2!.copyWith(
-                              //   color: currentTheme.textTheme.bodyText2!.color!
-                              //       .withOpacity(0.8),
-                              //   fontSize: 16,
-                              //
-                              // ),
                             ),
                             const SizedBox(height: 10),
                             if (isTypeImage)
@@ -225,7 +219,7 @@ class PostCard extends ConsumerWidget {
                                           : null,
                                     ),
                                     Text(
-                                      post.upvotes.length.toString(),
+                                      (post.upvotes.length-post.downvotes.length).toString(),
                                       style: currentTheme.textTheme.bodyText2!
                                           .copyWith(
                                         color: currentTheme
@@ -239,15 +233,6 @@ class PostCard extends ConsumerWidget {
                                       color: post.downvotes.contains(user.uid)
                                           ? Colors.red
                                           : null,
-                                    ),
-                                    Text(
-                                      post.downvotes.length.toString(),
-                                      style: currentTheme.textTheme.bodyText2!
-                                          .copyWith(
-                                        color: currentTheme
-                                            .textTheme.bodyText2!.color!
-                                            .withOpacity(0.8),
-                                      ),
                                     ),
                                   ],
                                 ),

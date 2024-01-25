@@ -2,8 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:routemaster/routemaster.dart';
 import 'package:untitled/core/common/error_text.dart';
+import 'package:untitled/features/home/user_profile/controller/user_profile_controller.dart';
 
 import '../../../../core/common/loader.dart';
+import '../../../../core/common/post_card.dart';
 import '../../../auth/controller/auth_controller.dart';
 
 class UserProfileScreen extends ConsumerWidget {
@@ -51,7 +53,6 @@ class UserProfileScreen extends ConsumerWidget {
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     Text('u/${user.name}',
-                                        overflow: TextOverflow.ellipsis,
                                         style: const TextStyle(
                                             fontSize: 16,
                                             fontWeight: FontWeight.bold)),
@@ -85,7 +86,19 @@ class UserProfileScreen extends ConsumerWidget {
                         ])))
                   ];
                 },
-                body: const Text("Displaying posts")),
+                body: ref.watch(getUserPostsProvider(uid)).when(
+                    data: (posts) {
+                      return ListView.builder(
+                        itemCount: posts.length,
+                        itemBuilder: (context, index) {
+                          final post = posts[index];
+                          return PostCard(post: post);
+                        },
+                      );
+                    },
+                    error: (Object error, StackTrace stackTrace) =>
+                        ErrorText(error: error.toString()),
+                    loading: () => const Loader())),
             loading: () => const Loader(),
             error: (error, stackTrace) => ErrorText(
                   error: error.toString(),

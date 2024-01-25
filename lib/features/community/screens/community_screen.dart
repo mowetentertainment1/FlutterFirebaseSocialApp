@@ -59,7 +59,6 @@ class CommunityScreen extends ConsumerWidget {
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     Text('r/${community.name}',
-                                        overflow: TextOverflow.ellipsis,
                                         style: const TextStyle(
                                             fontSize: 16,
                                             fontWeight: FontWeight.bold)),

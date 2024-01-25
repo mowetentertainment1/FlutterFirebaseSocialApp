@@ -67,7 +67,7 @@ class PostRepo {
       });
     }
 }
-  void downvote(Post post, String userId) async {
+  void downVotePost(Post post, String userId) async {
     if (post.upvotes.contains(userId)) {
       _posts.doc(post.id).update({
         'upvotes': FieldValue.arrayRemove([userId]),

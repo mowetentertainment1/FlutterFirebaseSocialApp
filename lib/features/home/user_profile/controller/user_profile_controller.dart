@@ -1,12 +1,15 @@
 import 'dart:io';
 
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:routemaster/routemaster.dart';
 import 'package:untitled/features/home/user_profile/repository/user_profile_repo.dart';
+import 'package:untitled/model/user.dart';
 
 import '../../../../core/providers/storage_repository_provider.dart';
 import '../../../../core/utils.dart';
+import '../../../../model/post_model.dart';
 import '../../../auth/controller/auth_controller.dart';
 
 final userProfileControllerProvider =
@@ -16,7 +19,9 @@ final userProfileControllerProvider =
       ref: ref,
       storageRepository: ref.watch(storageRepositoryProvider));
 });
-
+final getUserPostsProvider = StreamProvider.family((ref,String uid) {
+  return ref.read(userProfileControllerProvider.notifier).getUserPosts(uid);
+});
 class UserProfileController extends StateNotifier<bool> {
   final UserProfileRepo _userRepo;
 
@@ -66,7 +71,11 @@ class UserProfileController extends StateNotifier<bool> {
         (l) => showSnackBar(context, l.message),
         (r) => {
               _ref.read(userProvider.notifier).update((state) => user),
-              Routemaster.of(context).pop()
+        showSnackBar(context, 'Post deleted.'),
+              Routemaster.of(context).push('/u/${user.uid}')
             });
+  }
+  Stream<List<Post>> getUserPosts(String uid) {
+    return _userRepo.getUserPosts(uid);
   }
 }
