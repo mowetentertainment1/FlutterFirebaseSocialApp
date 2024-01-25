@@ -24,6 +24,9 @@ final postControllerProvider = StateNotifierProvider<PostController, bool>((ref)
 final userPostsProvider = StreamProvider.family<List<Post>, List<Community>>((ref, communities) {
   return ref.read(postControllerProvider.notifier).getPosts(communities);
 });
+final getPostByIdProvider = StreamProvider.family<Post, String>((ref, postId) {
+  return ref.watch(postControllerProvider.notifier).getPost(postId);
+});
 class PostController extends StateNotifier<bool> {
   final PostRepo _postRepo;
 
@@ -140,5 +143,9 @@ Stream<List<Post>> getPosts(List<Community> communities) {
     } else {
       return const Stream.empty();
     }
+  }
+  Stream<Post>
+      getPost(String postId) {
+    return _postRepo.getPostById(postId);
   }
 }
