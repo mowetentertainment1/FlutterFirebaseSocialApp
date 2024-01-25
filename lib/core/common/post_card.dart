@@ -2,6 +2,7 @@ import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:routemaster/routemaster.dart';
 import 'package:untitled/core/common/photo_view.dart';
 import 'package:untitled/features/community/controller/community_controller.dart';
 import 'package:untitled/model/post_model.dart';
@@ -9,6 +10,7 @@ import 'package:untitled/theme/pallete.dart';
 
 import '../../features/auth/controller/auth_controller.dart';
 import '../../features/post/controller/post_controller.dart';
+import '../../model/community_model.dart';
 
 class PostCard extends ConsumerWidget {
   final Post post;
@@ -26,7 +28,9 @@ class PostCard extends ConsumerWidget {
   void downVotePost(WidgetRef ref) {
     ref.read(postControllerProvider.notifier).downVotePost(post);
   }
-
+  void navigateToCommunity(BuildContext context) {
+    Routemaster.of(context).push('/r/${post.communityName}');
+  }
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final isTypeImage = post.type == 'image';
@@ -55,10 +59,15 @@ class PostCard extends ConsumerWidget {
                             Row(
                               crossAxisAlignment: CrossAxisAlignment.center,
                               children: [
-                                CircleAvatar(
-                                  radius: 25,
-                                  backgroundImage:
-                                      NetworkImage(post.communityProfilePic),
+                                GestureDetector(
+                                  onTap: () {
+                                    navigateToCommunity(context);
+                                  },
+                                  child: CircleAvatar(
+                                    radius: 25,
+                                    backgroundImage:
+                                        NetworkImage(post.communityProfilePic),
+                                  ),
                                 ),
                                 Padding(
                                   padding: const EdgeInsets.symmetric(
@@ -105,10 +114,33 @@ class PostCard extends ConsumerWidget {
                                         data: (community) {
                                           if (community.mods
                                               .contains(user.uid)) {
-                                            return IconButton(
-                                                onPressed: () {},
-                                                icon: const Icon(Icons
-                                                    .admin_panel_settings));
+                                            return PopupMenuButton(
+                                              icon: const Icon(Icons.admin_panel_settings),
+                                                itemBuilder: (context) => [
+                                                  const PopupMenuItem(
+                                                    value: 'edit',
+                                                    child: Text('Edit'),
+                                                  ),
+                                                  const PopupMenuItem(
+                                                    value: 'delete',
+                                                    child: Text('Delete',
+                                                        style: TextStyle(
+                                                            color: Colors.red)),
+                                                  ),
+                                                ],
+                                                onSelected: (value) {
+                                                  if (value == 'edit') {
+                                                    // Navigator.push(
+                                                    //   context,
+                                                    //   MaterialPageRoute(
+                                                    //     builder: (context) =>
+                                                    //         EditPostScreen(post: post),
+                                                    //   ),
+                                                    // );
+                                                  } else {
+                                                    deletePost(context, ref);
+                                                  }
+                                                });
                                           }
                                           return const SizedBox();
                                         },
