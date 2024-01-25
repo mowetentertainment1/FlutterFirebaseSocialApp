@@ -6,6 +6,7 @@ import 'package:fpdart/fpdart.dart';
 import 'package:routemaster/routemaster.dart';
 import 'package:untitled/core/constants/constants.dart';
 import 'package:untitled/model/community_model.dart';
+import 'package:untitled/model/post_model.dart';
 
 import '../../../core/failure.dart';
 import '../../../core/providers/storage_repository_provider.dart';
@@ -37,6 +38,10 @@ final getCommunityByNameProvider = StreamProvider.family((ref, String name) {
 
 final searchCommunityProvider = StreamProvider.family((ref, String query) {
   return ref.watch(communityControllerProvider.notifier).searchCommunity(query);
+});
+
+final getCommunityPostsProvider = StreamProvider.family((ref, String name) {
+  return ref.read(communityControllerProvider.notifier).getCommunityPosts(name);
 });
 
 class CommunityController extends StateNotifier<bool> {
@@ -150,5 +155,8 @@ class CommunityController extends StateNotifier<bool> {
               Routemaster.of(context).pop()
             });
     state = false;
+  }
+  Stream<List<Post>> getCommunityPosts(String communityName) {
+    return _communityRepo.getCommunityPosts(communityName);
   }
 }

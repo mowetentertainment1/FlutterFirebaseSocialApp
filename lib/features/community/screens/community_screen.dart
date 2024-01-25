@@ -4,6 +4,8 @@ import 'package:routemaster/routemaster.dart';
 import 'package:untitled/core/common/loader.dart';
 import 'package:untitled/model/community_model.dart';
 
+import '../../../core/common/error_text.dart';
+import '../../../core/common/post_card.dart';
 import '../../auth/controller/auth_controller.dart';
 import '../controller/community_controller.dart';
 
@@ -109,7 +111,19 @@ class CommunityScreen extends ConsumerWidget {
                         ])))
                   ];
                 },
-                body: const Text("Displaying posts")),
+                body: ref.watch(getCommunityPostsProvider(communityName)).when(
+                    data: (posts) {
+                      return ListView.builder(
+                        itemCount: posts.length,
+                        itemBuilder: (context, index) {
+                          final post = posts[index];
+                          return PostCard(post: post);
+                        },
+                      );
+                    },
+                    error: (Object error, StackTrace stackTrace) =>
+                        ErrorText(error: error.toString()),
+                    loading: () => const Loader())),
             loading: () => const Loader(),
             error: (error, stackTrace) => Text(error.toString())));
   }

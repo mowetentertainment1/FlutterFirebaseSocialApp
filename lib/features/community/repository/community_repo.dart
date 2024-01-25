@@ -7,6 +7,7 @@ import 'package:untitled/model/community_model.dart';
 import '../../../core/constants/firebase_constants.dart';
 import '../../../core/failure.dart';
 import '../../../core/providers/firebase_providers.dart';
+import '../../../model/post_model.dart';
 
 final communityRepoProvider = Provider((ref) {
   return CommunityRepo(firestore: ref.watch(firestoreProvider));
@@ -126,8 +127,17 @@ class CommunityRepo {
       return left(Failure(e.toString()));
     }
   }
+  Stream<List<Post>> getCommunityPosts(String communityName) {
+    return _posts
+        .where("communityName", isEqualTo: communityName)
+        .orderBy("createdAt", descending: true)
+        .snapshots()
+        .map((event) => event.docs
+        .map((e) => Post.fromMap(e.data() as Map<String, dynamic>))
+        .toList());
+  }
 
-
+  CollectionReference get _posts => _firestore.collection("posts");
   CollectionReference get _communities =>
       _firestore.collection(FirebaseConstants.communitiesCollection);
 }
