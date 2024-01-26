@@ -5,6 +5,7 @@ import 'package:untitled/core/common/post_card.dart';
 
 import '../../../core/common/loader.dart';
 import '../controller/post_controller.dart';
+import '../widget/comment_card.dart';
 
 class CommentsScreen extends ConsumerStatefulWidget {
   final String postId;
@@ -34,47 +35,41 @@ class _CommentScreenState extends ConsumerState<CommentsScreen> {
             data: (post) {
               return Column(
                 children: [
-                      PostCard(post: post),
-                      Expanded(
+                  PostCard(post: post),
+                  // if (!isGuest)
+                  //   Responsive(
+                  //     child:
+                      TextField(
+                        // onSubmitted: (val) => addComment(data),
+                        controller: _commentController,
+                        decoration: const InputDecoration(
+                          hintText: 'What are your thoughts?',
+                          filled: true,
+                          border: InputBorder.none,
+                        ),
+                      ),
+                    // ),
+                  ref.watch(getPostCommentsProvider(widget.postId)).when(
+                    data: (data) {
+                      return Expanded(
                         child: ListView.builder(
-                          itemCount: 10,
+                          itemCount: data.length,
                           itemBuilder: (BuildContext context, int index) {
-                            return ListTile(
-                              title: Text('Comment $index'),
-                            );
+                            final comment = data[index];
+                            return CommentCard(comment: comment);
                           },
                         ),
-                      ),
-                      const Divider(height: 1),
-                      Container(
-                        decoration:
-                            BoxDecoration(color: Theme.of(context).cardColor),
-                        child: IconTheme(
-                          data: IconThemeData(
-                              color: Theme.of(context).colorScheme.secondary),
-                          child: Container(
-                            margin: const EdgeInsets.symmetric(horizontal: 2.0),
-                            child: Row(
-                              children: [
-                                Expanded(
-                                  child: TextField(
-                                    controller: _commentController,
-                                    decoration: const InputDecoration(
-                                      hintText: 'Add a comment...',
-                                      border: InputBorder.none,
-                                    ),
-                                  ),
-                                ),
-                                IconButton(
-                                    icon: const Icon(Icons.send),
-                                    onPressed: () {}),
-                              ],
-                            ),
-                          ),
-                        ),
-                      ),
-                    ],
-              );
+                      );
+                    },
+                    error: (error, stackTrace) {
+                      return ErrorText(
+                        error: error.toString(),
+                      );
+                    },
+                    loading: () => const Loader(),
+                  ),
+                ],
+              );;
             },
             error: (Object error, StackTrace stackTrace) {
               return ErrorText(error: error.toString());
