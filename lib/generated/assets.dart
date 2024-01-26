@@ -52,5 +52,6 @@ class Assets {
   static const String screensModToolScreen = 'lib/features/community/screens/mod_tool_screen.dart';
   static const String screensUserProfileScreen = 'lib/features/home/user_profile/screens/user_profile_screen.dart';
   static const String themePallete = 'lib/theme/pallete.dart';
+  static const String widgetCommentCard = 'lib/features/post/widget/comment_card.dart';
 
 }

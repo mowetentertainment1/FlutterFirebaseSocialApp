@@ -8,6 +8,7 @@ import 'package:uuid/uuid.dart';
 
 import '../../../core/providers/storage_repository_provider.dart';
 import '../../../core/utils.dart';
+import '../../../model/comment_model.dart';
 import '../../../model/community_model.dart';
 import '../../../model/post_model.dart';
 import '../../auth/controller/auth_controller.dart';
@@ -26,6 +27,10 @@ final userPostsProvider = StreamProvider.family<List<Post>, List<Community>>((re
 });
 final getPostByIdProvider = StreamProvider.family<Post, String>((ref, postId) {
   return ref.watch(postControllerProvider.notifier).getPost(postId);
+});
+final getPostCommentsProvider = StreamProvider.family((ref, String postId) {
+  final postController = ref.watch(postControllerProvider.notifier);
+  return postController.fetchPostComments(postId);
 });
 class PostController extends StateNotifier<bool> {
   final PostRepo _postRepo;
@@ -147,5 +152,8 @@ Stream<List<Post>> getPosts(List<Community> communities) {
   Stream<Post>
       getPost(String postId) {
     return _postRepo.getPostById(postId);
+  }
+  Stream<List<Comment>> fetchPostComments(String postId) {
+    return _postRepo.getCommentsOfPost(postId);
   }
 }

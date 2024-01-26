@@ -4,8 +4,10 @@ import 'package:fpdart/fpdart.dart';
 import 'package:untitled/core/type_defs.dart';
 import 'package:untitled/model/community_model.dart';
 
+import '../../../core/constants/firebase_constants.dart';
 import '../../../core/failure.dart';
 import '../../../core/providers/firebase_providers.dart';
+import '../../../model/comment_model.dart';
 import '../../../model/post_model.dart';
 
 final postRepoProvider = Provider((ref) {
@@ -17,7 +19,8 @@ class PostRepo {
 
   PostRepo({required FirebaseFirestore firestore}) : _firestore = firestore;
 
-  CollectionReference get _posts => _firestore.collection("posts");
+  CollectionReference get _posts => _firestore.collection(FirebaseConstants.postsCollection);
+  CollectionReference get _comments => _firestore.collection(FirebaseConstants.commentsCollection);
 
   FutureVoid addPost(Post post) async {
     try {
@@ -87,6 +90,17 @@ class PostRepo {
   Stream<Post> getPostById(String postId) {
     return _posts.doc(postId).snapshots().map(
         (event) => Post.fromMap(event.data() as Map<String, dynamic>));
+  }
+  Stream<List<Comment>> getCommentsOfPost(String postId) {
+    return _comments.where('postId', isEqualTo: postId).orderBy('createdAt', descending: true).snapshots().map(
+          (event) => event.docs
+          .map(
+            (e) => Comment.fromMap(
+          e.data() as Map<String, dynamic>,
+        ),
+      )
+          .toList(),
+    );
   }
 
 }
