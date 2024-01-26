@@ -6,6 +6,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:routemaster/routemaster.dart';
 import 'package:uuid/uuid.dart';
 
+import '../../../core/enums/enums.dart';
 import '../../../core/providers/storage_repository_provider.dart';
 import '../../../core/utils.dart';
 import '../../../model/comment_model.dart';
@@ -84,7 +85,7 @@ class PostController extends StateNotifier<bool> {
       );
 
       final res = await _postRepo.addPost(post);
-      // _ref.read(userProfileControllerProvider.notifier).updateUserKarma(UserKarma.imagePost);
+      _ref.read(userProfileControllerProvider.notifier).updateUserKarma(UserKarma.imagePost);
       state = false;
       res.fold((l) => showSnackBar(context, l.message), (r) {
         showSnackBar(context, 'Posted.');
@@ -120,7 +121,7 @@ class PostController extends StateNotifier<bool> {
     );
 
     final res = await _postRepo.addPost(post);
-    // _ref.read(userProfileControllerProvider.notifier).updateUserKarma(UserKarma.textPost);
+    _ref.read(userProfileControllerProvider.notifier).updateUserKarma(UserKarma.textPost);
     state = false;
     res.fold((l) => showSnackBar(context, l.message), (r) {
       showSnackBar(context, 'Posted.');
@@ -130,6 +131,7 @@ class PostController extends StateNotifier<bool> {
   void deletePost(Post post, BuildContext context) async {
     state = true;
     final res = await _postRepo.deletePost(post);
+    _ref.read(userProfileControllerProvider.notifier).updateUserKarma(UserKarma.deletePost);
     state = false;
     res.fold((l) => showSnackBar(context, l.message), (r) {
       showSnackBar(context, 'Post deleted.');
@@ -173,7 +175,7 @@ Stream<List<Post>> getPosts(List<Community> communities) {
       profilePic: user.profilePic,
     );
     final res = await _postRepo.addComment(comment);
-    // _ref.read(userProfileControllerProvider.notifier).updateUserKarma(UserKarma.comment);
+    _ref.read(userProfileControllerProvider.notifier).updateUserKarma(UserKarma.comment);
     res.fold((l) => showSnackBar(context, l.message), (r) => null);
   }
 }
