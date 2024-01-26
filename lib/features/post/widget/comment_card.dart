@@ -51,11 +51,37 @@ class CommentCard extends ConsumerWidget {
               children: [
                 IconButton(
                   onPressed: () {},
+                  icon: const Icon(Icons.arrow_upward),
+                  // color: post.upvotes.contains(user.uid)
+                  //     ? Colors.green
+                  //     : null,
+                ),
+                // Text(
+                //   (post.upvotes.length-post.downvotes.length).toString(),
+                //   style: currentTheme.textTheme.bodyText2!
+                //       .copyWith(
+                //     color: currentTheme
+                //         .textTheme.bodyText2!.color!
+                //         .withOpacity(0.8),
+                //   ),
+                // ),
+                IconButton(
+                  onPressed: () {},
+                  icon: const Icon(Icons.arrow_downward),
+                  // color: post.downvotes.contains(user.uid)
+                  //     ? Colors.red
+                  //     : null,
+                ),
+                const Spacer(),
+                IconButton(
+                  onPressed: () {},
                   icon: const Icon(Icons.reply),
                 ),
                 const Text('Reply'),
               ],
             ),
+            const Divider()
+
           ],
         ),
     );

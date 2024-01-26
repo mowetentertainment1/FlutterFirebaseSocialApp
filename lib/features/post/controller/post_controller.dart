@@ -12,6 +12,7 @@ import '../../../model/comment_model.dart';
 import '../../../model/community_model.dart';
 import '../../../model/post_model.dart';
 import '../../auth/controller/auth_controller.dart';
+import '../../home/user_profile/controller/user_profile_controller.dart';
 import '../repository/post_repo.dart';
 final postControllerProvider = StateNotifierProvider<PostController, bool>((ref) {
   final postRepo = ref.watch(postRepoProvider);
@@ -155,5 +156,24 @@ Stream<List<Post>> getPosts(List<Community> communities) {
   }
   Stream<List<Comment>> fetchPostComments(String postId) {
     return _postRepo.getCommentsOfPost(postId);
+  }
+  void addComment({
+    required BuildContext context,
+    required String text,
+    required Post post,
+  }) async {
+    final user = _ref.read(userProvider)!;
+    String commentId = const Uuid().v1();
+    Comment comment = Comment(
+      id: commentId,
+      text: text,
+      createdAt: DateTime.now(),
+      postId: post.id,
+      username: user.name,
+      profilePic: user.profilePic,
+    );
+    final res = await _postRepo.addComment(comment);
+    // _ref.read(userProfileControllerProvider.notifier).updateUserKarma(UserKarma.comment);
+    res.fold((l) => showSnackBar(context, l.message), (r) => null);
   }
 }
