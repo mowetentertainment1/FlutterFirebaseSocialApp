@@ -10,7 +10,6 @@ import 'package:untitled/theme/pallete.dart';
 
 import '../../features/auth/controller/auth_controller.dart';
 import '../../features/post/controller/post_controller.dart';
-import '../../model/community_model.dart';
 
 class PostCard extends ConsumerWidget {
   final Post post;
@@ -28,17 +27,21 @@ class PostCard extends ConsumerWidget {
   void downVotePost(WidgetRef ref) {
     ref.read(postControllerProvider.notifier).downVotePost(post);
   }
+
   void navigateToCommunity(BuildContext context) {
     Routemaster.of(context).push('/r/${post.communityName}');
   }
+
   void navigateToComments(BuildContext context) {
     Routemaster.of(context).push('/post/${post.id}/comments');
   }
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final isTypeImage = post.type == 'image';
     final isTypeText = post.type == 'text';
     final user = ref.watch(userProvider)!;
+    final isGuest = !user.isAuthenticated;
     final currentTheme = ref.watch(themeNotifierProvider);
     return Column(
       children: [
@@ -83,7 +86,8 @@ class PostCard extends ConsumerWidget {
                                         width: 160,
                                         child: Text(
                                           'r/${post.communityName}',
-                                          style: currentTheme.textTheme.bodyText2!
+                                          style: currentTheme
+                                              .textTheme.bodyText2!
                                               .copyWith(
                                             color: currentTheme
                                                 .textTheme.bodyText2!.color!
@@ -97,7 +101,8 @@ class PostCard extends ConsumerWidget {
                                         width: 160,
                                         child: Text(
                                           'u/${post.username}',
-                                          style: currentTheme.textTheme.bodyText2!
+                                          style: currentTheme
+                                              .textTheme.bodyText2!
                                               .copyWith(
                                             color: currentTheme
                                                 .textTheme.bodyText2!.color!
@@ -118,19 +123,21 @@ class PostCard extends ConsumerWidget {
                                           if (community.mods
                                               .contains(user.uid)) {
                                             return PopupMenuButton(
-                                              icon: const Icon(Icons.admin_panel_settings),
+                                                icon: const Icon(
+                                                    Icons.admin_panel_settings),
                                                 itemBuilder: (context) => [
-                                                  const PopupMenuItem(
-                                                    value: 'edit',
-                                                    child: Text('Edit'),
-                                                  ),
-                                                  const PopupMenuItem(
-                                                    value: 'delete',
-                                                    child: Text('Delete',
-                                                        style: TextStyle(
-                                                            color: Colors.red)),
-                                                  ),
-                                                ],
+                                                      const PopupMenuItem(
+                                                        value: 'edit',
+                                                        child: Text('Edit'),
+                                                      ),
+                                                      const PopupMenuItem(
+                                                        value: 'delete',
+                                                        child: Text('Delete',
+                                                            style: TextStyle(
+                                                                color: Colors
+                                                                    .red)),
+                                                      ),
+                                                    ],
                                                 onSelected: (value) {
                                                   if (value == 'edit') {
                                                     // Navigator.push(
@@ -247,14 +254,18 @@ class PostCard extends ConsumerWidget {
                                 Row(
                                   children: [
                                     IconButton(
-                                      onPressed: () => upvotePost(ref),
+                                      onPressed: isGuest
+                                          ? () {}
+                                          : () => upvotePost(ref),
                                       icon: const Icon(Icons.arrow_upward),
                                       color: post.upvotes.contains(user.uid)
                                           ? Colors.green
                                           : null,
                                     ),
                                     Text(
-                                      (post.upvotes.length-post.downvotes.length).toString(),
+                                      (post.upvotes.length -
+                                              post.downvotes.length)
+                                          .toString(),
                                       style: currentTheme.textTheme.bodyText2!
                                           .copyWith(
                                         color: currentTheme
@@ -263,7 +274,9 @@ class PostCard extends ConsumerWidget {
                                       ),
                                     ),
                                     IconButton(
-                                      onPressed: () => downVotePost(ref),
+                                      onPressed: isGuest
+                                          ? () {}
+                                          : () => downVotePost(ref),
                                       icon: const Icon(Icons.arrow_downward),
                                       color: post.downvotes.contains(user.uid)
                                           ? Colors.red
@@ -274,7 +287,9 @@ class PostCard extends ConsumerWidget {
                                 Row(
                                   children: [
                                     IconButton(
-                                      onPressed: () {navigateToComments(context);},
+                                      onPressed: () {
+                                        navigateToComments(context);
+                                      },
                                       icon: const Icon(Icons.comment),
                                     ),
                                     Text(

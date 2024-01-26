@@ -42,6 +42,14 @@ class PostRepo {
             .map((e) => Post.fromMap(e.data() as Map<String, dynamic>))
             .toList());
   }
+  Stream<List<Post>> getGuestPosts() {
+    return _posts
+        .orderBy("createdAt", descending: true).limit(10)
+        .snapshots()
+        .map((event) => event.docs
+            .map((e) => Post.fromMap(e.data() as Map<String, dynamic>))
+            .toList());
+  }
 
   FutureVoid deletePost(Post post) async {
     try {
@@ -91,6 +99,7 @@ class PostRepo {
     return _posts.doc(postId).snapshots().map(
         (event) => Post.fromMap(event.data() as Map<String, dynamic>));
   }
+
   Stream<List<Comment>> getCommentsOfPost(String postId) {
     return _comments.where('postId', isEqualTo: postId).orderBy('createdAt', descending: true).snapshots().map(
           (event) => event.docs

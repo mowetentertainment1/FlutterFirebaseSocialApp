@@ -4,6 +4,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:untitled/core/constants/constants.dart';
 
 import '../../features/auth/controller/auth_controller.dart';
+import '../../theme/pallete.dart';
 
 class SightInBtn extends ConsumerWidget {
   const SightInBtn({super.key});
@@ -14,14 +15,26 @@ class SightInBtn extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return ElevatedButton.icon(
+    return Padding(
+      padding: const EdgeInsets.all(18.0),
+      child: ElevatedButton.icon(
         onPressed: () => signInWithGoogle(context, ref),
-        icon: Image.asset(Constants.googlePath, height: 60, width: 100),
-        label: Text("Sign in with Google ",
-            style: GoogleFonts.poppins(
-              fontSize: 17,
-              fontWeight: FontWeight.bold,
-              letterSpacing: 0.5,
-            )));
+        icon: Image.asset(
+          Constants.googlePath,
+          width: 35,
+        ),
+        label: const Text(
+          'Continue with Google',
+          style: TextStyle(fontSize: 18, color: Colors.white),
+        ),
+        style: ElevatedButton.styleFrom(
+          backgroundColor: Pallete.greyColor,
+          minimumSize: const Size(double.infinity, 50),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(20),
+          ),
+        ),
+      ),
+    );
   }
 }

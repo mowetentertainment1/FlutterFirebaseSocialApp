@@ -39,6 +39,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
   Widget build(BuildContext context) {
     final user = ref.watch(userProvider);
     final currentTheme = ref.watch(themeNotifierProvider);
+    final isGuest = !user!.isAuthenticated;
     return PopScope(
       canPop: true,
       onPopInvoked: (bool didPop) async {
@@ -94,7 +95,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                 icon: Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 5.0),
                   child: CircleAvatar(
-                    backgroundImage: NetworkImage(user!.profilePic),
+                    backgroundImage: NetworkImage(user.profilePic),
                   ),
                 ),
                 onPressed: () => displayEndDrawer(context),
@@ -102,10 +103,10 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
             })
           ],
         ),
-        drawer: const CommunityListDrawer(),
+        drawer: isGuest? null : const CommunityListDrawer(),
         endDrawer: const ProfileDrawer(),
         body: Constants.tabWidgets[_page],
-        bottomNavigationBar: CupertinoTabBar(
+        bottomNavigationBar:isGuest? null : CupertinoTabBar(
           height: 60,
           currentIndex: _page,
           activeColor: currentTheme.iconTheme.color,

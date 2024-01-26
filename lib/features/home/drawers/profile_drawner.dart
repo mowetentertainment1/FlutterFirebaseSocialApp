@@ -23,7 +23,8 @@ class ProfileDrawer extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final user = ref.watch(userProvider)!;
+    final user = ref.watch(userProvider);
+    final isGuest = !user!.isAuthenticated;
     return Drawer(
       child: SafeArea(
           child: Column(
@@ -43,24 +44,26 @@ class ProfileDrawer extends ConsumerWidget {
           ),
           const SizedBox(height: 15),
           const Divider(),
-          ListTile(
-              title: const Text("My profile"),
-              leading: const Icon(Icons.person),
-              onTap: () => navigateToUserProfile(context, user.uid)),
-          const Divider(),
+          isGuest
+              ? const SizedBox()
+              : ListTile(
+                  title: const Text("My profile"),
+                  leading: const Icon(Icons.person),
+                  onTap: () => navigateToUserProfile(context, user.uid)),
+
           ListTile(
             title: const Text("Log out"),
             leading: const Icon(Icons.logout, color: Colors.red),
             onTap: () => logOut(ref),
           ),
           const Divider(),
-
           SizedBox(
             child: ListTile(
               title: const Text("Dark Mode"),
               leading: const Icon(Icons.dark_mode),
               trailing: Switch.adaptive(
-                value: ref.watch(themeNotifierProvider.notifier).mode == ThemeMode.dark,
+                value: ref.watch(themeNotifierProvider.notifier).mode ==
+                    ThemeMode.dark,
                 onChanged: (val) => toggleTheme(ref),
               ),
             ),

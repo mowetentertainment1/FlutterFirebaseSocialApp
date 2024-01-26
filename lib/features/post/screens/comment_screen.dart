@@ -5,6 +5,7 @@ import 'package:untitled/core/common/post_card.dart';
 
 import '../../../core/common/loader.dart';
 import '../../../model/post_model.dart';
+import '../../auth/controller/auth_controller.dart';
 import '../controller/post_controller.dart';
 import '../widget/comment_card.dart';
 
@@ -39,6 +40,8 @@ class _CommentScreenState extends ConsumerState<CommentsScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final user = ref.watch(userProvider)!;
+    final isGuest = !user.isAuthenticated;
     return Scaffold(
         appBar: AppBar(
           title: const Text('Comments'),
@@ -48,9 +51,9 @@ class _CommentScreenState extends ConsumerState<CommentsScreen> {
               return Column(
                 children: [
                   PostCard(post: post),
-                  // if (!isGuest)
-                  //   Responsive(
-                  //     child:
+                  if (!isGuest)
+                    // Responsive(
+                    //   child:
                   SizedBox(
                     height: 50,
                     child: TextField(
