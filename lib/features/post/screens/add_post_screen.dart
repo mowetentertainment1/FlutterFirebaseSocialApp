@@ -8,6 +8,7 @@ import 'package:untitled/features/community/controller/community_controller.dart
 import '../../../core/common/loader.dart';
 import '../../../core/utils.dart';
 import '../../../model/community_model.dart';
+import '../../../responsive/responsive.dart';
 import '../../../theme/pallete.dart';
 import '../controller/post_controller.dart';
 
@@ -74,144 +75,146 @@ class AddPostScreen extends ConsumerStatefulWidget {
 
     return isLoading
         ? const Loader()
-        : Wrap(
-      children: [
-    Container(
-      padding: const EdgeInsets.all(8.0),
-      child:  TextField(
-      controller: titleController,
-      decoration: const InputDecoration(
-      hintText: 'What\'s on your mind?',
-      ),
-      maxLines: 5,
-      ),
-    ),
-        const SizedBox(height: 20),
-        imageFiles.isNotEmpty
-            ? SizedBox(
-          height: 200,
-          child: GridView.builder(
-            scrollDirection: Axis.horizontal,
-            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 1,
-            ),
-            itemCount: imageFiles.length,
-            itemBuilder: (BuildContext context, int index) {
-              return Padding(
+        : Responsive(
+          child: Wrap(
+                children: [
+              Container(
                 padding: const EdgeInsets.all(8.0),
-                child: DottedBorder(
-                  borderType: BorderType.RRect,
-                  radius: const Radius.circular(10),
-                  dashPattern: const [12, 4],
-                  strokeCap: StrokeCap.round,
-                  color: currentTheme.textTheme.bodyText2!.color!,
-                  child: Container(
-                    height: 200,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(10),
+                child:  TextField(
+                controller: titleController,
+                decoration: const InputDecoration(
+                hintText: 'What\'s on your mind?',
+                ),
+                maxLines: 5,
+                ),
+              ),
+          const SizedBox(height: 20),
+          imageFiles.isNotEmpty
+              ? SizedBox(
+            height: 200,
+            child: GridView.builder(
+              scrollDirection: Axis.horizontal,
+              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 1,
+              ),
+              itemCount: imageFiles.length,
+              itemBuilder: (BuildContext context, int index) {
+                return Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: DottedBorder(
+                    borderType: BorderType.RRect,
+                    radius: const Radius.circular(10),
+                    dashPattern: const [12, 4],
+                    strokeCap: StrokeCap.round,
+                    color: currentTheme.textTheme.bodyText2!.color!,
+                    child: Container(
+                      height: 200,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      width: double.infinity,
+                      child: Image.file(imageFiles[index]),
                     ),
-                    width: double.infinity,
-                    child: Image.file(imageFiles[index]),
                   ),
-                ),
-              );
-            },
-          ),
-        )
-            : const SizedBox(height: 0),
-        const SizedBox(height: 20),
-        const Padding(
-          padding: EdgeInsets.symmetric(horizontal: 8.0),
-          child: Align(
-            alignment: Alignment.centerLeft,
-            child: Text('Select Community:', style: TextStyle(fontSize: 16)),
-
-          ),
-        ),
-        ref.watch(userCommunitiesProvider).when(
-            data: (communities) {
-              communitie = communities;
-              if (communities.isEmpty) {
-                return const Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 8.0),
-                  child: Text('You have not joined any community yet'),
                 );
-              }
-              return Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 8.0),
-
-                child: DropdownButton<String>(
-                  value: selectedCommunity != null
-                      ? selectedCommunity!.name
-                      : communities.first.name,
-                  icon: const Icon(Icons.arrow_downward),
-                  iconSize: 24,
-                  elevation: 16,
-                  style:  TextStyle(color:currentTheme.textTheme.bodyText2!.color!.withOpacity(0.8),),
-                  underline: Container(
-                    height: 2,
-                    color: currentTheme.textTheme.bodyText2!.color!.withOpacity(0.8),
-                  ),
-                  onChanged: (String? newValue) {
-                    setState(() {
-                      selectedCommunity = communities.firstWhere(
-                              (element) => element.name == newValue);
-                    });
-                  },
-                  items: communities
-                      .map<DropdownMenuItem<String>>((Community value) {
-                    return DropdownMenuItem<String>(
-                      value:  value.name,
-                      child: Text(value.name),
-                    );
-                  }).toList(),
-                ),
-              );
-            },
-            loading: () => const Loader(),
-            error: (error, stackTrace) => Text(error.toString())),
-        Container(
-          padding: const EdgeInsets.all(8.0),
-          child: Row(
-            children: [
-              IconButton(
-                icon: const Icon(Icons.image),
-                onPressed: () =>pickImages(),
-              ),
-              IconButton(
-                icon: const Icon(Icons.linked_camera),
-                onPressed: () =>pickImageFromCamera(),
-              ),
-              IconButton(
-                icon: const Icon(Icons.video_collection),
-                onPressed: () {},
-              ),
-              IconButton(
-                icon: const Icon(Icons.emoji_emotions),
-                onPressed: () {},
-              ),
-              IconButton(
-                icon: const Icon(Icons.more_horiz),
-                onPressed: () {},
-              ),
-              const Spacer(),
-              ElevatedButton(
-                onPressed: () => sharePost(),
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.blueAccent,
-                ),
-                child: const Text(
-                  'Post',
-                  style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.white),
-                ),
-              )
-            ],
-
+              },
+            ),
+          )
+              : const SizedBox(height: 0),
+          const SizedBox(height: 20),
+          const Padding(
+            padding: EdgeInsets.symmetric(horizontal: 8.0),
+            child: Align(
+              alignment: Alignment.centerLeft,
+              child: Text('Select Community:', style: TextStyle(fontSize: 16)),
+          
+            ),
           ),
-        ),
-      ],);
+          ref.watch(userCommunitiesProvider).when(
+              data: (communities) {
+                communitie = communities;
+                if (communities.isEmpty) {
+                  return const Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 8.0),
+                    child: Text('You have not joined any community yet'),
+                  );
+                }
+                return Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 8.0),
+          
+                  child: DropdownButton<String>(
+                    value: selectedCommunity != null
+                        ? selectedCommunity!.name
+                        : communities.first.name,
+                    icon: const Icon(Icons.arrow_downward),
+                    iconSize: 24,
+                    elevation: 16,
+                    style:  TextStyle(color:currentTheme.textTheme.bodyText2!.color!.withOpacity(0.8),),
+                    underline: Container(
+                      height: 2,
+                      color: currentTheme.textTheme.bodyText2!.color!.withOpacity(0.8),
+                    ),
+                    onChanged: (String? newValue) {
+                      setState(() {
+                        selectedCommunity = communities.firstWhere(
+                                (element) => element.name == newValue);
+                      });
+                    },
+                    items: communities
+                        .map<DropdownMenuItem<String>>((Community value) {
+                      return DropdownMenuItem<String>(
+                        value:  value.name,
+                        child: Text(value.name),
+                      );
+                    }).toList(),
+                  ),
+                );
+              },
+              loading: () => const Loader(),
+              error: (error, stackTrace) => Text(error.toString())),
+          Container(
+            padding: const EdgeInsets.all(8.0),
+            child: Row(
+              children: [
+                IconButton(
+                  icon: const Icon(Icons.image),
+                  onPressed: () =>pickImages(),
+                ),
+                IconButton(
+                  icon: const Icon(Icons.linked_camera),
+                  onPressed: () =>pickImageFromCamera(),
+                ),
+                IconButton(
+                  icon: const Icon(Icons.video_collection),
+                  onPressed: () {},
+                ),
+                IconButton(
+                  icon: const Icon(Icons.emoji_emotions),
+                  onPressed: () {},
+                ),
+                IconButton(
+                  icon: const Icon(Icons.more_horiz),
+                  onPressed: () {},
+                ),
+                const Spacer(),
+                ElevatedButton(
+                  onPressed: () => sharePost(),
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.blueAccent,
+                  ),
+                  child: const Text(
+                    'Post',
+                    style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white),
+                  ),
+                )
+              ],
+          
+            ),
+          ),
+                ],),
+        );
   }
 }

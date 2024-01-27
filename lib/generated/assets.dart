@@ -39,6 +39,7 @@ class Assets {
   static const String repositoryCommunityRepo = 'lib/features/community/repository/community_repo.dart';
   static const String repositoryPostRepo = 'lib/features/post/repository/post_repo.dart';
   static const String repositoryUserProfileRepo = 'lib/features/home/user_profile/repository/user_profile_repo.dart';
+  static const String responsiveResponsive = 'lib/responsive/responsive.dart';
   static const String screensAddModsSreen = 'lib/features/community/screens/add_mods_sreen.dart';
   static const String screensAddPostScreen = 'lib/features/post/screens/add_post_screen.dart';
   static const String screensChatScreen = 'lib/features/chat/screens/chat_screen.dart';

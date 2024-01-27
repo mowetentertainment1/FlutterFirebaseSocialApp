@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:untitled/core/common/loader.dart';
 import 'package:untitled/core/common/sight_in_btn.dart';
+import 'package:untitled/responsive/responsive.dart';
 
 import '../../../core/constants/constants.dart';
 import '../controller/auth_controller.dart';
@@ -53,7 +54,7 @@ void signInAsGuest(BuildContext context, WidgetRef ref) {
                   textAlign: TextAlign.center,
                 ),
                 const SizedBox(height: 100),
-                const SightInBtn(),
+                const Responsive(child: SightInBtn()),
                 const SizedBox(height: 60),
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 10),

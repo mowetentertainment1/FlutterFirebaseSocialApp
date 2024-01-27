@@ -30,7 +30,6 @@ class FeedScreen extends ConsumerWidget {
                 },
                 loading: () => const Loader(),
                 error: (e, s) {
-                  // print(e);
                   return ErrorText(error: e.toString());
                 },
               );
