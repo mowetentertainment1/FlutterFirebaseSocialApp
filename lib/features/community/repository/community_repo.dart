@@ -136,6 +136,25 @@ class CommunityRepo {
         .map((e) => Post.fromMap(e.data() as Map<String, dynamic>))
         .toList());
   }
+  FutureVoid deleteCommunity(String communityName) async {
+    try {
+      var communityDoc = await _communities.doc(communityName).get();
+      var posts = await _posts.where("communityName", isEqualTo: communityName).get();
+
+      if (!communityDoc.exists) {
+        throw Exception("Community doesn't exists");
+      }
+      for (var post in posts.docs) {
+        await post.reference.delete();
+      }
+
+      return right(_communities.doc(communityName).delete());
+    } on FirebaseException catch (e) {
+      throw e.message!;
+    } catch (e) {
+      return left(Failure(e.toString()));
+    }
+  }
 
   CollectionReference get _posts => _firestore.collection("posts");
   CollectionReference get _communities =>

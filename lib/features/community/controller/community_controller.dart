@@ -8,10 +8,12 @@ import 'package:untitled/core/constants/constants.dart';
 import 'package:untitled/model/community_model.dart';
 import 'package:untitled/model/post_model.dart';
 
+import '../../../core/enums/enums.dart';
 import '../../../core/failure.dart';
 import '../../../core/providers/storage_repository_provider.dart';
 import '../../../core/utils.dart';
 import '../../auth/controller/auth_controller.dart';
+import '../../home/user_profile/controller/user_profile_controller.dart';
 import '../repository/community_repo.dart';
 
 final userCommunitiesProvider = StreamProvider((ref) {
@@ -80,6 +82,7 @@ class CommunityController extends StateNotifier<bool> {
             });
     state = false;
   }
+
   void joinCommunity(Community community, BuildContext context) async {
     final user = _ref.read(userProvider)!;
     Either<Failure, void> res;
@@ -87,16 +90,21 @@ class CommunityController extends StateNotifier<bool> {
       res = await _communityRepo.leaveCommunity(community.name, user.uid);
     } else {
       res = await _communityRepo.joinCommunity(community.name, user.uid);
-      res.fold((l) => showSnackBar(context, l.message), (r) => {
-        if (community.members.contains(user.uid)) {
-          showSnackBar(context, "Leaved community ${community.name}"),
-        } else {
-          showSnackBar(context, " Joined community ${community.name}"),
-
-        }
-      });
+      res.fold(
+          (l) => showSnackBar(context, l.message),
+          (r) => {
+                if (community.members.contains(user.uid))
+                  {
+                    showSnackBar(context, "Leaved community ${community.name}"),
+                  }
+                else
+                  {
+                    showSnackBar(
+                        context, " Joined community ${community.name}"),
+                  }
+              });
     }
- }
+  }
 
   Stream<List<Community>> getCommunities() {
     final userUid = _ref.read(userProvider)?.uid ?? "";
@@ -120,17 +128,18 @@ class CommunityController extends StateNotifier<bool> {
           file: avatarFile,
           id: community.name,
           path: "community/${community.name}/avatar");
-      res.fold((l) => showSnackBar(context, l.message), (r) => community = community.copyWith(avatar: r));
+      res.fold((l) => showSnackBar(context, l.message),
+          (r) => community = community.copyWith(avatar: r));
     }
     if (bannerFile != null) {
       final res = await _storageRepository.storeFile(
           file: bannerFile,
           id: community.name,
           path: "community/${community.name}/banner");
-      res.fold((l) => showSnackBar(context, l.message), (r) => community = community.copyWith(banner: r));
-
+      res.fold((l) => showSnackBar(context, l.message),
+          (r) => community = community.copyWith(banner: r));
     }
-    if(description != community.description){
+    if (description != community.description) {
       community = community.copyWith(description: description);
     }
     final res = await _communityRepo.editCommunity(community);
@@ -142,10 +151,28 @@ class CommunityController extends StateNotifier<bool> {
               Routemaster.of(context).pop()
             });
   }
+
+  void deleteCommunity(String communityName, BuildContext context) async {
+    state = true;
+    final res = await _communityRepo.deleteCommunity(communityName);
+    _ref
+        .read(userProfileControllerProvider.notifier)
+        .updateUserKarma(UserKarma.deletePost);
+    state = false;
+    res.fold(
+        (l) => showSnackBar(context, l.message),
+        (r) => {
+              Routemaster.of(context).push('/'),
+              showSnackBar(context, "Community deleted."),
+            });
+  }
+
   Stream<List<Community>> searchCommunity(String query) {
     return _communityRepo.searchCommunity(query);
   }
-  void addMods(String communityName, List<String> uids, BuildContext context) async {
+
+  void addMods(
+      String communityName, List<String> uids, BuildContext context) async {
     state = true;
     final res = await _communityRepo.addMod(communityName, uids);
     res.fold(
@@ -156,6 +183,7 @@ class CommunityController extends StateNotifier<bool> {
             });
     state = false;
   }
+
   Stream<List<Post>> getCommunityPosts(String communityName) {
     return _communityRepo.getCommunityPosts(communityName);
   }
