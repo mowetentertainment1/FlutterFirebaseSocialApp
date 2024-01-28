@@ -66,6 +66,10 @@ class AddPostScreen extends ConsumerStatefulWidget {
     } else {
       showSnackBar(context, 'Please enter title');
     }
+    setState(() {
+      imageFiles = [];
+      titleController.clear();
+    });
 
     }
   @override
@@ -75,8 +79,7 @@ class AddPostScreen extends ConsumerStatefulWidget {
 
     return isLoading
         ? const Loader()
-        : Responsive(
-          child: Wrap(
+        : Wrap(
                 children: [
               Container(
                 padding: const EdgeInsets.all(8.0),
@@ -214,7 +217,7 @@ class AddPostScreen extends ConsumerStatefulWidget {
           
             ),
           ),
-                ],),
-        );
+                ]
+    );
   }
 }

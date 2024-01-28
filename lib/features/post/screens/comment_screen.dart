@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:untitled/core/common/error_text.dart';
-import 'package:untitled/core/common/post_card.dart';
 
 import '../../../core/common/loader.dart';
 import '../../../model/post_model.dart';
+import '../../../responsive/responsive.dart';
 import '../../auth/controller/auth_controller.dart';
 import '../controller/post_controller.dart';
 import '../widget/comment_card.dart';
@@ -50,35 +50,7 @@ class _CommentScreenState extends ConsumerState<CommentsScreen> {
             data: (post) {
               return Column(
                 children: [
-                  PostCard(post: post),
-                  if (!isGuest)
-                    // Responsive(
-                    //   child:
-                  SizedBox(
-                    height: 50,
-                    child: TextField(
-                      controller: _commentController,
-                      decoration: InputDecoration(
-                        border: const OutlineInputBorder(
-                          borderRadius: BorderRadius.all(
-                            Radius.circular(10),
-                          ),
-                        ),
-                        contentPadding:
-                            const EdgeInsets.symmetric(horizontal: 16),
-                        hintText: 'Add a comment',
-                        suffixIcon: GestureDetector(
-                            onTap: () {
-                              addComment(post);
-                            },
-                            child: const Icon(Icons.send, color: Colors.blue)),
-                      ),
-                      onSubmitted: (value) {
-                        addComment(post);
-                      },
-                    ),
-                  ),
-                  // ),
+
                   ref.watch(getPostCommentsProvider(widget.postId)).when(
                         data: (data) {
                           return Expanded(
@@ -98,13 +70,41 @@ class _CommentScreenState extends ConsumerState<CommentsScreen> {
                         },
                         loading: () => const Loader(),
                       ),
+                  if (!isGuest)
+                    Responsive(
+                      child:
+                      SizedBox(
+                        height: 50,
+                        child: TextField(
+                          controller: _commentController,
+                          decoration: InputDecoration(
+                            border: const OutlineInputBorder(
+                              borderRadius: BorderRadius.all(
+                                Radius.circular(10),
+                              ),
+                            ),
+                            contentPadding:
+                            const EdgeInsets.symmetric(horizontal: 16),
+                            hintText: 'Add a comment',
+                            suffixIcon: GestureDetector(
+                                onTap: () {
+                                  addComment(post);
+                                },
+                                child: const Icon(Icons.send, color: Colors.blue)),
+                          ),
+                          onSubmitted: (value) {
+                            addComment(post);
+                          },
+                        ),
+                      ),
+                    ),
                 ],
               );
-              ;
             },
             error: (Object error, StackTrace stackTrace) {
               return ErrorText(error: error.toString());
             },
             loading: () => const Loader()));
+
   }
 }

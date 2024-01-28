@@ -42,9 +42,7 @@ final getPostCommentsProvider = StreamProvider.family((ref, String postId) {
 
 class PostController extends StateNotifier<bool> {
   final PostRepo _postRepo;
-
   final Ref _ref;
-
   final StorageRepository _storageRepository;
 
   PostController({
@@ -96,8 +94,8 @@ class PostController extends StateNotifier<bool> {
             .updateUserKarma(UserKarma.imagePost);
         state = false;
         res.fold((l) => showSnackBar(context, l.message), (r) {
-          showSnackBar(context, 'Posted.');
           Routemaster.of(context).push('/');
+          showSnackBar(context, 'Posted.');
         });
       });
     }
@@ -137,7 +135,7 @@ class PostController extends StateNotifier<bool> {
     state = false;
     res.fold((l) => showSnackBar(context, l.message), (r) {
       showSnackBar(context, 'Posted.');
-      Routemaster.of(context).push('/');
+
     });
   }
 

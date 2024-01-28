@@ -1,4 +1,7 @@
+import 'dart:typed_data';
+
 import 'package:dotted_border/dotted_border.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -36,11 +39,24 @@ class PostCard extends ConsumerWidget {
   void navigateToComments(BuildContext context) {
     Routemaster.of(context).push('/post/${post.id}/comments');
   }
+  void navigateToImgPost(BuildContext context, int index) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) =>
+            ImageZoomScreen(
+              imageUrls: post.linkImage,
+              initialIndex: index,
+            ),
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final isTypeImage = post.type == 'image';
     final isTypeText = post.type == 'text';
+
     final user = ref.watch(userProvider)!;
     final isGuest = !user.isAuthenticated;
     final currentTheme = ref.watch(themeNotifierProvider);
@@ -221,16 +237,7 @@ class PostCard extends ConsumerWidget {
                                               .textTheme.bodyText2!.color!,
                                           child: InkWell(
                                             onTap: () {
-                                              Navigator.push(
-                                                context,
-                                                MaterialPageRoute(
-                                                  builder: (context) =>
-                                                      ImageZoomScreen(
-                                                    imageUrls: post.linkImage,
-                                                    initialIndex: index,
-                                                  ),
-                                                ),
-                                              );
+                                              navigateToImgPost(context, index);
                                             },
                                             child: Container(
                                               height: double.infinity,
@@ -323,4 +330,5 @@ class PostCard extends ConsumerWidget {
       ),
     );
   }
+
 }
