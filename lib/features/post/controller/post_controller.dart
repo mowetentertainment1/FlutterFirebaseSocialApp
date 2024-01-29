@@ -59,7 +59,6 @@ class PostController extends StateNotifier<bool> {
     required String title,
     required Community selectedCommunity,
     required List<File> file,
-    // required Uint8List? webFile,
   }) async {
     state = true;
     String postId = const Uuid().v1();
@@ -84,8 +83,8 @@ class PostController extends StateNotifier<bool> {
           uid: user.uid,
           type: 'image',
           createdAt: DateTime.now(),
-          awards: [],
-          linkImage: r,
+          linkVideo: '',
+          linkImage: r, awards: [],
         );
 
         final res = await _postRepo.addPost(post);
@@ -105,7 +104,7 @@ class PostController extends StateNotifier<bool> {
     required BuildContext context,
     required String title,
     required Community selectedCommunity,
-    required String description,
+    required String linkVideo,
   }) async {
     state = true;
     String postId = const Uuid().v1();
@@ -123,9 +122,8 @@ class PostController extends StateNotifier<bool> {
       uid: user.uid,
       type: 'text',
       createdAt: DateTime.now(),
-      awards: [],
-      description: description,
-      linkImage: [],
+      linkVideo: linkVideo,
+      linkImage: [], awards: [],
     );
 
     final res = await _postRepo.addPost(post);
@@ -136,6 +134,48 @@ class PostController extends StateNotifier<bool> {
     res.fold((l) => showSnackBar(context, l.message), (r) {
       showSnackBar(context, 'Posted.');
 
+    });
+  }
+  void shareVideoPost({
+    required BuildContext context,
+    required String title,
+    required Community selectedCommunity,
+    required File? file,
+  }) async {
+    state = true;
+    String postId = const Uuid().v1();
+    final user = _ref.read(userProvider)!;
+    final imageRes = await _storageRepository.storeFile(
+      path: 'posts/${selectedCommunity.name}',
+      id: postId,
+      file: file,
+    );
+
+    imageRes.fold((l) => showSnackBar(context, l.message), (r) async {
+      final Post post = Post(
+        id: postId,
+        title: title,
+        communityName: selectedCommunity.name,
+        communityProfilePic: selectedCommunity.avatar,
+        upvotes: [],
+        downvotes: [],
+        commentCount: 0,
+        username: user.name,
+        uid: user.uid,
+        type: 'image',
+        createdAt: DateTime.now(),
+        linkVideo: r,
+        linkImage: [],
+        awards: [],
+      );
+
+      final res = await _postRepo.addPost(post);
+      _ref.read(userProfileControllerProvider.notifier).updateUserKarma(UserKarma.imagePost);
+      state = false;
+      res.fold((l) => showSnackBar(context, l.message), (r) {
+        showSnackBar(context, 'Posted successfully!');
+        Routemaster.of(context).pop();
+      });
     });
   }
 

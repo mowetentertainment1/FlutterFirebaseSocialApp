@@ -4,7 +4,7 @@ class Post {
   final String id;
   final String title;
   final List<String> linkImage;
-  final String? description;
+  final String linkVideo;
   final String communityName;
   final String communityProfilePic;
   final List<String> upvotes;
@@ -19,7 +19,7 @@ class Post {
     required this.id,
     required this.title,
     required this.linkImage,
-    this.description,
+    required this.linkVideo,
     required this.communityName,
     required this.communityProfilePic,
     required this.upvotes,
@@ -36,7 +36,7 @@ class Post {
     String? id,
     String? title,
     List<String>? linkImage,
-    String? description,
+    String? linkVideo,
     String? communityName,
     String? communityProfilePic,
     List<String>? upvotes,
@@ -52,7 +52,7 @@ class Post {
       id: id ?? this.id,
       title: title ?? this.title,
       linkImage: linkImage ?? this.linkImage,
-      description: description ?? this.description,
+      linkVideo: linkVideo ?? this.linkVideo,
       communityName: communityName ?? this.communityName,
       communityProfilePic: communityProfilePic ?? this.communityProfilePic,
       upvotes: upvotes ?? this.upvotes,
@@ -71,7 +71,7 @@ class Post {
       'id': id,
       'title': title,
       'linkImage': linkImage,
-      'description': description,
+      'linkVideo': linkVideo,
       'communityName': communityName,
       'communityProfilePic': communityProfilePic,
       'upvotes': upvotes,
@@ -90,7 +90,7 @@ class Post {
       id: map['id'] ?? '',
       title: map['title'] ?? '',
       linkImage: List<String>.from(map['linkImage']),
-      description: map['description'],
+      linkVideo: map['linkVideo'],
       communityName: map['communityName'] ?? '',
       communityProfilePic: map['communityProfilePic'] ?? '',
       upvotes: List<String>.from(map['upvotes']),
@@ -106,7 +106,7 @@ class Post {
 
   @override
   String toString() {
-    return 'Post(id: $id, title: $title, linkImage: $linkImage, description: $description, communityName: $communityName, communityProfilePic: $communityProfilePic, upvotes: $upvotes, downvotes: $downvotes, commentCount: $commentCount, username: $username, uid: $uid, type: $type, createdAt: $createdAt, awards: $awards)';
+    return 'Post(id: $id, title: $title, linkImage: $linkImage, linkVideo: $linkVideo, communityName: $communityName, communityProfilePic: $communityProfilePic, upvotes: $upvotes, downvotes: $downvotes, commentCount: $commentCount, username: $username, uid: $uid, type: $type, createdAt: $createdAt, awards: $awards)';
   }
 
   @override
@@ -117,7 +117,7 @@ class Post {
         other.id == id &&
         other.title == title &&
         listEquals(other.linkImage, linkImage) &&
-        other.description == description &&
+        other.linkVideo == linkVideo &&
         other.communityName == communityName &&
         other.communityProfilePic == communityProfilePic &&
         listEquals(other.upvotes, upvotes) &&
@@ -135,7 +135,7 @@ class Post {
     return id.hashCode ^
     title.hashCode ^
     linkImage.hashCode ^
-    description.hashCode ^
+    linkVideo.hashCode ^
     communityName.hashCode ^
     communityProfilePic.hashCode ^
     upvotes.hashCode ^
