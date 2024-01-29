@@ -150,7 +150,6 @@ class PostController extends StateNotifier<bool> {
       id: postId,
       file: file,
     );
-
     imageRes.fold((l) => showSnackBar(context, l.message), (r) async {
       final Post post = Post(
         id: postId,
@@ -162,7 +161,7 @@ class PostController extends StateNotifier<bool> {
         commentCount: 0,
         username: user.name,
         uid: user.uid,
-        type: 'image',
+        type: 'video',
         createdAt: DateTime.now(),
         linkVideo: r,
         linkImage: [],
