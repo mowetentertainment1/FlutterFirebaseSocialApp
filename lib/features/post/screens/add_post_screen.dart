@@ -45,6 +45,7 @@ class _CreateAddPostScreenState extends ConsumerState<AddPostScreen> {
       setState(() {
         for (var pickedImage in res) {
           imageFiles.add(File(pickedImage.path));
+          videoFile = null;
         }
       });
     }
@@ -55,6 +56,7 @@ class _CreateAddPostScreenState extends ConsumerState<AddPostScreen> {
     if (res != null) {
       setState(() {
         videoFile = File(res.files.single.path!);
+        imageFiles = [];
         _videoPlayerController = VideoPlayerController.file(videoFile!);
         _chewieController = ChewieController(
           videoPlayerController: _videoPlayerController,
