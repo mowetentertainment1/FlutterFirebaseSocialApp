@@ -31,6 +31,18 @@ class StorageRepository {
       return left(Failure(e.toString()));
     }
   }
+  FutureEither<String> storeVideo(
+      {required String path,  required File? file}) async {
+    try {
+      final ref = _firebaseStorage.ref().child(path).child('${const Uuid().v4()}.mp4');
+      UploadTask uploadTask = ref.putFile(file!);
+      TaskSnapshot taskSnapshot = await uploadTask;
+      String url = await taskSnapshot.ref.getDownloadURL();
+      return right(url);
+    } catch (e) {
+      return left(Failure(e.toString()));
+    }
+  }
   Future<Either<Failure, List<String>>> storeMultipleFiles(
       {required String path, required List<File> files}) async {
     try {

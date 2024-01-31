@@ -157,10 +157,9 @@ class PostController extends StateNotifier<bool> {
     state = true;
     String postId = const Uuid().v1();
     final user = _ref.read(userProvider)!;
-    final imageRes = await _storageRepository.storeFile(
+    final imageRes = await _storageRepository.storeVideo(
       path: 'posts/${selectedCommunity.name}/$postId/',
       file: file,
-      id: postId,
     );
     imageRes.fold((l) => showSnackBar(context, l.message), (r) async {
       final Post post = Post(
