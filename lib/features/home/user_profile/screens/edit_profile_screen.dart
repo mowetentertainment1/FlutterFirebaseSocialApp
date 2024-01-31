@@ -103,7 +103,7 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
                         dashPattern: const [12, 4],
                         strokeCap: StrokeCap.round,
                         color: Pallete.darkModeAppTheme.textTheme
-                            .bodyText2!.color!,
+                            .bodyMedium!.color!,
                         child: Container(
                           height: 150,
                           decoration: BoxDecoration(

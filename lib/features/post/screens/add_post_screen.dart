@@ -140,7 +140,7 @@ class _CreateAddPostScreenState extends ConsumerState<AddPostScreen> {
                             radius: const Radius.circular(10),
                             dashPattern: const [12, 4],
                             strokeCap: StrokeCap.round,
-                            color: currentTheme.textTheme.bodyText2!.color!,
+                            color: currentTheme.textTheme.bodyMedium!.color!,
                             child: Container(
                               height: 200,
                               decoration: BoxDecoration(
@@ -188,12 +188,12 @@ class _CreateAddPostScreenState extends ConsumerState<AddPostScreen> {
                       iconSize: 24,
                       elevation: 16,
                       style: TextStyle(
-                        color: currentTheme.textTheme.bodyText2!.color!
+                        color: currentTheme.textTheme.bodyMedium!.color!
                             .withOpacity(0.8),
                       ),
                       underline: Container(
                         height: 2,
-                        color: currentTheme.textTheme.bodyText2!.color!
+                        color: currentTheme.textTheme.bodyMedium!.color!
                             .withOpacity(0.8),
                       ),
                       onChanged: (String? newValue) {

@@ -8,10 +8,10 @@ class ImageZoomScreen extends StatefulWidget {
   final int initialIndex;
 
   const ImageZoomScreen({
-    Key? key,
+    super.key,
     required this.imageUrls,
     required this.initialIndex,
-  }) : super(key: key);
+  });
 
   @override
   _ImageZoomScreenState createState() => _ImageZoomScreenState();

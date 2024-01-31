@@ -99,7 +99,7 @@ class _EditCommunityScreenState extends ConsumerState<EditCommunityScreen> {
                                   dashPattern: const [12, 4],
                                   strokeCap: StrokeCap.round,
                                   color: currentTheme.textTheme
-                                      .bodyText2!.color!,
+                                      .bodyMedium!.color!,
                                   child: Container(
                                     height: 150,
                                     decoration: BoxDecoration(

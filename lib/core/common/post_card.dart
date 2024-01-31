@@ -1,6 +1,3 @@
-import 'dart:io';
-
-import 'package:chewie/chewie.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -69,7 +66,7 @@ class PostCard extends ConsumerWidget {
           Container(
               decoration: BoxDecoration(
                 color:
-                    currentTheme.textTheme.bodyText2!.color!.withOpacity(0.1),
+                    currentTheme.textTheme.bodyMedium!.color!.withOpacity(0.1),
                 borderRadius: BorderRadius.circular(10),
               ),
               margin: const EdgeInsets.symmetric(vertical: 4),
@@ -109,10 +106,10 @@ class PostCard extends ConsumerWidget {
                                           child: Text(
                                             'r/${post.communityName}',
                                             style: currentTheme
-                                                .textTheme.bodyText2!
+                                                .textTheme.bodyMedium!
                                                 .copyWith(
                                               color: currentTheme
-                                                  .textTheme.bodyText2!.color!
+                                                  .textTheme.bodyMedium!.color!
                                                   .withOpacity(0.8),
                                               fontSize: 16,
                                               fontWeight: FontWeight.bold,
@@ -124,10 +121,10 @@ class PostCard extends ConsumerWidget {
                                           child: Text(
                                             'u/${post.username}',
                                             style: currentTheme
-                                                .textTheme.bodyText2!
+                                                .textTheme.bodyMedium!
                                                 .copyWith(
                                               color: currentTheme
-                                                  .textTheme.bodyText2!.color!
+                                                  .textTheme.bodyMedium!.color!
                                                   .withOpacity(0.8),
                                               fontSize: 12,
                                             ),
@@ -213,7 +210,7 @@ class PostCard extends ConsumerWidget {
                                 post.title,
                                 style: GoogleFonts.poppins().copyWith(
                                   color:
-                                      currentTheme.textTheme.bodyText2!.color,
+                                      currentTheme.textTheme.bodyMedium!.color,
                                   fontSize: 16,
                                   letterSpacing: 0.5,
                                 ),
@@ -276,10 +273,10 @@ class PostCard extends ConsumerWidget {
                                         (post.upvotes.length -
                                                 post.downvotes.length)
                                             .toString(),
-                                        style: currentTheme.textTheme.bodyText2!
+                                        style: currentTheme.textTheme.bodyMedium!
                                             .copyWith(
                                           color: currentTheme
-                                              .textTheme.bodyText2!.color!
+                                              .textTheme.bodyMedium!.color!
                                               .withOpacity(0.8),
                                         ),
                                       ),
@@ -304,10 +301,10 @@ class PostCard extends ConsumerWidget {
                                       ),
                                       Text(
                                         post.commentCount.toString(),
-                                        style: currentTheme.textTheme.bodyText2!
+                                        style: currentTheme.textTheme.bodyMedium!
                                             .copyWith(
                                           color: currentTheme
-                                              .textTheme.bodyText2!.color!
+                                              .textTheme.bodyMedium!.color!
                                               .withOpacity(0.8),
                                         ),
                                       ),

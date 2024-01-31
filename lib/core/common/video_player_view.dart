@@ -39,9 +39,7 @@ class _VideoPlayerViewState extends State<VideoPlayerView> {
       autoPlay: false,
       looping: true,
       autoInitialize: true,
-      allowFullScreen: true,
-      deviceOrientationsAfterFullScreen: [DeviceOrientation.portraitUp],
-      deviceOrientationsOnEnterFullScreen: [DeviceOrientation.landscapeLeft],
+
       placeholder: Container(
         color: Colors.black,
       ),
