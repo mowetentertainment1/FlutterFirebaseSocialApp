@@ -7,6 +7,7 @@ class Assets {
   static const String commonPhotoView = 'lib/core/common/photo_view.dart';
   static const String commonPostCard = 'lib/core/common/post_card.dart';
   static const String commonSightInBtn = 'lib/core/common/sight_in_btn.dart';
+  static const String commonVideoPlayerView = 'lib/core/common/video_player_view.dart';
   static const String constantsConstants = 'lib/core/constants/constants.dart';
   static const String constantsFirebaseConstants = 'lib/core/constants/firebase_constants.dart';
   static const String controllerAuthController = 'lib/features/auth/controller/auth_controller.dart';

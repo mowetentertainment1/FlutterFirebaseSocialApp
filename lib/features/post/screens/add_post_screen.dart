@@ -8,6 +8,7 @@ import 'package:untitled/features/community/controller/community_controller.dart
 import 'package:video_player/video_player.dart';
 
 import '../../../core/common/loader.dart';
+import '../../../core/common/video_player_view.dart';
 import '../../../core/utils.dart';
 import '../../../model/community_model.dart';
 import '../../../theme/pallete.dart';
@@ -57,12 +58,6 @@ class _CreateAddPostScreenState extends ConsumerState<AddPostScreen> {
       setState(() {
         videoFile = File(res.files.single.path!);
         imageFiles = [];
-        _videoPlayerController = VideoPlayerController.file(videoFile!);
-        _chewieController = ChewieController(
-          videoPlayerController: _videoPlayerController,
-          autoPlay: true,
-          looping: false,
-        );
       });
     }
   }
@@ -160,11 +155,9 @@ class _CreateAddPostScreenState extends ConsumerState<AddPostScreen> {
                     ),
                   )
                 : videoFile != null
-                    ? SizedBox(
-                        height: 200,
-                        child: Chewie(
-                          controller: _chewieController,
-                        ),
+                    ? VideoPlayerView(
+                        url: videoFile!.path,
+                        dataSourceType: DataSourceType.file,
                       )
                     : const SizedBox(),
             const SizedBox(height: 20),
