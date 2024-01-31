@@ -7,17 +7,19 @@ import 'package:untitled/model/community_model.dart';
 import '../../../core/constants/firebase_constants.dart';
 import '../../../core/failure.dart';
 import '../../../core/providers/firebase_providers.dart';
+import '../../../core/providers/storage_repository_provider.dart';
 import '../../../model/post_model.dart';
 
 final communityRepoProvider = Provider((ref) {
-  return CommunityRepo(firestore: ref.watch(firestoreProvider));
+  return CommunityRepo(firestore: ref.watch(firestoreProvider), storageRepository: ref.watch(storageRepositoryProvider));
 });
 
 class CommunityRepo {
   final FirebaseFirestore _firestore;
+  final StorageRepository _storageRepository;
 
-  CommunityRepo({required FirebaseFirestore firestore})
-      : _firestore = firestore;
+  CommunityRepo({required FirebaseFirestore firestore,required StorageRepository storageRepository})
+      : _storageRepository = storageRepository,_firestore = firestore;
 
   FutureVoid createCommunity(Community community) async {
     try {
@@ -142,19 +144,24 @@ class CommunityRepo {
       var posts = await _posts.where("communityName", isEqualTo: communityName).get();
 
       if (!communityDoc.exists) {
-        throw Exception("Community doesn't exists");
+        throw Exception("Community doesn't exist");
       }
+
       for (var post in posts.docs) {
+        List<String> urls = ((post.data() as Map<String, dynamic>)["linkImage"] as List<String>?) ?? [];
         await post.reference.delete();
+        // final imageDelRes = await _storageRepository.deleteMultipleFiles(urls: urls);
+        // imageDelRes.fold((l) => throw Exception(l.message), (r) => {});
       }
 
       return right(_communities.doc(communityName).delete());
     } on FirebaseException catch (e) {
       throw e.message!;
     } catch (e) {
-      return left(Failure(e.toString()));
+      throw Failure(e.toString());
     }
   }
+
 
   CollectionReference get _posts => _firestore.collection("posts");
   CollectionReference get _communities =>
