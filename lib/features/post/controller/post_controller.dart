@@ -58,47 +58,59 @@ class PostController extends StateNotifier<bool> {
     required BuildContext context,
     required String title,
     required Community selectedCommunity,
-    required List<File> file,
+    required List<File> files,
   }) async {
     state = true;
     String postId = const Uuid().v1();
     final user = _ref.read(userProvider)!;
-    for (var i = 0; i < file.length; i++) {
-      final imageRes = await _storageRepository.storeMultipleFiles(
-        path: 'posts/${selectedCommunity.name}',
-        id: postId,
-        files: file,
-        // webFile: webFile,
-      );
-      imageRes.fold((l) => showSnackBar(context, l.message), (r) async {
-        final Post post = Post(
-          id: postId,
-          title: title,
-          communityName: selectedCommunity.name,
-          communityProfilePic: selectedCommunity.avatar,
-          upvotes: [],
-          downvotes: [],
-          commentCount: 0,
-          username: user.name,
-          uid: user.uid,
-          type: 'image',
-          createdAt: DateTime.now(),
-          linkVideo: '',
-          linkImage: r, awards: [],
+    List<String> urls = [];
+
+    try {
+        final imageRes = await _storageRepository.storeMultipleFiles(
+          path: 'posts/${selectedCommunity.name}/$postId/',
+          files: files,
         );
 
-        final res = await _postRepo.addPost(post);
-        _ref
-            .read(userProfileControllerProvider.notifier)
-            .updateUserKarma(UserKarma.imagePost);
-        state = false;
-        res.fold((l) => showSnackBar(context, l.message), (r) {
+        imageRes.fold(
+              (l) => showSnackBar(context, l.message),
+              (r) => urls = r,
+        );
+      final Post post = Post(
+        id: postId,
+        title: title,
+        communityName: selectedCommunity.name,
+        communityProfilePic: selectedCommunity.avatar,
+        upvotes: [],
+        downvotes: [],
+        commentCount: 0,
+        username: user.name,
+        uid: user.uid,
+        type: 'image',
+        createdAt: DateTime.now(),
+        linkVideo: '',
+        linkImage: urls,
+        awards: [],
+      );
+
+      final res = await _postRepo.addPost(post);
+      _ref
+          .read(userProfileControllerProvider.notifier)
+          .updateUserKarma(UserKarma.imagePost);
+      state = false;
+
+      res.fold(
+            (l) => showSnackBar(context, l.message),
+            (r) {
           Routemaster.of(context).push('/');
           showSnackBar(context, 'Posted.');
-        });
-      });
+        },
+      );
+    } catch (e) {
+      state = false;
+      showSnackBar(context, 'Error sharing image post: $e');
     }
   }
+
 
   void shareTextPost({
     required BuildContext context,
@@ -146,9 +158,9 @@ class PostController extends StateNotifier<bool> {
     String postId = const Uuid().v1();
     final user = _ref.read(userProvider)!;
     final imageRes = await _storageRepository.storeFile(
-      path: 'posts/${selectedCommunity.name}',
-      id: postId,
+      path: 'posts/${selectedCommunity.name}/$postId/',
       file: file,
+      id: postId,
     );
     imageRes.fold((l) => showSnackBar(context, l.message), (r) async {
       final Post post = Post(
@@ -178,16 +190,23 @@ class PostController extends StateNotifier<bool> {
     });
   }
 
-  void deletePost(Post post, BuildContext context) async {
+  void deletePost(List<String> urls, Post post, BuildContext context
+      ) async {
     state = true;
     final res = await _postRepo.deletePost(post);
+    final imageDelRes = await _storageRepository.deleteFile(
+      urls: urls,
+    );
     _ref
         .read(userProfileControllerProvider.notifier)
         .updateUserKarma(UserKarma.deletePost);
     state = false;
-    res.fold((l) => showSnackBar(context, l.message), (r) {
-      showSnackBar(context, 'Post deleted.');
-    });
+     imageDelRes.fold((l) => showSnackBar(context, l.message), (r) {
+        showSnackBar(context, 'File Deleted');
+      });
+     res.fold((l) => showSnackBar(context, l.message), (r) {
+        showSnackBar(context, 'Deleted successfully!');
+      });
   }
 
   void upVotePost(Post post) async {

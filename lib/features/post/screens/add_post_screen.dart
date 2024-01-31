@@ -77,14 +77,14 @@ class _CreateAddPostScreenState extends ConsumerState<AddPostScreen> {
   }
 
   void sharePost() {
-    if (imageFiles.isNotEmpty && titleController.text.isNotEmpty) {
+    if (imageFiles.isNotEmpty) {
       ref.read(postControllerProvider.notifier).shareImagePost(
             context: context,
             title: titleController.text.trim(),
             selectedCommunity: selectedCommunity ?? communitie[0],
-            file: imageFiles,
+            files: imageFiles,
           );
-    } else if (videoFile != null && titleController.text.isNotEmpty) {
+    } else if (videoFile != null) {
       ref.read(postControllerProvider.notifier).shareVideoPost(
             context: context,
             title: titleController.text.trim(),
