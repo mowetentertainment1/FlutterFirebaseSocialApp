@@ -48,7 +48,15 @@ class StorageRepository {
   }
 
 
-  FutureVoid deleteFile({required List<String> urls}) async {
+  FutureVoid deleteFile({required String path, required String id}) async {
+    try {
+      final ref = _firebaseStorage.ref().child(path);
+      return right(ref.delete());
+    } catch (e) {
+      return left(Failure(e.toString()));
+    }
+  }
+  FutureVoid deleteMultipleFiles({required List<String> urls}) async {
     try {
       for (String url in urls) {
         final ref = _firebaseStorage.refFromURL(url);
