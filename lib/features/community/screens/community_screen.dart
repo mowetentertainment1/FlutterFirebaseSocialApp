@@ -58,7 +58,7 @@ class CommunityScreen extends ConsumerWidget {
                                 ),
                                 const SizedBox(width: 10),
                                 SizedBox(
-                                  width: 280,
+                                  width: 250,
                                   child: Column(
                                     crossAxisAlignment: CrossAxisAlignment.start,
                                     children: [

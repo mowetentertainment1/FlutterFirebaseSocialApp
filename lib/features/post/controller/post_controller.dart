@@ -194,7 +194,7 @@ class PostController extends StateNotifier<bool> {
       ) async {
     state = true;
     final res = await _postRepo.deletePost(post);
-    final imageDelRes = await _storageRepository.deleteFile(
+    final imageDelRes = await _storageRepository.deleteMultipleFiles(
       urls: urls,
     );
     _ref

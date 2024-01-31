@@ -158,6 +158,12 @@ class CommunityController extends StateNotifier<bool> {
     _ref
         .read(userProfileControllerProvider.notifier)
         .updateUserKarma(UserKarma.deletePost);
+    final delBanner = await _storageRepository.deleteFile(
+        path: "community/$communityName/banner", id: communityName);
+    final delAvatar = await _storageRepository.deleteFile(
+        path: "community/$communityName/avatar", id: communityName);
+    delBanner.fold((l) => showSnackBar(context, l.message), (r) => {});
+    delAvatar.fold((l) => showSnackBar(context, l.message), (r) => {});
     state = false;
     res.fold(
         (l) => showSnackBar(context, l.message),
