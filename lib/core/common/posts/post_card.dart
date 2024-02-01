@@ -16,12 +16,11 @@ import '../../../features/post/controller/post_controller.dart';
 class PostCard extends ConsumerWidget {
   final Post post;
 
+
   const PostCard({super.key, required this.post});
 
   void deletePost(BuildContext context, WidgetRef ref) {
-    ref
-        .read(postControllerProvider.notifier)
-        .deletePost(post.linkImage, post, context);
+    ref.read(postControllerProvider.notifier).deletePost(post.linkImage, post, context);
   }
 
   void upvotePost(WidgetRef ref) {
@@ -65,8 +64,7 @@ class PostCard extends ConsumerWidget {
         children: [
           Container(
               decoration: BoxDecoration(
-                color:
-                    currentTheme.textTheme.bodyMedium!.color!.withOpacity(0.1),
+                color: currentTheme.textTheme.bodyMedium!.color!.withOpacity(0.1),
                 borderRadius: BorderRadius.circular(10),
               ),
               margin: const EdgeInsets.symmetric(vertical: 4),
@@ -76,8 +74,8 @@ class PostCard extends ConsumerWidget {
                     child: Column(
                       children: [
                         Container(
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 16, vertical: 12),
+                          padding:
+                              const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
@@ -90,23 +88,20 @@ class PostCard extends ConsumerWidget {
                                     },
                                     child: CircleAvatar(
                                       radius: 25,
-                                      backgroundImage: NetworkImage(
-                                          post.communityProfilePic),
+                                      backgroundImage:
+                                          NetworkImage(post.communityProfilePic),
                                     ),
                                   ),
                                   Padding(
-                                    padding: const EdgeInsets.symmetric(
-                                        horizontal: 8.0),
+                                    padding: const EdgeInsets.symmetric(horizontal: 8.0),
                                     child: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
+                                      crossAxisAlignment: CrossAxisAlignment.start,
                                       children: [
                                         SizedBox(
                                           width: 160,
                                           child: Text(
                                             'r/${post.communityName}',
-                                            style: currentTheme
-                                                .textTheme.bodyMedium!
+                                            style: currentTheme.textTheme.bodyMedium!
                                                 .copyWith(
                                               color: currentTheme
                                                   .textTheme.bodyMedium!.color!
@@ -120,8 +115,7 @@ class PostCard extends ConsumerWidget {
                                           width: 160,
                                           child: Text(
                                             'u/${post.username}',
-                                            style: currentTheme
-                                                .textTheme.bodyMedium!
+                                            style: currentTheme.textTheme.bodyMedium!
                                                 .copyWith(
                                               color: currentTheme
                                                   .textTheme.bodyMedium!.color!
@@ -135,15 +129,14 @@ class PostCard extends ConsumerWidget {
                                   ),
                                   const Spacer(),
                                   ref
-                                      .watch(getCommunityByNameProvider(
-                                          post.communityName))
+                                      .watch(
+                                          getCommunityByNameProvider(post.communityName))
                                       .when(
                                           data: (community) {
-                                            if (community.mods
-                                                .contains(user.uid)) {
+                                            if (community.mods.contains(user.uid)) {
                                               return PopupMenuButton(
-                                                  icon: const Icon(Icons
-                                                      .admin_panel_settings),
+                                                  icon: const Icon(
+                                                      Icons.admin_panel_settings),
                                                   itemBuilder: (context) => [
                                                         const PopupMenuItem(
                                                           value: 'edit',
@@ -153,8 +146,7 @@ class PostCard extends ConsumerWidget {
                                                           value: 'delete',
                                                           child: Text('Delete',
                                                               style: TextStyle(
-                                                                  color: Colors
-                                                                      .red)),
+                                                                  color: Colors.red)),
                                                         ),
                                                       ],
                                                   onSelected: (value) {
@@ -186,8 +178,7 @@ class PostCard extends ConsumerWidget {
                                               const PopupMenuItem(
                                                 value: 'delete',
                                                 child: Text('Delete',
-                                                    style: TextStyle(
-                                                        color: Colors.red)),
+                                                    style: TextStyle(color: Colors.red)),
                                               ),
                                             ],
                                         onSelected: (value) {
@@ -209,8 +200,7 @@ class PostCard extends ConsumerWidget {
                               Text(
                                 post.title,
                                 style: GoogleFonts.poppins().copyWith(
-                                  color:
-                                      currentTheme.textTheme.bodyMedium!.color,
+                                  color: currentTheme.textTheme.bodyMedium!.color,
                                   fontSize: 16,
                                   letterSpacing: 0.5,
                                 ),
@@ -226,8 +216,7 @@ class PostCard extends ConsumerWidget {
                                       crossAxisCount: 1,
                                     ),
                                     itemCount: post.linkImage.length,
-                                    itemBuilder:
-                                        (BuildContext context, int index) {
+                                    itemBuilder: (BuildContext context, int index) {
                                       return Padding(
                                         padding: const EdgeInsets.all(8.0),
                                         child: InkWell(
@@ -251,39 +240,33 @@ class PostCard extends ConsumerWidget {
                                 VideoPlayerView(
                                   url: post.linkVideo,
                                   dataSourceType: DataSourceType.network,
-                                )
-                                ,
+                                ),
                               const SizedBox(height: 10),
                               Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                 children: [
                                   Row(
                                     children: [
                                       IconButton(
-                                        onPressed: isGuest
-                                            ? () {}
-                                            : () => upvotePost(ref),
+                                        onPressed:
+                                            isGuest ? () {} : () => upvotePost(ref),
                                         icon: const Icon(Icons.arrow_upward),
                                         color: post.upvotes.contains(user.uid)
                                             ? Colors.green
                                             : null,
                                       ),
                                       Text(
-                                        (post.upvotes.length -
-                                                post.downvotes.length)
+                                        (post.upvotes.length - post.downvotes.length)
                                             .toString(),
-                                        style: currentTheme.textTheme.bodyMedium!
-                                            .copyWith(
-                                          color: currentTheme
-                                              .textTheme.bodyMedium!.color!
+                                        style:
+                                            currentTheme.textTheme.bodyMedium!.copyWith(
+                                          color: currentTheme.textTheme.bodyMedium!.color!
                                               .withOpacity(0.8),
                                         ),
                                       ),
                                       IconButton(
-                                        onPressed: isGuest
-                                            ? () {}
-                                            : () => downVotePost(ref),
+                                        onPressed:
+                                            isGuest ? () {} : () => downVotePost(ref),
                                         icon: const Icon(Icons.arrow_downward),
                                         color: post.downvotes.contains(user.uid)
                                             ? Colors.red
@@ -301,10 +284,9 @@ class PostCard extends ConsumerWidget {
                                       ),
                                       Text(
                                         post.commentCount.toString(),
-                                        style: currentTheme.textTheme.bodyMedium!
-                                            .copyWith(
-                                          color: currentTheme
-                                              .textTheme.bodyMedium!.color!
+                                        style:
+                                            currentTheme.textTheme.bodyMedium!.copyWith(
+                                          color: currentTheme.textTheme.bodyMedium!.color!
                                               .withOpacity(0.8),
                                         ),
                                       ),

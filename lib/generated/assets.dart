@@ -5,7 +5,6 @@ class Assets {
   static const String cardChatsList = 'lib/features/chat/card/chats_list.dart';
   static const String cardMyMessageCard = 'lib/features/chat/card/my_message_card.dart';
   static const String cardSenderMessageCard = 'lib/features/chat/card/sender_message_card.dart';
-  static const String chatContactsList = 'lib/features/chat/contacts_list.dart';
   static const String commonErrorText = 'lib/core/common/error_text.dart';
   static const String commonLoader = 'lib/core/common/loader.dart';
   static const String commonPhotoView = 'lib/core/common/photo_view.dart';
@@ -52,6 +51,7 @@ class Assets {
   static const String screensChatScreen = 'lib/features/chat/screens/chat_screen.dart';
   static const String screensCommentScreen = 'lib/features/post/screens/comment_screen.dart';
   static const String screensCommunityScreen = 'lib/features/community/screens/community_screen.dart';
+  static const String screensContactsList = 'lib/features/chat/screens/contacts_list.dart';
   static const String screensCreateCommunityScreen = 'lib/features/community/screens/create_community_screen.dart';
   static const String screensEditCommunityScreen = 'lib/features/community/screens/edit_community_screen.dart';
   static const String screensEditProfileScreen = 'lib/features/home/user_profile/screens/edit_profile_screen.dart';

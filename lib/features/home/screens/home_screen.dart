@@ -103,38 +103,40 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
             })
           ],
         ),
-        drawer: isGuest? null : const CommunityListDrawer(),
+        drawer: isGuest ? null : const CommunityListDrawer(),
         endDrawer: const ProfileDrawer(),
         body: Constants.tabWidgets[_page],
-        bottomNavigationBar:isGuest? null : CupertinoTabBar(
-          height: 60,
-          currentIndex: _page,
-          activeColor: currentTheme.iconTheme.color,
-          backgroundColor: currentTheme.backgroundColor,
-          border: const Border(
-            top: BorderSide(
-              color: Colors.grey,
-              width: 0.5,
-            ),
-          ),
-          items: const [
-            BottomNavigationBarItem(
-                icon: Icon(CupertinoIcons.home), label: 'Home'),
-            BottomNavigationBarItem(
-              icon: Icon(CupertinoIcons.add),
-              label: 'Create',
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(CupertinoIcons.chat_bubble),
-              label: 'Chat',
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(CupertinoIcons.bell),
-              label: 'Notification',
-            ),
-          ],
-          onTap: onPageChange,
-        ),
+        bottomNavigationBar: isGuest
+            ? null
+            : CupertinoTabBar(
+                height: 60,
+                currentIndex: _page,
+                activeColor: currentTheme.iconTheme.color,
+                backgroundColor: currentTheme.colorScheme.background,
+                border: const Border(
+                  top: BorderSide(
+                    color: Colors.grey,
+                    width: 0.5,
+                  ),
+                ),
+                items: const [
+                  BottomNavigationBarItem(
+                      icon: Icon(CupertinoIcons.home), label: 'Home'),
+                  BottomNavigationBarItem(
+                    icon: Icon(CupertinoIcons.add),
+                    label: 'Create',
+                  ),
+                  BottomNavigationBarItem(
+                    icon: Icon(CupertinoIcons.chat_bubble),
+                    label: 'Chat',
+                  ),
+                  BottomNavigationBarItem(
+                    icon: Icon(CupertinoIcons.bell),
+                    label: 'Notification',
+                  ),
+                ],
+                onTap: onPageChange,
+              ),
       ),
     );
   }

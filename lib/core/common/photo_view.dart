@@ -29,7 +29,6 @@ class _ImageZoomScreenState extends State<ImageZoomScreen> {
   }
   @override
   Widget build(BuildContext context) {
-    double _progress = 0;
     return Scaffold(
       appBar: AppBar(
       ),
@@ -76,9 +75,10 @@ class _ImageZoomScreenState extends State<ImageZoomScreen> {
             child: Icon(isZoomed ? Icons.zoom_out : Icons.zoom_in),
           ),
           const SizedBox(width: 10),
+
           FloatingActionButton(
             onPressed: () {
-              FileDownloader.downloadFile(url:  widget.imageUrls[widget.initialIndex], onDownloadError: (e) {
+              FileDownloader.downloadFile(url:  widget.imageUrls[currentIndex], onDownloadError: (e) {
                 ScaffoldMessenger.of(context).showSnackBar(
                   SnackBar(
                     content: Text('Failed to download image: $e'),
@@ -89,8 +89,6 @@ class _ImageZoomScreenState extends State<ImageZoomScreen> {
                     SnackBar(
                       content: Text('File saved at: $path'),
                     ));
-              }, onProgress: (fileName, progress) {
-                _progress = progress;
               }
               );
               // downloadImage(widget.imageUrls[widget.initialIndex]);
@@ -121,7 +119,7 @@ class _ImageZoomScreenState extends State<ImageZoomScreen> {
     } else {
       // Optional: Handle when there are no more images
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
+        const SnackBar(
           content: Text('No more images'),
         ),
       );
