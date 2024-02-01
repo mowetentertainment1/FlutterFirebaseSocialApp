@@ -2,10 +2,13 @@
 class Assets {
   Assets._();
 
+  static const String cardChatsList = 'lib/features/chat/card/chats_list.dart';
+  static const String cardMyMessageCard = 'lib/features/chat/card/my_message_card.dart';
+  static const String cardSenderMessageCard = 'lib/features/chat/card/sender_message_card.dart';
+  static const String chatContactsList = 'lib/features/chat/contacts_list.dart';
   static const String commonErrorText = 'lib/core/common/error_text.dart';
   static const String commonLoader = 'lib/core/common/loader.dart';
   static const String commonPhotoView = 'lib/core/common/photo_view.dart';
-  static const String commonPostCard = 'lib/core/common/post_card.dart';
   static const String commonSightInBtn = 'lib/core/common/sight_in_btn.dart';
   static const String commonVideoPlayerView = 'lib/core/common/video_player_view.dart';
   static const String constantsConstants = 'lib/core/constants/constants.dart';
@@ -14,7 +17,9 @@ class Assets {
   static const String controllerCommunityController = 'lib/features/community/controller/community_controller.dart';
   static const String controllerPostController = 'lib/features/post/controller/post_controller.dart';
   static const String controllerUserProfileController = 'lib/features/home/user_profile/controller/user_profile_controller.dart';
+  static const String coreColors = 'lib/core/colors.dart';
   static const String coreFailure = 'lib/core/failure.dart';
+  static const String coreInfo = 'lib/core/info.dart';
   static const String coreTypeDefs = 'lib/core/type_defs.dart';
   static const String coreUtils = 'lib/core/utils.dart';
   static const String delegatesSearchCommunityDelegates = 'lib/features/home/delegates/search_community_delegates.dart';
@@ -34,6 +39,7 @@ class Assets {
   static const String modelPostModel = 'lib/model/post_model.dart';
   static const String modelUser = 'lib/model/user.dart';
   static const String notificationNotificationScreen = 'lib/features/notification/notification_screen.dart';
+  static const String postsPostCard = 'lib/core/common/posts/post_card.dart';
   static const String providersFirebaseProviders = 'lib/core/providers/firebase_providers.dart';
   static const String providersStorageRepositoryProvider = 'lib/core/providers/storage_repository_provider.dart';
   static const String repositoryAuthRepository = 'lib/features/auth/repository/auth_repository.dart';
@@ -51,6 +57,7 @@ class Assets {
   static const String screensEditProfileScreen = 'lib/features/home/user_profile/screens/edit_profile_screen.dart';
   static const String screensHomeScreen = 'lib/features/home/screens/home_screen.dart';
   static const String screensLoginScreen = 'lib/features/auth/screens/login_screen.dart';
+  static const String screensMobileChatScreen = 'lib/features/chat/screens/mobile_chat_screen.dart';
   static const String screensModToolScreen = 'lib/features/community/screens/mod_tool_screen.dart';
   static const String screensUserProfileScreen = 'lib/features/home/user_profile/screens/user_profile_screen.dart';
   static const String themePallete = 'lib/theme/pallete.dart';

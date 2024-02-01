@@ -6,7 +6,7 @@ import 'package:untitled/features/home/user_profile/controller/user_profile_cont
 import 'package:untitled/responsive/responsive.dart';
 
 import '../../../../core/common/loader.dart';
-import '../../../../core/common/post_card.dart';
+import '../../../../core/common/posts/post_card.dart';
 import '../../../auth/controller/auth_controller.dart';
 
 class UserProfileScreen extends ConsumerWidget {

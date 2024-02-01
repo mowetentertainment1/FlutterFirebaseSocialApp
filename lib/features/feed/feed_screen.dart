@@ -3,7 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:untitled/core/common/error_text.dart';
 import 'package:untitled/core/common/loader.dart';
 
-import '../../core/common/post_card.dart';
+import '../../core/common/posts/post_card.dart';
 import '../auth/controller/auth_controller.dart';
 import '../community/controller/community_controller.dart';
 import '../post/controller/post_controller.dart';

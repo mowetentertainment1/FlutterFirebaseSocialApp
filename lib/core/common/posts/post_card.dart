@@ -10,8 +10,8 @@ import 'package:untitled/responsive/responsive.dart';
 import 'package:untitled/theme/pallete.dart';
 import 'package:video_player/video_player.dart';
 
-import '../../features/auth/controller/auth_controller.dart';
-import '../../features/post/controller/post_controller.dart';
+import '../../../features/auth/controller/auth_controller.dart';
+import '../../../features/post/controller/post_controller.dart';
 
 class PostCard extends ConsumerWidget {
   final Post post;

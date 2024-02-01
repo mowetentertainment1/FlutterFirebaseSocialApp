@@ -5,7 +5,7 @@ import 'package:untitled/core/common/loader.dart';
 import 'package:untitled/model/community_model.dart';
 
 import '../../../core/common/error_text.dart';
-import '../../../core/common/post_card.dart';
+import '../../../core/common/posts/post_card.dart';
 import '../../../responsive/responsive.dart';
 import '../../auth/controller/auth_controller.dart';
 import '../controller/community_controller.dart';
