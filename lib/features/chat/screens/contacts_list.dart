@@ -1,11 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:routemaster/routemaster.dart';
 import 'package:untitled/features/chat/screens/mobile_chat_screen.dart';
 
-import '../../core/colors.dart';
-import '../../core/info.dart';
+import '../../../core/colors.dart';
+import '../../../core/info.dart';
 
 class ContactsList extends StatelessWidget {
   const ContactsList({super.key});
+  void navigateToChatScreen(BuildContext context) {
+    Routemaster.of(context).push('/chat/...');
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -19,11 +23,7 @@ class ContactsList extends StatelessWidget {
             children: [
               InkWell(
                 onTap: () {
-                  Navigator.of(context).push(
-                    MaterialPageRoute(
-                      builder: (context) => const MobileChatScreen(),
-                    ),
-                  );
+                  navigateToChatScreen(context);
                 },
                 child: Padding(
                   padding: const EdgeInsets.only(bottom: 8.0),

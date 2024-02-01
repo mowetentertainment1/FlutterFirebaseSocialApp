@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../contacts_list.dart';
+import 'contacts_list.dart';
 import '../../../core/colors.dart';
 
 class ChatScreen extends ConsumerWidget {

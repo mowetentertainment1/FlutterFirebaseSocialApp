@@ -10,7 +10,9 @@ import 'package:untitled/features/home/user_profile/screens/edit_profile_screen.
 import 'package:untitled/features/home/user_profile/screens/user_profile_screen.dart';
 import 'package:untitled/features/post/screens/comment_screen.dart';
 
+import 'core/common/photo_view.dart';
 import 'features/auth/screens/login_screen.dart';
+import 'features/chat/screens/mobile_chat_screen.dart';
 
 final loggedOutRoute = RouteMap(routes: {
   '/': (_) => const MaterialPage(child: LoginScreen()),
@@ -38,4 +40,18 @@ final loggedInRoute = RouteMap(routes: {
       child: EditProfileScreen(uid: routeData.pathParameters['uid']!)),
   '/post/:postId/comments': (routeData) => MaterialPage(
       child: CommentsScreen(postId: routeData.pathParameters['postId']!)),
+  '/post/images': (routeData) {
+    final List<String> imageUrls = routeData.queryParameters['imageUrls']!.split(',');
+    final int initialIndex = int.parse(routeData.queryParameters['initialIndex']!);
+
+    return MaterialPage(
+      child: ImageZoomScreen(
+          initialIndex: initialIndex,
+          imageUrls: imageUrls,
+      ),
+    );
+  },
+  '/chat/...': (routeData) => const MaterialPage(
+      child: MobileChatScreen(),)
+
 });
