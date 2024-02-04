@@ -65,8 +65,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
         }
       },
       child: Scaffold(
-        drawer: isGuest ? null : const CommunityListDrawer(),
-        endDrawer: const ProfileDrawer(),
+
         body: Constants.tabWidgets[_page],
         bottomNavigationBar: isGuest
             ? null

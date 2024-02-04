@@ -16,6 +16,8 @@ import '../../../model/community_model.dart';
 import '../../../theme/pallete.dart';
 import '../../auth/controller/auth_controller.dart';
 import '../../home/delegates/search_community_delegates.dart';
+import '../../home/drawers/community_list_drawer.dart';
+import '../../home/drawers/profile_drawner.dart';
 import '../controller/post_controller.dart';
 
 class AddPostScreen extends ConsumerStatefulWidget {
@@ -122,6 +124,8 @@ class _CreateAddPostScreenState extends ConsumerState<AddPostScreen> {
     return isLoading
         ? const Loader()
         : Scaffold(
+      drawer: const CommunityListDrawer(),
+      endDrawer: const ProfileDrawer(),
       appBar: AppBar(
         leading: Builder(builder: (context) {
           return IconButton(

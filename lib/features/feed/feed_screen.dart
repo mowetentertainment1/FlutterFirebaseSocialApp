@@ -9,6 +9,8 @@ import '../../core/common/posts/post_card.dart';
 import '../auth/controller/auth_controller.dart';
 import '../community/controller/community_controller.dart';
 import '../home/delegates/search_community_delegates.dart';
+import '../home/drawers/community_list_drawer.dart';
+import '../home/drawers/profile_drawner.dart';
 import '../post/controller/post_controller.dart';
 
 class FeedScreen extends ConsumerWidget {
@@ -24,8 +26,10 @@ class FeedScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final user = ref.watch(userProvider)!;
-    final isGuest = user.isAuthenticated;
+    final isGuest = !user.isAuthenticated;
     return Scaffold(
+        drawer: isGuest ? null : const CommunityListDrawer(),
+        endDrawer: const ProfileDrawer(),
         appBar: AppBar(
           leading: Builder(builder: (context) {
             return IconButton(
@@ -56,7 +60,7 @@ class FeedScreen extends ConsumerWidget {
         ),
         body: ref.watch(userCommunitiesProvider).when(
               data: (communities) {
-                if (!isGuest) {
+                if (isGuest) {
                   return ref.watch(guestPostsProvider).when(
                         data: (posts) {
                           return ListView.builder(

@@ -7,6 +7,8 @@ import '../../core/common/loader.dart';
 import '../../theme/pallete.dart';
 import '../auth/controller/auth_controller.dart';
 import '../home/delegates/search_community_delegates.dart';
+import '../home/drawers/community_list_drawer.dart';
+import '../home/drawers/profile_drawner.dart';
 import '../post/controller/post_controller.dart';
 
 class NotificationScreen extends ConsumerWidget {
@@ -23,11 +25,12 @@ class NotificationScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final currentTheme = ref.watch(themeNotifierProvider);
     final isLoading = ref.watch(postControllerProvider);
-
     final user = ref.watch(userProvider)!;
     return isLoading
         ? const Loader()
         : Scaffold(
+      drawer: const CommunityListDrawer(),
+      endDrawer: const ProfileDrawer(),
       appBar: AppBar(
         leading: Builder(builder: (context) {
           return IconButton(

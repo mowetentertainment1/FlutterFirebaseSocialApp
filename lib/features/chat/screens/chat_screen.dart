@@ -5,6 +5,8 @@ import 'package:google_fonts/google_fonts.dart';
 
 import '../../auth/controller/auth_controller.dart';
 import '../../home/delegates/search_community_delegates.dart';
+import '../../home/drawers/community_list_drawer.dart';
+import '../../home/drawers/profile_drawner.dart';
 import 'contacts_list.dart';
 import '../../../core/colors.dart';
 
@@ -23,6 +25,8 @@ class ChatScreen extends ConsumerWidget {
     return DefaultTabController(
       length: 3,
       child: Scaffold(
+        drawer: const CommunityListDrawer(),
+        endDrawer: const ProfileDrawer(),
         appBar: AppBar(
           leading: Builder(builder: (context) {
             return IconButton(
