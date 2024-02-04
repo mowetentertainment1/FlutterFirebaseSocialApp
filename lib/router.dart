@@ -40,10 +40,9 @@ final loggedInRoute = RouteMap(routes: {
       child: EditProfileScreen(uid: routeData.pathParameters['uid']!)),
   '/post/:postId/comments': (routeData) => MaterialPage(
       child: CommentsScreen(postId: routeData.pathParameters['postId']!)),
-  '/post/images': (routeData) {
+  '/post/img': (routeData) {
     final List<String> imageUrls = routeData.queryParameters['imageUrls']!.split(',');
     final int initialIndex = int.parse(routeData.queryParameters['initialIndex']!);
-
     return MaterialPage(
       child: ImageZoomScreen(
           initialIndex: initialIndex,

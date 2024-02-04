@@ -39,17 +39,10 @@ class PostCard extends ConsumerWidget {
     Routemaster.of(context).push('/post/${post.id}/comments');
   }
 
-  void navigateToImgPost(BuildContext context, int index) {
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => ImageZoomScreen(
-          imageUrls: post.linkImage,
-          initialIndex: index,
-        ),
-      ),
-    );
+  void navigateToImgPost(BuildContext context, int index, List<String> imageUrls) {
+    Routemaster.of(context).push('/post/img?imageUrls=${Uri.encodeComponent(imageUrls.join(','))}&initialIndex=$index');
   }
+
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -221,7 +214,7 @@ class PostCard extends ConsumerWidget {
                                         padding: const EdgeInsets.all(8.0),
                                         child: InkWell(
                                           onTap: () {
-                                            navigateToImgPost(context, index);
+                                            navigateToImgPost(context, index, post.linkImage);
                                           },
                                           child: SizedBox(
                                             height: double.infinity,
