@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:routemaster/routemaster.dart';
-import 'package:untitled/features/chat/screens/mobile_chat_screen.dart';
-
 import '../../../core/colors.dart';
 import '../../../core/info.dart';
 

@@ -27,14 +27,6 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     });
   }
 
-  void displayDrawer(BuildContext context) {
-    Scaffold.of(context).openDrawer();
-  }
-
-  void displayEndDrawer(BuildContext context) {
-    Scaffold.of(context).openEndDrawer();
-  }
-
   @override
   Widget build(BuildContext context) {
     final user = ref.watch(userProvider);
@@ -73,36 +65,6 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
         }
       },
       child: Scaffold(
-        appBar: AppBar(
-          leading: Builder(builder: (context) {
-            return IconButton(
-              icon: const Icon(Icons.menu),
-              onPressed: () => displayDrawer(context),
-            );
-          }),
-          title: Text('Home', style: GoogleFonts.poppins()),
-          actions: [
-            IconButton(
-              icon: const Icon(CupertinoIcons.search),
-              onPressed: () {
-                showSearch(
-                    context: context,
-                    delegate: SearchCommunityScreen(ref: ref));
-              },
-            ),
-            Builder(builder: (context) {
-              return IconButton(
-                icon: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 5.0),
-                  child: CircleAvatar(
-                    backgroundImage: NetworkImage(user.profilePic),
-                  ),
-                ),
-                onPressed: () => displayEndDrawer(context),
-              );
-            })
-          ],
-        ),
         drawer: isGuest ? null : const CommunityListDrawer(),
         endDrawer: const ProfileDrawer(),
         body: Constants.tabWidgets[_page],
