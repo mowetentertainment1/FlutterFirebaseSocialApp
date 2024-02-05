@@ -49,6 +49,7 @@ class _MyAppState extends ConsumerState<MyApp> {
               title: 'Amigo',
               theme: ref.watch(themeNotifierProvider),
               routerDelegate: RoutemasterDelegate(
+
                 routesBuilder: (context) {
                   if (data != null) {
                     getData(ref, data);
@@ -59,7 +60,9 @@ class _MyAppState extends ConsumerState<MyApp> {
                   return loggedOutRoute;
                 },
               ),
-              routeInformationParser: const RoutemasterParser(),
+              routeInformationParser: const RoutemasterParser(
+
+              ),
             ),
         error: (error, stackTrace) => ErrorText(error: error.toString()),
         loading: () => const Loader());
