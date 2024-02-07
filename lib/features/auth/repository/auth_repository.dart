@@ -42,8 +42,7 @@ class AuthRepository {
       UserModel userModel;
       if (kIsWeb) {
         GoogleAuthProvider googleProvider = GoogleAuthProvider();
-        googleProvider
-            .addScope('https://www.googleapis.com/auth/contacts.readonly');
+        googleProvider.addScope('https://www.googleapis.com/auth/contacts.readonly');
         userCredential = await _auth.signInWithPopup(googleProvider);
       } else {
         final GoogleSignInAccount? googleUser = await _googleSignIn.signIn();
@@ -64,16 +63,8 @@ class AuthRepository {
           uid: userCredential.user!.uid,
           isAuthenticated: true,
           karma: 0,
-          awards: [
-            // 'awesomeAns',
-            // 'gold',
-            // 'platinum',
-            // 'helpful',
-            // 'plusone',
-            // 'rocket',
-            // 'thankyou',
-            // 'til',
-          ],
+          followers: [],
+          following: [],
         );
         await _users.doc(userCredential.user!.uid).set(userModel.toMap());
       } else {
@@ -99,7 +90,8 @@ class AuthRepository {
         uid: userCredential.user!.uid,
         isAuthenticated: false,
         karma: 0,
-        awards: [],
+        followers: [],
+        following: [],
       );
       // await _users.doc(userCredential.user!.uid).set(userModel.toMap());
 
@@ -112,8 +104,10 @@ class AuthRepository {
   }
 
   Stream<UserModel> getUserData(String uid) {
-    return _users.doc(uid).snapshots().map(
-        (event) => UserModel.fromMap(event.data() as Map<String, dynamic>));
+    return _users
+        .doc(uid)
+        .snapshots()
+        .map((event) => UserModel.fromMap(event.data() as Map<String, dynamic>));
   }
 
   void logOut() async {

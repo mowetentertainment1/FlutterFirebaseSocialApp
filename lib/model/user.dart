@@ -9,7 +9,8 @@ class UserModel {
   final String uid;
   final bool isAuthenticated; // if guest or not
   final int karma;
-  final List<String> awards;
+  final List<String> followers;
+  final List<String> following;
 
   UserModel({
     required this.name,
@@ -19,7 +20,8 @@ class UserModel {
     required this.uid,
     required this.isAuthenticated,
     required this.karma,
-    required this.awards,
+    required this.followers,
+    required this.following,
   });
 
   UserModel copyWith({
@@ -30,7 +32,8 @@ class UserModel {
     String? uid,
     bool? isAuthenticated,
     int? karma,
-    List<String>? awards,
+    List<String>? followers,
+    List<String>? following,
   }) {
     return UserModel(
       name: name ?? this.name,
@@ -40,7 +43,8 @@ class UserModel {
       uid: uid ?? this.uid,
       isAuthenticated: isAuthenticated ?? this.isAuthenticated,
       karma: karma ?? this.karma,
-      awards: awards ?? this.awards,
+      followers: followers ?? this.followers,
+      following: followers ?? this.following,
     );
   }
 
@@ -53,7 +57,8 @@ class UserModel {
       'uid': uid,
       'isAuthenticated': isAuthenticated,
       'karma': karma,
-      'awards': awards,
+      'followers': followers,
+      'following': following,
     };
   }
 
@@ -66,13 +71,14 @@ class UserModel {
       uid: map['uid'] ?? '',
       isAuthenticated: map['isAuthenticated'] ?? false,
       karma: map['karma']?.toInt() ?? 0,
-      awards: List<String>.from(map['awards']),
+      followers: List<String>.from(map['followers']),
+      following: List<String>.from(map['following']),
     );
   }
 
   @override
   String toString() {
-    return 'UserModel(name: $name, profilePic: $profilePic, banner: $banner, description: $description, uid: $uid, isAuthenticated: $isAuthenticated, karma: $karma, awards: $awards)';
+    return 'UserModel(name: $name, profilePic: $profilePic, banner: $banner, description: $description, uid: $uid, isAuthenticated: $isAuthenticated, karma: $karma, followers: $followers, following: $following)';
   }
 
 
@@ -88,7 +94,8 @@ class UserModel {
         other.uid == uid &&
         other.isAuthenticated == isAuthenticated &&
         other.karma == karma &&
-        listEquals(other.awards, awards);
+        listEquals(other.followers, followers) &&
+        listEquals(other.following, following);
   }
 
   @override
@@ -100,6 +107,7 @@ class UserModel {
     uid.hashCode ^
     isAuthenticated.hashCode ^
     karma.hashCode ^
-    awards.hashCode;
+    followers.hashCode ^
+    following.hashCode;
   }
 }
