@@ -93,4 +93,12 @@ class UserProfileController extends StateNotifier<bool> {
     res.fold((l) => null,
         (r) => _ref.read(userProvider.notifier).update((state) => user));
   }
+  void followUser( String followUid) async {
+    final user = _ref.read(userProvider)!.uid;
+    _userRepo.followUser(user, followUid);
+  }
+  void unFollowUser(String followUid) async {
+    final user = _ref.read(userProvider)!.uid;
+    _userRepo.unFollowUser(user, followUid);
+  }
 }

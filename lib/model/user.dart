@@ -44,7 +44,7 @@ class UserModel {
       isAuthenticated: isAuthenticated ?? this.isAuthenticated,
       karma: karma ?? this.karma,
       followers: followers ?? this.followers,
-      following: followers ?? this.following,
+      following: following ?? this.following,
     );
   }
 
@@ -71,8 +71,8 @@ class UserModel {
       uid: map['uid'] ?? '',
       isAuthenticated: map['isAuthenticated'] ?? false,
       karma: map['karma']?.toInt() ?? 0,
-      followers: List<String>.from(map['followers']),
-      following: List<String>.from(map['following']),
+      followers: List<String>.from(map['followers'] ?? []),
+      following: List<String>.from(map['following'] ?? []),
     );
   }
 

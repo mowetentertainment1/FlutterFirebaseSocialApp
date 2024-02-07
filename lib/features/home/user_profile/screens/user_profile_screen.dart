@@ -17,12 +17,18 @@ class UserProfileScreen extends ConsumerWidget {
   void navigateToEditProfile(BuildContext context) {
     Routemaster.of(context).push('/edit-profile/$uid');
   }
+  void followUser(String uidForFollow, WidgetRef ref) {
+    ref.read(userProfileControllerProvider.notifier).followUser(uidForFollow);
+  }
+  void unfollowUser(String uidForUnfollow, WidgetRef ref) {
+    ref.read(userProfileControllerProvider.notifier).unFollowUser(uidForUnfollow);
+  }
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final user = ref.watch(userProvider)!;
-    final isOwner = user.uid == uid;
-    final isGuest = !user.isAuthenticated;
+    final currentUser = ref.watch(userProvider)!;
+    final isOwner = currentUser.uid == uid;
+    final isGuest = !currentUser.isAuthenticated;
     return Responsive(
       child: Scaffold(
           body: ref.watch(getUserDataProvider(uid)).when(
@@ -94,11 +100,22 @@ class UserProfileScreen extends ConsumerWidget {
                                       )
                                     : isGuest
                                         ? const SizedBox()
-                                    : ElevatedButton(
+                                    :
+                                currentUser.following.contains(uid)
+                                        ? ElevatedButton(
+                                            style: ElevatedButton.styleFrom(
+                                              backgroundColor: Colors.grey,
+                                            ),
+                                            onPressed: () => unfollowUser(uid, ref),
+                                            child: const Text('Unfollow',
+                                                style: TextStyle(color: Colors.white)),
+                                          )
+                                        :
+                                ElevatedButton(
                                         style: ElevatedButton.styleFrom(
                                           backgroundColor: Colors.blueAccent,
                                         ),
-                                        onPressed: () {},
+                                        onPressed: () => followUser(uid, ref),
                                         child: const Text('Follow',
                                             style: TextStyle(color: Colors.white)),
                                       ),

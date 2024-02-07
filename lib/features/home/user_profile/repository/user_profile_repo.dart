@@ -70,8 +70,32 @@ class UserProfileRepo {
       return users;
     });
   }
-  Stream<UserModel> getUserData(String uid) {
-    return _users.doc(uid).snapshots().map(
-            (event) => UserModel.fromMap(event.data() as Map<String, dynamic>));
+  void followUser(String uid, String followUid) async {
+    try {
+      await _users.doc(uid).update({
+        "following": FieldValue.arrayUnion([followUid])
+      });
+      await _users.doc(followUid).update({
+        "followers": FieldValue.arrayUnion([uid])
+      });
+    } on FirebaseException catch (e) {
+      throw e.message!;
+    } catch (e) {
+      throw Failure(e.toString());
+    }
+  }
+  void unFollowUser(String uid, String followUid) async {
+    try {
+      await _users.doc(uid).update({
+        "following": FieldValue.arrayRemove([followUid])
+      });
+      await _users.doc(followUid).update({
+        "followers": FieldValue.arrayRemove([uid])
+      });
+    } on FirebaseException catch (e) {
+      throw e.message!;
+    } catch (e) {
+      throw Failure(e.toString());
+    }
   }
 }
