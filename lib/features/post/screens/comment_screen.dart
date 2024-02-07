@@ -50,7 +50,6 @@ class _CommentScreenState extends ConsumerState<CommentsScreen> {
             data: (post) {
               return Column(
                 children: [
-
                   ref.watch(getPostCommentsProvider(widget.postId)).when(
                         data: (data) {
                           return Expanded(
@@ -72,8 +71,7 @@ class _CommentScreenState extends ConsumerState<CommentsScreen> {
                       ),
                   if (!isGuest)
                     Responsive(
-                      child:
-                      SizedBox(
+                      child: SizedBox(
                         height: 50,
                         child: TextField(
                           controller: _commentController,
@@ -83,14 +81,23 @@ class _CommentScreenState extends ConsumerState<CommentsScreen> {
                                 Radius.circular(10),
                               ),
                             ),
-                            contentPadding:
-                            const EdgeInsets.symmetric(horizontal: 16),
+                            contentPadding: const EdgeInsets.symmetric(horizontal: 16),
                             hintText: 'Add a comment',
                             suffixIcon: GestureDetector(
                                 onTap: () {
                                   addComment(post);
                                 },
-                                child: const Icon(Icons.send, color: Colors.blue)),
+                                child: _commentController.text.trim().isEmpty
+                                    ? IconButton(
+                                        onPressed: () {},
+                                        icon: const Icon(Icons.send, color: Colors.grey),
+                                      )
+                                    : IconButton(
+                                        onPressed: () {
+                                          addComment(post);
+                                        },
+                                        icon: const Icon(Icons.send, color: Colors.blue),
+                                      )),
                           ),
                           onSubmitted: (value) {
                             addComment(post);
@@ -105,6 +112,5 @@ class _CommentScreenState extends ConsumerState<CommentsScreen> {
               return ErrorText(error: error.toString());
             },
             loading: () => const Loader()));
-
   }
 }
