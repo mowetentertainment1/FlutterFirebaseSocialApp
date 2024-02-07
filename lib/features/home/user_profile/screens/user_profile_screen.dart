@@ -20,6 +20,8 @@ class UserProfileScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final user = ref.watch(userProvider)!;
+    final isOwner = user.uid == uid;
     return Responsive(
       child: Scaffold(
           body: ref.watch(getUserDataProvider(uid)).when(
@@ -48,41 +50,69 @@ class UserProfileScreen extends ConsumerWidget {
                                 ),
                                 const SizedBox(width: 10),
                                 SizedBox(
-                                  width: 180,
+                                  width: 250,
                                   child: Column(
                                     crossAxisAlignment: CrossAxisAlignment.start,
                                     children: [
                                       Text('u/${user.name}',
                                           style: const TextStyle(
-                                              fontSize: 16,
-                                              fontWeight: FontWeight.bold)),
+                                              fontSize: 16, fontWeight: FontWeight.bold)),
                                       const SizedBox(height: 5),
                                       Text(
                                         'Karma: ${user.karma}',
                                         style: const TextStyle(fontSize: 12),
                                       ),
+                                      const SizedBox(height: 10),
                                     ],
                                   ),
                                 ),
-                                OutlinedButton(
-                                    onPressed: () =>
-                                        navigateToEditProfile(context),
-                                    style: OutlinedButton.styleFrom(
-                                        side: const BorderSide(
-                                            color: Colors.blue, width: 1),
-                                        shape: RoundedRectangleBorder(
-                                            borderRadius:
-                                                BorderRadius.circular(20))),
-                                    child: const Icon(Icons.edit, size: 20)),
                               ],
                             ),
                             const SizedBox(height: 20),
                             SizedBox(
                               child: Text(
+
                                 ' ${user.description}',
                                 style: const TextStyle(fontSize: 15),
                               ),
                             ),
+                            const SizedBox(height: 20),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.end,
+                              children: [
+                                isOwner
+                                    ? ElevatedButton(
+                                        style: ElevatedButton.styleFrom(
+                                          backgroundColor: Colors.blueAccent,
+                                        ),
+                                        onPressed: () => navigateToEditProfile(context),
+                                        child: const Text(
+                                          'Edit Profile',
+                                          style: TextStyle(color: Colors.white),
+                                        ),
+                                      )
+                                    : ElevatedButton(
+                                        style: ElevatedButton.styleFrom(
+                                          backgroundColor: Colors.blueAccent,
+                                        ),
+                                        onPressed: () {},
+                                        child: const Text('Follow',
+                                            style: TextStyle(color: Colors.white)),
+                                      ),
+                                const SizedBox(width: 10),
+                                isOwner
+                                    ? const SizedBox()
+                                    : ElevatedButton(
+                                        style: ElevatedButton.styleFrom(
+                                          backgroundColor: Colors.blueAccent,
+                                        ),
+                                        onPressed: () {},
+                                        child: const Text('Message',
+                                            style: TextStyle(color: Colors.white)),
+                                      )
+                              ],
+                            ),
+                            const Divider()
                           ])))
                     ];
                   },

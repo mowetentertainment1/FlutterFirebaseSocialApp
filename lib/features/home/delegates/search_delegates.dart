@@ -47,7 +47,7 @@ class SearchCommunityScreen extends SearchDelegate {
                 itemBuilder: (context, index) {
                   if (index < communities.length) {
                     return ListTile(
-                      title: Text(communities[index].name),
+                      title: Text('r/${communities[index].name}'),
                       leading: CircleAvatar(
                         backgroundImage: NetworkImage(communities[index].avatar),
                       ),
@@ -57,7 +57,7 @@ class SearchCommunityScreen extends SearchDelegate {
                     );
                   } else {
                     return ListTile(
-                      title: Text(users[index - communities.length].name),
+                      title: Text('u/${users[index - communities.length].name}'),
                       leading: CircleAvatar(
                         backgroundImage: NetworkImage(users[index].profilePic),
                       ),
