@@ -8,7 +8,7 @@ import 'package:untitled/core/common/loader.dart';
 import '../../core/common/posts/post_card.dart';
 import '../auth/controller/auth_controller.dart';
 import '../community/controller/community_controller.dart';
-import '../home/delegates/search_community_delegates.dart';
+import '../home/delegates/search_delegates.dart';
 import '../home/drawers/community_list_drawer.dart';
 import '../home/drawers/profile_drawner.dart';
 import '../post/controller/post_controller.dart';

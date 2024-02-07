@@ -75,6 +75,7 @@ class UserModel {
     return 'UserModel(name: $name, profilePic: $profilePic, banner: $banner, description: $description, uid: $uid, isAuthenticated: $isAuthenticated, karma: $karma, awards: $awards)';
   }
 
+
   @override
   bool operator ==(Object other) {
     if (identical(this, other)) return true;

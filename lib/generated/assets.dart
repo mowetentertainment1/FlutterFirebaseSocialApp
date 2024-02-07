@@ -21,7 +21,7 @@ class Assets {
   static const String coreInfo = 'lib/core/info.dart';
   static const String coreTypeDefs = 'lib/core/type_defs.dart';
   static const String coreUtils = 'lib/core/utils.dart';
-  static const String delegatesSearchCommunityDelegates = 'lib/features/home/delegates/search_community_delegates.dart';
+  static const String delegatesSearchCommunityDelegates = 'lib/features/home/delegates/search_delegates.dart';
   static const String drawersCommunityListDrawer = 'lib/features/home/drawers/community_list_drawer.dart';
   static const String drawersProfileDrawner = 'lib/features/home/drawers/profile_drawner.dart';
   static const String enumsEnums = 'lib/core/enums/enums.dart';

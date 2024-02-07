@@ -3,7 +3,6 @@ import 'package:flutter/foundation.dart';
 class Community {
   final String id;
   final String name;
-
   final String description;
   final String banner;
   final String avatar;

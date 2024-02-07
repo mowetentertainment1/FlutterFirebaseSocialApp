@@ -15,7 +15,7 @@ import '../../../core/utils.dart';
 import '../../../model/community_model.dart';
 import '../../../theme/pallete.dart';
 import '../../auth/controller/auth_controller.dart';
-import '../../home/delegates/search_community_delegates.dart';
+import '../../home/delegates/search_delegates.dart';
 import '../../home/drawers/community_list_drawer.dart';
 import '../../home/drawers/profile_drawner.dart';
 import '../controller/post_controller.dart';
