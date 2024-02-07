@@ -22,6 +22,7 @@ class UserProfileScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final user = ref.watch(userProvider)!;
     final isOwner = user.uid == uid;
+    final isGuest = !user.isAuthenticated;
     return Responsive(
       child: Scaffold(
           body: ref.watch(getUserDataProvider(uid)).when(
@@ -91,6 +92,8 @@ class UserProfileScreen extends ConsumerWidget {
                                           style: TextStyle(color: Colors.white),
                                         ),
                                       )
+                                    : isGuest
+                                        ? const SizedBox()
                                     : ElevatedButton(
                                         style: ElevatedButton.styleFrom(
                                           backgroundColor: Colors.blueAccent,

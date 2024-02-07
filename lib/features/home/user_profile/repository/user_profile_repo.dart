@@ -60,6 +60,9 @@ class UserProfileRepo {
           ? null
           : query.substring(0, query.length - 1) +
           String.fromCharCode(query.codeUnitAt(query.length - 1) + 1),
+    ).where(
+      "name",
+      isNotEqualTo: "Guest",
     )
         .snapshots()
         .map((event) {

@@ -57,7 +57,7 @@ class AuthRepository {
 
       if (userCredential.additionalUserInfo!.isNewUser) {
         userModel = UserModel(
-          name: userCredential.user!.displayName?.trim() ?? 'unknown',
+          name: userCredential.user!.displayName?.replaceAll(' ', '') ?? 'unknown',
           profilePic: userCredential.user!.photoURL ?? Constants.avatarDefault,
           banner: Constants.bannerDefault,
           description: 'Hey there! I am using Amigo',
@@ -101,7 +101,7 @@ class AuthRepository {
         karma: 0,
         awards: [],
       );
-      await _users.doc(userCredential.user!.uid).set(userModel.toMap());
+      // await _users.doc(userCredential.user!.uid).set(userModel.toMap());
 
       return right(userModel);
     } on FirebaseException catch (e) {
