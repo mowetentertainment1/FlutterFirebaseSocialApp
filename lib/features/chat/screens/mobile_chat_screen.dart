@@ -39,8 +39,8 @@ class MobileChatScreen extends ConsumerWidget {
                         fontWeight: FontWeight.bold,
                       ),
                     ),
-                     Text(
-                     user.isOnline ? 'Online' : 'Offline',
+                    Text(
+                      user.isOnline ? 'Online' : 'Offline',
                       style: TextStyle(
                         fontSize: 12,
                         color: user.isOnline ? Colors.green : Colors.grey,
@@ -61,8 +61,8 @@ class MobileChatScreen extends ConsumerWidget {
       ),
       body: Column(
         children: [
-          const Expanded(
-            child: ChatList(),
+          Expanded(
+            child: ChatList(receiverId: uid),
           ),
           BottomChatField(
             receiverUserId: uid,

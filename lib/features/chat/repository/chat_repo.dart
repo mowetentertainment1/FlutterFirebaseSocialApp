@@ -51,6 +51,22 @@ class ChatRepo {
       return contacts;
     });
   }
+  Stream<List<Message>> getChatStream(String receiverUserId) {
+    return _users
+        .doc(_auth.currentUser!.uid)
+        .collection('chats')
+        .doc(receiverUserId)
+        .collection('messages')
+        .orderBy('timeSent')
+        .snapshots()
+        .map((event) {
+      List<Message> messages = [];
+      for (var document in event.docs) {
+        messages.add(Message.fromMap(document.data()));
+      }
+      return messages;
+    });
+  }
   void sendTextMessage(
       {required String message,
       required UserModel senderUser,
