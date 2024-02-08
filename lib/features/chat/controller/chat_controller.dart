@@ -3,7 +3,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../../core/providers/storage_repository_provider.dart';
 import '../../../../core/utils.dart';
-import '../../../auth/controller/auth_controller.dart';
+import '../../../model/chat_contact.dart';
+import '../../auth/controller/auth_controller.dart';
 import '../repository/chat_repo.dart';
 final chatControllerProvider = StateNotifierProvider<ChatController, bool>((ref) {
   final chatRepo = ref.watch(chatRepoProvider);
@@ -18,6 +19,9 @@ class ChatController extends StateNotifier<bool> {
   final ChatRepo _chatRepo;
   final Ref _ref;
   final StorageRepository _storageRepository;
+  Stream<List<ChatContact>> chatContacts() {
+    return _chatRepo.getChatContacts();
+  }
 
   ChatController({
     required ChatRepo chatRepo,

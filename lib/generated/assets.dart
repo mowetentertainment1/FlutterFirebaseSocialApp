@@ -14,7 +14,7 @@ class Assets {
   static const String constantsConstants = 'lib/core/constants/constants.dart';
   static const String constantsFirebaseConstants = 'lib/core/constants/firebase_constants.dart';
   static const String controllerAuthController = 'lib/features/auth/controller/auth_controller.dart';
-  static const String controllerChatController = 'lib/features/chat/card/controller/chat_controller.dart';
+  static const String controllerChatController = 'lib/features/chat/controller/chat_controller.dart';
   static const String controllerCommunityController = 'lib/features/community/controller/community_controller.dart';
   static const String controllerPostController = 'lib/features/post/controller/post_controller.dart';
   static const String controllerUserProfileController = 'lib/features/home/user_profile/controller/user_profile_controller.dart';
@@ -47,7 +47,7 @@ class Assets {
   static const String providersFirebaseProviders = 'lib/core/providers/firebase_providers.dart';
   static const String providersStorageRepositoryProvider = 'lib/core/providers/storage_repository_provider.dart';
   static const String repositoryAuthRepository = 'lib/features/auth/repository/auth_repository.dart';
-  static const String repositoryChatRepo = 'lib/features/chat/card/repository/chat_repo.dart';
+  static const String repositoryChatRepo = 'lib/features/chat/repository/chat_repo.dart';
   static const String repositoryCommunityRepo = 'lib/features/community/repository/community_repo.dart';
   static const String repositoryPostRepo = 'lib/features/post/repository/post_repo.dart';
   static const String repositoryUserProfileRepo = 'lib/features/home/user_profile/repository/user_profile_repo.dart';

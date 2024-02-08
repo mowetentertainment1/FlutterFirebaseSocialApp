@@ -1,12 +1,11 @@
 import 'dart:io';
 
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../core/colors.dart';
 import '../../core/utils.dart';
-import 'card/controller/chat_controller.dart';
+import 'controller/chat_controller.dart';
 
 class BottomChatField extends ConsumerStatefulWidget {
   final String receiverUserId;
