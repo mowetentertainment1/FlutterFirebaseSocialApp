@@ -11,11 +11,15 @@ import '../../../auth/controller/auth_controller.dart';
 
 class UserProfileScreen extends ConsumerWidget {
   final String uid;
+  final String name;
 
-  const UserProfileScreen({super.key, required this.uid});
+  const UserProfileScreen({super.key, required this.uid, required this.name});
 
   void navigateToEditProfile(BuildContext context) {
     Routemaster.of(context).push('/edit-profile/$uid');
+  }
+  void navigateToChat(BuildContext context) {
+    Routemaster.of(context).push('/chat/$name/$uid');
   }
   void followUser(String uidForFollow, WidgetRef ref) {
     ref.read(userProfileControllerProvider.notifier).followUser(uidForFollow);
@@ -126,7 +130,7 @@ class UserProfileScreen extends ConsumerWidget {
                                         style: ElevatedButton.styleFrom(
                                           backgroundColor: Colors.blueAccent,
                                         ),
-                                        onPressed: () {},
+                                        onPressed: () => navigateToChat(context),
                                         child: const Text('Message',
                                             style: TextStyle(color: Colors.white)),
                                       )

@@ -5,9 +5,9 @@ class UserModel {
   final String profilePic;
   final String banner;
   final String description;
-
   final String uid;
   final bool isAuthenticated; // if guest or not
+  final bool isOnline;
   final int karma;
   final List<String> followers;
   final List<String> following;
@@ -19,6 +19,7 @@ class UserModel {
     required this.description,
     required this.uid,
     required this.isAuthenticated,
+    required this.isOnline,
     required this.karma,
     required this.followers,
     required this.following,
@@ -31,6 +32,7 @@ class UserModel {
     String? description,
     String? uid,
     bool? isAuthenticated,
+    bool? isOnline,
     int? karma,
     List<String>? followers,
     List<String>? following,
@@ -42,6 +44,7 @@ class UserModel {
       description: description ?? this.description,
       uid: uid ?? this.uid,
       isAuthenticated: isAuthenticated ?? this.isAuthenticated,
+      isOnline: isOnline ?? this.isOnline,
       karma: karma ?? this.karma,
       followers: followers ?? this.followers,
       following: following ?? this.following,
@@ -56,6 +59,7 @@ class UserModel {
       'description': description,
       'uid': uid,
       'isAuthenticated': isAuthenticated,
+      'isOnline': isOnline,
       'karma': karma,
       'followers': followers,
       'following': following,
@@ -70,6 +74,7 @@ class UserModel {
       description: map['description'] ?? '',
       uid: map['uid'] ?? '',
       isAuthenticated: map['isAuthenticated'] ?? false,
+      isOnline: map['isOnline'] ?? false,
       karma: map['karma']?.toInt() ?? 0,
       followers: List<String>.from(map['followers'] ?? []),
       following: List<String>.from(map['following'] ?? []),
@@ -78,7 +83,7 @@ class UserModel {
 
   @override
   String toString() {
-    return 'UserModel(name: $name, profilePic: $profilePic, banner: $banner, description: $description, uid: $uid, isAuthenticated: $isAuthenticated, karma: $karma, followers: $followers, following: $following)';
+    return 'UserModel(name: $name, profilePic: $profilePic, banner: $banner, description: $description, uid: $uid, isAuthenticated: $isAuthenticated, isOnline: $isOnline, karma: $karma, followers: $followers, following: $following)';
   }
 
 
@@ -93,6 +98,7 @@ class UserModel {
         other.description == description &&
         other.uid == uid &&
         other.isAuthenticated == isAuthenticated &&
+        other.isOnline == isOnline &&
         other.karma == karma &&
         listEquals(other.followers, followers) &&
         listEquals(other.following, following);
@@ -106,6 +112,7 @@ class UserModel {
     description.hashCode ^
     uid.hashCode ^
     isAuthenticated.hashCode ^
+    isOnline.hashCode ^
     karma.hashCode ^
     followers.hashCode ^
     following.hashCode;
