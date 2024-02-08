@@ -5,6 +5,7 @@ class Assets {
   static const String cardChatsList = 'lib/features/chat/card/chats_list.dart';
   static const String cardMyMessageCard = 'lib/features/chat/card/my_message_card.dart';
   static const String cardSenderMessageCard = 'lib/features/chat/card/sender_message_card.dart';
+  static const String chatBottomChatField = 'lib/features/chat/bottom_chat_field.dart';
   static const String commonErrorText = 'lib/core/common/error_text.dart';
   static const String commonLoader = 'lib/core/common/loader.dart';
   static const String commonPhotoView = 'lib/core/common/photo_view.dart';
@@ -21,7 +22,7 @@ class Assets {
   static const String coreInfo = 'lib/core/info.dart';
   static const String coreTypeDefs = 'lib/core/type_defs.dart';
   static const String coreUtils = 'lib/core/utils.dart';
-  static const String delegatesSearchCommunityDelegates = 'lib/features/home/delegates/search_delegates.dart';
+  static const String delegatesSearchDelegates = 'lib/features/home/delegates/search_delegates.dart';
   static const String drawersCommunityListDrawer = 'lib/features/home/drawers/community_list_drawer.dart';
   static const String drawersProfileDrawner = 'lib/features/home/drawers/profile_drawner.dart';
   static const String enumsEnums = 'lib/core/enums/enums.dart';

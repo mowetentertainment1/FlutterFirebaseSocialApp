@@ -67,10 +67,10 @@ class ChatScreen extends ConsumerWidget {
                 text: 'CHATS',
               ),
               Tab(
-                text: 'STATUS',
+                text: 'COMMUNITIES',
               ),
               Tab(
-                text: 'CALLS',
+                text: 'STATUS',
               ),
             ],
           ),
