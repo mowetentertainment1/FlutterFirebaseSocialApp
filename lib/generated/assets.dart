@@ -14,6 +14,7 @@ class Assets {
   static const String constantsConstants = 'lib/core/constants/constants.dart';
   static const String constantsFirebaseConstants = 'lib/core/constants/firebase_constants.dart';
   static const String controllerAuthController = 'lib/features/auth/controller/auth_controller.dart';
+  static const String controllerChatController = 'lib/features/chat/card/controller/chat_controller.dart';
   static const String controllerCommunityController = 'lib/features/community/controller/community_controller.dart';
   static const String controllerPostController = 'lib/features/post/controller/post_controller.dart';
   static const String controllerUserProfileController = 'lib/features/home/user_profile/controller/user_profile_controller.dart';
@@ -26,6 +27,7 @@ class Assets {
   static const String drawersCommunityListDrawer = 'lib/features/home/drawers/community_list_drawer.dart';
   static const String drawersProfileDrawner = 'lib/features/home/drawers/profile_drawner.dart';
   static const String enumsEnums = 'lib/core/enums/enums.dart';
+  static const String enumsMessageEnum = 'lib/core/enums/message_enum.dart';
   static const String feedFeedScreen = 'lib/features/feed/feed_screen.dart';
   static const String generatedAssets = 'lib/generated/assets.dart';
   static const String imagesGoogle = 'assets/images/google.png';
@@ -34,8 +36,10 @@ class Assets {
   static const String libFirebaseOptions = 'lib/firebase_options.dart';
   static const String libMain = 'lib/main.dart';
   static const String libRouter = 'lib/router.dart';
+  static const String modelChatContact = 'lib/model/chat_contact.dart';
   static const String modelCommentModel = 'lib/model/comment_model.dart';
   static const String modelCommunityModel = 'lib/model/community_model.dart';
+  static const String modelMessage = 'lib/model/message.dart';
   static const String modelPostModel = 'lib/model/post_model.dart';
   static const String modelUser = 'lib/model/user.dart';
   static const String notificationNotificationScreen = 'lib/features/notification/notification_screen.dart';
@@ -43,6 +47,7 @@ class Assets {
   static const String providersFirebaseProviders = 'lib/core/providers/firebase_providers.dart';
   static const String providersStorageRepositoryProvider = 'lib/core/providers/storage_repository_provider.dart';
   static const String repositoryAuthRepository = 'lib/features/auth/repository/auth_repository.dart';
+  static const String repositoryChatRepo = 'lib/features/chat/card/repository/chat_repo.dart';
   static const String repositoryCommunityRepo = 'lib/features/community/repository/community_repo.dart';
   static const String repositoryPostRepo = 'lib/features/post/repository/post_repo.dart';
   static const String repositoryUserProfileRepo = 'lib/features/home/user_profile/repository/user_profile_repo.dart';
