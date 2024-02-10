@@ -2,7 +2,6 @@ import 'package:date_format/date_format.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:routemaster/routemaster.dart';
-
 import '../../../core/colors.dart';
 import '../../../core/common/loader.dart';
 import '../../../model/chat_contact.dart';
@@ -106,7 +105,7 @@ class ContactsList extends ConsumerWidget {
                               padding: const EdgeInsets.only(bottom: 8.0),
                               child: ListTile(
                                 title: Text(
-                                  chatContactData.name,
+                                  'u/${chatContactData.name}',
                                   style: const TextStyle(
                                     fontSize: 18,
                                   ),

@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 
-import '../../../core/colors.dart';
-
 class SenderMessageCard extends StatelessWidget {
   const SenderMessageCard({
     super.key,
@@ -18,11 +16,11 @@ class SenderMessageCard extends StatelessWidget {
       child: ConstrainedBox(
         constraints: BoxConstraints(
           maxWidth: MediaQuery.of(context).size.width - 45,
+          minWidth: 120
         ),
         child: Card(
           elevation: 1,
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
-          color: senderMessageColor,
           margin: const EdgeInsets.symmetric(horizontal: 15, vertical: 5),
           child: Stack(
             children: [

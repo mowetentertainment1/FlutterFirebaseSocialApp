@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:routemaster/routemaster.dart';
 import 'package:untitled/model/user.dart';
 import '../../../core/colors.dart';
 import '../../auth/controller/auth_controller.dart';
@@ -15,10 +16,10 @@ class MobileChatScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     return Scaffold(
       appBar: AppBar(
-        automaticallyImplyLeading: false,
+        // automaticallyImplyLeading: false,
         backgroundColor: appBarColor,
         title: StreamBuilder<UserModel>(
-          stream: ref.read(authControllerProvider.notifier).getUserData(uid),
+          stream: ref.watch(authControllerProvider.notifier).getUserData(uid),
           builder: (context, snapshot) {
             final user = snapshot.data!;
             return Row(
@@ -32,11 +33,16 @@ class MobileChatScreen extends ConsumerWidget {
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(
-                      user.name,
-                      style: const TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
+                    GestureDetector(
+                      onTap: () {
+                        Routemaster.of(context).push('/u/${user.name}/${user.uid}');
+                      },
+                      child: Text(
+                        'u/${user.name}',
+                        style: const TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
                     ),
                     Text(
@@ -53,9 +59,18 @@ class MobileChatScreen extends ConsumerWidget {
           },
         ),
         actions: [
-          IconButton(
-            onPressed: () {},
-            icon: const Icon(Icons.more_vert),
+          PopupMenuButton(
+            itemBuilder: (context) => [
+              const PopupMenuItem(
+                child: Text('Mute'),
+              ),
+              const PopupMenuItem(
+                child: Text('Block'),
+              ),const PopupMenuItem(
+                child: Text('Delete Chat', style: TextStyle(color: Colors.red)),
+
+              ),
+            ],
           ),
         ],
       ),

@@ -69,9 +69,6 @@ class ChatScreen extends ConsumerWidget {
               Tab(
                 text: 'COMMUNITIES',
               ),
-              Tab(
-                text: 'STATUS',
-              ),
             ],
           ),
         ),

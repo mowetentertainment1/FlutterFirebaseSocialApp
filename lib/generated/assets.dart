@@ -20,7 +20,6 @@ class Assets {
   static const String controllerUserProfileController = 'lib/features/home/user_profile/controller/user_profile_controller.dart';
   static const String coreColors = 'lib/core/colors.dart';
   static const String coreFailure = 'lib/core/failure.dart';
-  static const String coreInfo = 'lib/core/info.dart';
   static const String coreTypeDefs = 'lib/core/type_defs.dart';
   static const String coreUtils = 'lib/core/utils.dart';
   static const String delegatesSearchDelegates = 'lib/features/home/delegates/search_delegates.dart';
