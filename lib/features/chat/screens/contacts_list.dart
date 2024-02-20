@@ -88,7 +88,13 @@ class ContactsList extends ConsumerWidget {
                   if (snapshot.connectionState == ConnectionState.waiting) {
                     return const Loader();
                   }
-
+                  if (snapshot.data!.isEmpty) {
+                    return const Center(
+                        child: Padding(
+                          padding: EdgeInsets.only(top: 100),
+                          child: Text('No contacts', style: TextStyle(color: Colors.grey, fontSize: 20)),
+                        ));
+                  }
                   return ListView.builder(
                     shrinkWrap: true,
                     itemCount: snapshot.data!.length,
@@ -99,7 +105,8 @@ class ContactsList extends ConsumerWidget {
                         children: [
                           InkWell(
                             onTap: () {
-                              Routemaster.of(context).push('/chat/${chatContactData.name}/${chatContactData.contactId}');
+                              Routemaster.of(context).push(
+                                  '/chat/${chatContactData.name}/${chatContactData.contactId}');
                             },
                             child: Padding(
                               padding: const EdgeInsets.only(bottom: 8.0),

@@ -6,7 +6,7 @@ import 'package:untitled/core/common/video_player_view.dart';
 import 'package:untitled/features/community/controller/community_controller.dart';
 import 'package:untitled/model/post_model.dart';
 import 'package:untitled/responsive/responsive.dart';
-import 'package:untitled/theme/pallete.dart';
+import 'package:untitled/theme/palette.dart';
 import 'package:video_player/video_player.dart';
 
 import '../../../features/auth/controller/auth_controller.dart';

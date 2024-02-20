@@ -11,7 +11,7 @@ import '../../../../core/common/error_text.dart';
 import '../../../../core/common/loader.dart';
 import '../../../../core/constants/constants.dart';
 import '../../../../core/utils.dart';
-import '../../../../theme/pallete.dart';
+import '../../../../theme/palette.dart';
 
 
 class EditProfileScreen extends ConsumerStatefulWidget {

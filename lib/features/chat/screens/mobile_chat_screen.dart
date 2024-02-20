@@ -20,7 +20,14 @@ class MobileChatScreen extends ConsumerWidget {
         backgroundColor: appBarColor,
         title: StreamBuilder<UserModel>(
           stream: ref.watch(authControllerProvider.notifier).getUserData(uid),
+
           builder: (context, snapshot) {
+            if (snapshot.hasError) {
+              return const Text('Something went wrong');
+            }
+            if (!snapshot.hasData) {
+              return const Text('Loading...');
+            }
             final user = snapshot.data!;
             return Row(
               mainAxisAlignment: MainAxisAlignment.start,

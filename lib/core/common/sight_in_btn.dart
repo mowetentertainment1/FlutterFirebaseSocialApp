@@ -4,7 +4,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:untitled/core/constants/constants.dart';
 
 import '../../features/auth/controller/auth_controller.dart';
-import '../../theme/pallete.dart';
+import '../../theme/palette.dart';
 
 class SightInBtn extends ConsumerWidget {
   const SightInBtn({super.key});

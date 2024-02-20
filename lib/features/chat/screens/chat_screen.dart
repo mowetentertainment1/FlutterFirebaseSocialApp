@@ -2,11 +2,12 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:untitled/features/chat/screens/select_contact_screen.dart';
 
 import '../../auth/controller/auth_controller.dart';
 import '../../home/delegates/search_delegates.dart';
 import '../../home/drawers/community_list_drawer.dart';
-import '../../home/drawers/profile_drawner.dart';
+import '../../home/drawers/profile_drawer.dart';
 import 'contacts_list.dart';
 import '../../../core/colors.dart';
 
@@ -19,6 +20,7 @@ class ChatScreen extends ConsumerWidget {
   void displayEndDrawer(BuildContext context) {
     Scaffold.of(context).openEndDrawer();
   }
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final user = ref.watch(userProvider)!;
@@ -74,7 +76,9 @@ class ChatScreen extends ConsumerWidget {
         ),
         body: const ContactsList(),
         floatingActionButton: FloatingActionButton(
-          onPressed: () {},
+          onPressed: () {
+            showSearch(context: context, delegate: SelectContactScreen(ref: ref));
+          },
           backgroundColor: tabColor,
           child: const Icon(
             Icons.comment,

@@ -24,7 +24,7 @@ class Assets {
   static const String coreUtils = 'lib/core/utils.dart';
   static const String delegatesSearchDelegates = 'lib/features/home/delegates/search_delegates.dart';
   static const String drawersCommunityListDrawer = 'lib/features/home/drawers/community_list_drawer.dart';
-  static const String drawersProfileDrawner = 'lib/features/home/drawers/profile_drawner.dart';
+  static const String drawersProfileDrawner = 'lib/features/home/drawers/profile_drawer.dart';
   static const String enumsEnums = 'lib/core/enums/enums.dart';
   static const String enumsMessageEnum = 'lib/core/enums/message_enum.dart';
   static const String feedFeedScreen = 'lib/features/feed/feed_screen.dart';
@@ -64,8 +64,9 @@ class Assets {
   static const String screensLoginScreen = 'lib/features/auth/screens/login_screen.dart';
   static const String screensMobileChatScreen = 'lib/features/chat/screens/mobile_chat_screen.dart';
   static const String screensModToolScreen = 'lib/features/community/screens/mod_tool_screen.dart';
+  static const String screensSelectContactScreen = 'lib/features/chat/screens/select_contact_screen.dart';
   static const String screensUserProfileScreen = 'lib/features/home/user_profile/screens/user_profile_screen.dart';
-  static const String themePallete = 'lib/theme/pallete.dart';
+  static const String themePallete = 'lib/theme/palette.dart';
   static const String widgetCommentCard = 'lib/features/post/widget/comment_card.dart';
 
 }

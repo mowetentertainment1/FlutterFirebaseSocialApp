@@ -8,7 +8,7 @@ import 'package:untitled/core/common/loader.dart';
 import 'package:untitled/features/auth/controller/auth_controller.dart';
 import 'package:untitled/model/user.dart';
 import 'package:untitled/router.dart';
-import 'package:untitled/theme/pallete.dart';
+import 'package:untitled/theme/palette.dart';
 
 import 'firebase_options.dart';
 

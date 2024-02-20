@@ -26,6 +26,7 @@ class ChatController extends StateNotifier<bool> {
   Stream<List<Message>> chatStream(String receiverUserId) {
     return _chatRepo.getChatStream(receiverUserId);
   }
+
   ChatController({
     required ChatRepo chatRepo,
     required Ref ref,

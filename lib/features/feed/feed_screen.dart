@@ -10,7 +10,7 @@ import '../auth/controller/auth_controller.dart';
 import '../community/controller/community_controller.dart';
 import '../home/delegates/search_delegates.dart';
 import '../home/drawers/community_list_drawer.dart';
-import '../home/drawers/profile_drawner.dart';
+import '../home/drawers/profile_drawer.dart';
 import '../post/controller/post_controller.dart';
 
 class FeedScreen extends ConsumerWidget {

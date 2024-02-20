@@ -4,7 +4,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:routemaster/routemaster.dart';
 import 'package:untitled/features/auth/controller/auth_controller.dart';
 
-import '../../../theme/pallete.dart';
+import '../../../theme/palette.dart';
 
 class ProfileDrawer extends ConsumerWidget {
   const ProfileDrawer({super.key});

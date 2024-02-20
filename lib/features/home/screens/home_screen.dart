@@ -2,7 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../core/constants/constants.dart';
-import '../../../theme/pallete.dart';
+import '../../../theme/palette.dart';
 import '../../auth/controller/auth_controller.dart';
 
 class HomeScreen extends ConsumerStatefulWidget {

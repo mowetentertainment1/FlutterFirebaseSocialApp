@@ -13,11 +13,11 @@ import '../../../core/common/loader.dart';
 import '../../../core/common/video_player_view.dart';
 import '../../../core/utils.dart';
 import '../../../model/community_model.dart';
-import '../../../theme/pallete.dart';
+import '../../../theme/palette.dart';
 import '../../auth/controller/auth_controller.dart';
 import '../../home/delegates/search_delegates.dart';
 import '../../home/drawers/community_list_drawer.dart';
-import '../../home/drawers/profile_drawner.dart';
+import '../../home/drawers/profile_drawer.dart';
 import '../controller/post_controller.dart';
 
 class AddPostScreen extends ConsumerStatefulWidget {

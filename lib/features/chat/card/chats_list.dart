@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:untitled/core/common/loader.dart';
 import 'package:untitled/features/chat/card/sender_message_card.dart';
 import '../controller/chat_controller.dart';
 import 'my_message_card.dart';
@@ -45,10 +46,13 @@ class _ChatListState extends ConsumerState<ChatList> {
         if (snapshot.hasError) {
           return const Center(child: Text('Something went wrong'));
         }
-        // SchedulerBinding.instance.addPostFrameCallback((_) {
-        //   _scrollController.jumpTo(_scrollController.position.maxScrollExtent);
-        // });
-
+        if (!snapshot.hasData) {
+          return const Loader();
+        }
+        SchedulerBinding.instance.addPostFrameCallback((_) {
+          _scrollController
+              .jumpTo(_scrollController.position.maxScrollExtent);
+        });
         return ListView.builder(
           controller: _scrollController,
           itemCount: snapshot.data?.length ?? 0,
