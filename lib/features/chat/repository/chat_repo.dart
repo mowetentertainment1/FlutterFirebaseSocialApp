@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
@@ -9,6 +11,7 @@ import '../../../../core/constants/firebase_constants.dart';
 import '../../../../core/enums/message_enum.dart';
 import '../../../../model/chat_contact.dart';
 import '../../../../model/message.dart';
+import '../../../core/utils.dart';
 
 final chatRepoProvider = Provider((ref) {
   return ChatRepo(firestore: FirebaseFirestore.instance, auth: FirebaseAuth.instance);
@@ -181,5 +184,70 @@ class ChatRepo {
         .collection(FirebaseConstants.messagesCollection)
         .doc(messageId)
         .set(receiverMessage.toMap());
+  }
+  void sendFileMessage({
+    required BuildContext context,
+    required File file,
+    required String recieverUserId,
+    required UserModel senderUserData,
+    required ProviderRef ref,
+    required MessageEnum messageEnum,
+    required bool isGroupChat,
+  }) async {
+    try {
+      var timeSent = DateTime.now();
+      var messageId = const Uuid().v1();
+
+      // String imageUrl = await ref
+      //     .read(commonFirebaseStorageRepositoryProvider)
+      //     .storeFileToFirebase(
+      //   'chat/${messageEnum.type}/${senderUserData.uid}/$recieverUserId/$messageId',
+      //   file,
+      // );
+
+      UserModel? recieverUserData;
+      if (!isGroupChat) {
+        var userDataMap =
+        await _firestore.collection('users').doc(recieverUserId).get();
+        recieverUserData = UserModel.fromMap(userDataMap.data()!);
+      }
+
+      String contactMsg;
+
+      switch (messageEnum) {
+        case MessageEnum.image:
+          contactMsg = '📷 Photo';
+          break;
+        case MessageEnum.video:
+          contactMsg = '📸 Video';
+          break;
+        case MessageEnum.audio:
+          contactMsg = '🎵 Audio';
+          break;
+        default:
+          contactMsg = 'File';
+      }
+      _saveDataToContactsSubCollection(
+        senderUserData,
+        recieverUserData!,
+        contactMsg,
+        timeSent,
+        recieverUserId,
+      );
+
+      _saveChatToMessagesSubCollection(
+        receiverUserId: recieverUserId,
+        text: 'imageUrl',
+        timeSent: timeSent,
+        messageId: messageId,
+        username: senderUserData.name,
+        messageType: messageEnum,
+        receiverUserName: recieverUserData.name,
+        senderUsername: senderUserData.name,
+        isGroupChat: isGroupChat,
+      );
+    } catch (e) {
+      showSnackBar(context, e.toString());
+    }
   }
 }

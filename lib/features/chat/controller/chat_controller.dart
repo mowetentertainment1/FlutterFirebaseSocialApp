@@ -7,26 +7,28 @@ import '../../../model/chat_contact.dart';
 import '../../../model/message.dart';
 import '../../auth/controller/auth_controller.dart';
 import '../repository/chat_repo.dart';
-// y
-final chatControllerProvider = Provider((ref) {
+final chatControllerProvider = StateNotifierProvider<ChatController, bool>((ref) {
   final chatRepo = ref.watch(chatRepoProvider);
   final storageRepository = ref.watch(storageRepositoryProvider);
   return ChatController(
     chatRepo: chatRepo,
-    storageRepository: storageRepository,
     ref: ref,
+    storageRepository: storageRepository,
   );
 });
-class ChatController{
+final chatStream = StreamProvider.family<List<Message>, String>((ref, receiverUserId) {
+  return ref.read(chatControllerProvider.notifier).getChatStream(receiverUserId);
+});
+class ChatController extends StateNotifier<bool> {
   final ChatRepo _chatRepo;
   final Ref _ref;
   final StorageRepository _storageRepository;
   Stream<List<ChatContact>> chatContacts() {
     return _chatRepo.getChatContacts();
   }
-  Stream<List<Message>> chatStream(String receiverUserId) {
-    return _chatRepo.getChatStream(receiverUserId);
-  }
+  // Stream<List<Message>> chatStream(String receiverUserId) {
+  //   return _chatRepo.getChatStream(receiverUserId);
+  // }
 
   ChatController({
     required ChatRepo chatRepo,
@@ -34,7 +36,8 @@ class ChatController{
     required StorageRepository storageRepository,
   })  : _chatRepo = chatRepo,
         _ref = ref,
-        _storageRepository = storageRepository;
+        _storageRepository = storageRepository,
+        super(false);
 
   void sendTextMessage(
       BuildContext context, String message, String receiverUserId) async {
@@ -50,5 +53,8 @@ class ChatController{
     } catch (e) {
       showSnackBar(context, e.toString());
     }
+  }
+  Stream<List<Message>> getChatStream(String receiverUserId) {
+    return _chatRepo.getChatStream(receiverUserId);
   }
 }

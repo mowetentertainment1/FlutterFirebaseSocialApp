@@ -12,7 +12,41 @@ class HomeScreen extends ConsumerStatefulWidget {
   ConsumerState<ConsumerStatefulWidget> createState() => _HomeScreenState();
 }
 
-class _HomeScreenState extends ConsumerState<HomeScreen> {
+class _HomeScreenState extends ConsumerState<HomeScreen> with WidgetsBindingObserver, TickerProviderStateMixin {
+  late TabController tabBarController;
+  @override
+  void initState() {
+    super.initState();
+    tabBarController = TabController(length: 3, vsync: this);
+    WidgetsBinding.instance.addObserver(this);
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    WidgetsBinding.instance.removeObserver(this);
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    super.didChangeAppLifecycleState(state);
+    switch (state) {
+      case AppLifecycleState.resumed:
+        ref.read(authControllerProvider.notifier).setUserState(true);
+        break;
+      case AppLifecycleState.inactive:
+        ref.read(authControllerProvider.notifier).setUserState(false);
+      case AppLifecycleState.detached:
+        ref.read(authControllerProvider.notifier).setUserState(false);
+        break;
+      case AppLifecycleState.paused:
+        ref.read(authControllerProvider.notifier).setUserState(false);
+        break;
+      case AppLifecycleState.hidden:
+        ref.read(authControllerProvider.notifier).setUserState(false);
+        break;
+    }
+  }
   int _page = 0;
 
   void onPageChange(int index) {
