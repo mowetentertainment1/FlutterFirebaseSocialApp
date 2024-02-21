@@ -1,8 +1,11 @@
+import 'dart:io';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../../core/providers/storage_repository_provider.dart';
 import '../../../../core/utils.dart';
+import '../../../core/enums/message_enum.dart';
 import '../../../model/chat_contact.dart';
 import '../../../model/message.dart';
 import '../../auth/controller/auth_controller.dart';
@@ -26,10 +29,6 @@ class ChatController extends StateNotifier<bool> {
   Stream<List<ChatContact>> chatContacts() {
     return _chatRepo.getChatContacts();
   }
-  // Stream<List<Message>> chatStream(String receiverUserId) {
-  //   return _chatRepo.getChatStream(receiverUserId);
-  // }
-
   ChatController({
     required ChatRepo chatRepo,
     required Ref ref,
@@ -41,6 +40,7 @@ class ChatController extends StateNotifier<bool> {
 
   void sendTextMessage(
       BuildContext context, String message, String receiverUserId) async {
+    state = true;
     try {
       _ref.read(getCurrentUserDataProvider).whenData((user) {
         _chatRepo.sendTextMessage(
@@ -50,11 +50,40 @@ class ChatController extends StateNotifier<bool> {
           context: context,
         );
       });
+      state = false;
     } catch (e) {
       showSnackBar(context, e.toString());
     }
   }
   Stream<List<Message>> getChatStream(String receiverUserId) {
     return _chatRepo.getChatStream(receiverUserId);
+  }
+  Future<void> sendFileMessage(
+      BuildContext context,
+      File file,
+      String receiverUserId,
+      MessageEnum messageEnum,
+      bool isGroupChat,
+      ) async {
+    state = true;
+    final imageSave= await _storageRepository.storeFile(
+      path:'chat/$receiverUserId/',
+      file: file,
+      id: messageEnum.type,
+    );
+    final imageUrl = imageSave.fold((l) => '', (r) => r);
+    state = false;
+
+    _ref.read(getCurrentUserDataProvider).whenData(
+          (value) => _chatRepo.sendFileMessage(
+        context: context,
+        file: file,
+        receiverUserId: receiverUserId,
+        senderUserData: value!,
+        messageEnum: messageEnum,
+        imageUrl: imageUrl,
+        isGroupChat: isGroupChat,
+      ),
+    );
   }
 }

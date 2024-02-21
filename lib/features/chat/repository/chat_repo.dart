@@ -11,6 +11,7 @@ import '../../../../core/constants/firebase_constants.dart';
 import '../../../../core/enums/message_enum.dart';
 import '../../../../model/chat_contact.dart';
 import '../../../../model/message.dart';
+import '../../../core/providers/storage_repository_provider.dart';
 import '../../../core/utils.dart';
 
 final chatRepoProvider = Provider((ref) {
@@ -188,9 +189,9 @@ class ChatRepo {
   void sendFileMessage({
     required BuildContext context,
     required File file,
-    required String recieverUserId,
+    required String receiverUserId,
     required UserModel senderUserData,
-    required ProviderRef ref,
+    required String imageUrl,
     required MessageEnum messageEnum,
     required bool isGroupChat,
   }) async {
@@ -198,18 +199,12 @@ class ChatRepo {
       var timeSent = DateTime.now();
       var messageId = const Uuid().v1();
 
-      // String imageUrl = await ref
-      //     .read(commonFirebaseStorageRepositoryProvider)
-      //     .storeFileToFirebase(
-      //   'chat/${messageEnum.type}/${senderUserData.uid}/$recieverUserId/$messageId',
-      //   file,
-      // );
 
-      UserModel? recieverUserData;
+      UserModel? receiverUserData;
       if (!isGroupChat) {
         var userDataMap =
-        await _firestore.collection('users').doc(recieverUserId).get();
-        recieverUserData = UserModel.fromMap(userDataMap.data()!);
+        await _firestore.collection('users').doc(receiverUserId).get();
+        receiverUserData = UserModel.fromMap(userDataMap.data()!);
       }
 
       String contactMsg;
@@ -229,20 +224,20 @@ class ChatRepo {
       }
       _saveDataToContactsSubCollection(
         senderUserData,
-        recieverUserData!,
+        receiverUserData!,
         contactMsg,
         timeSent,
-        recieverUserId,
+        receiverUserId,
       );
 
       _saveChatToMessagesSubCollection(
-        receiverUserId: recieverUserId,
-        text: 'imageUrl',
+        receiverUserId: receiverUserId,
+        text: imageUrl,
         timeSent: timeSent,
         messageId: messageId,
         username: senderUserData.name,
         messageType: messageEnum,
-        receiverUserName: recieverUserData.name,
+        receiverUserName: receiverUserData.name,
         senderUsername: senderUserData.name,
         isGroupChat: isGroupChat,
       );

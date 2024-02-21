@@ -6,6 +6,7 @@ class Assets {
   static const String cardMyMessageCard = 'lib/features/chat/card/my_message_card.dart';
   static const String cardSenderMessageCard = 'lib/features/chat/card/sender_message_card.dart';
   static const String chatBottomChatField = 'lib/features/chat/bottom_chat_field.dart';
+  static const String chatDisplayMessageType = 'lib/features/chat/display_message_type.dart';
   static const String commonErrorText = 'lib/core/common/error_text.dart';
   static const String commonLoader = 'lib/core/common/loader.dart';
   static const String commonPhotoView = 'lib/core/common/photo_view.dart';
@@ -24,7 +25,7 @@ class Assets {
   static const String coreUtils = 'lib/core/utils.dart';
   static const String delegatesSearchDelegates = 'lib/features/home/delegates/search_delegates.dart';
   static const String drawersCommunityListDrawer = 'lib/features/home/drawers/community_list_drawer.dart';
-  static const String drawersProfileDrawner = 'lib/features/home/drawers/profile_drawer.dart';
+  static const String drawersProfileDrawer = 'lib/features/home/drawers/profile_drawer.dart';
   static const String enumsEnums = 'lib/core/enums/enums.dart';
   static const String enumsMessageEnum = 'lib/core/enums/message_enum.dart';
   static const String feedFeedScreen = 'lib/features/feed/feed_screen.dart';
@@ -66,7 +67,7 @@ class Assets {
   static const String screensModToolScreen = 'lib/features/community/screens/mod_tool_screen.dart';
   static const String screensSelectContactScreen = 'lib/features/chat/screens/select_contact_screen.dart';
   static const String screensUserProfileScreen = 'lib/features/home/user_profile/screens/user_profile_screen.dart';
-  static const String themePallete = 'lib/theme/palette.dart';
+  static const String themePalette = 'lib/theme/palette.dart';
   static const String widgetCommentCard = 'lib/features/post/widget/comment_card.dart';
 
 }

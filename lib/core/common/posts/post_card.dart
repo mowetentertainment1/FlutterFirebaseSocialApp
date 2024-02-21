@@ -1,7 +1,9 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:routemaster/routemaster.dart';
+import 'package:untitled/core/common/loader.dart';
 import 'package:untitled/core/common/video_player_view.dart';
 import 'package:untitled/features/community/controller/community_controller.dart';
 import 'package:untitled/model/post_model.dart';
@@ -218,9 +220,14 @@ class PostCard extends ConsumerWidget {
                                           child: SizedBox(
                                             height: double.infinity,
                                             width: double.infinity,
-                                            child: Image.network(
-                                              post.linkImage[index],
+                                            child: CachedNetworkImage(
+                                              imageUrl: post.linkImage[index],
                                               fit: BoxFit.cover,
+                                              placeholder: (context, url) =>
+                                                  const Loader(),
+                                                useOldImageOnUrlChange: true,
+                                              errorWidget: (context, url, error) =>
+                                                      const Icon(Icons.error),
                                             ),
                                           ),
                                         ),

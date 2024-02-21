@@ -2,6 +2,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../core/colors.dart';
+import '../../core/enums/message_enum.dart';
 import '../../core/utils.dart';
 import 'controller/chat_controller.dart';
 
@@ -76,33 +77,32 @@ class _BottomChatFieldState extends ConsumerState<BottomChatField> {
     }
   }
 
-  // void sendFileMessage(
-  //     File file,
-  //     MessageEnum messageEnum,
-  //     ) {
-  //   ref.read(chatControllerProvider).sendFileMessage(
-  //     context,
-  //     file,
-  //     widget.receiverUserId,
-  //     messageEnum,
-  //     widget.isGroupChat,
-  //   );
-  // }
+  void sendFileMessage(
+      File file,
+      MessageEnum messageEnum,
+      ) {
+    ref.read(chatControllerProvider.notifier).sendFileMessage(
+      context,
+      file,
+      widget.receiverUserId,
+      messageEnum,
+      widget.isGroupChat,
+    );
+  }
 
-  List<File> imageFiles = [];
+  File? imageFile;
 
   File? videoFile;
 
-  void pickImages() async {
-    final res = await pickMultipleImages();
+  void openPickImage() async {
+    final res = await pickImage();
     if (res != null) {
-      setState(() {
-        for (var pickedImage in res) {
-          imageFiles.add(File(pickedImage.path));
-          videoFile = null;
-        }
-      });
+      sendFileMessage(
+        File(res.files.single.path!),
+        MessageEnum.image,
+      );
     }
+
   }
 
   void pickingVideo() async {
@@ -110,7 +110,7 @@ class _BottomChatFieldState extends ConsumerState<BottomChatField> {
     if (res != null) {
       setState(() {
         videoFile = File(res.files.single.path!);
-        imageFiles = [];
+        imageFile = null;
       });
     }
   }
@@ -165,7 +165,7 @@ class _BottomChatFieldState extends ConsumerState<BottomChatField> {
                           mainAxisAlignment: MainAxisAlignment.end,
                           children: [
                             IconButton(
-                              onPressed: pickImages,
+                              onPressed: openPickImage,
                               icon: const Icon(
                                 Icons.camera_alt,
                                 color: Colors.grey,

@@ -1,13 +1,16 @@
 import 'package:flutter/material.dart';
 
+import '../../../core/enums/message_enum.dart';
+
 class SenderMessageCard extends StatelessWidget {
   const SenderMessageCard({
     super.key,
     required this.message,
-    required this.date,
+    required this.date, required this.type,
   });
   final String message;
   final String date;
+  final MessageEnum type;
 
   @override
   Widget build(BuildContext context) {

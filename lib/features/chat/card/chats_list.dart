@@ -23,40 +23,47 @@ class _ChatListState extends ConsumerState<ChatList> {
     super.dispose();
     scrollController.dispose();
   }
-@override
+
+  @override
   void initState() {
     super.initState();
     SchedulerBinding.instance.addPostFrameCallback((_) {
       scrollController.jumpTo(scrollController.position.maxScrollExtent);
     });
   }
+
   @override
   Widget build(BuildContext context) {
-    return ref.watch(chatStream(widget.receiverId)).when(
-          data: (chatList) {
-            return ListView.builder(
-              controller: scrollController,
-              itemCount: chatList.length,
-              itemBuilder: (context, index) {
-                final message = chatList[index];
-                final isMyMessage =
-                    message.senderId == FirebaseAuth.instance.currentUser!.uid;
-                return isMyMessage
-                    ? MyMessageCard(
-                        message: message.text,
-                        date: formatDate(message.timeSent, [HH, ':', nn]),
-                      )
-                    : SenderMessageCard(
-                        message: message.text,
-                        date: formatDate(message.timeSent, [HH, ':', nn]),
-                      );
+    final isLoading = ref.watch(chatControllerProvider);
+    return isLoading
+        ? const Loader()
+        : ref.watch(chatStream(widget.receiverId)).when(
+              data: (chatList) {
+                return ListView.builder(
+                  controller: scrollController,
+                  itemCount: chatList.length,
+                  itemBuilder: (context, index) {
+                    final message = chatList[index];
+                    final isMyMessage =
+                        message.senderId == FirebaseAuth.instance.currentUser!.uid;
+                    return isMyMessage
+                        ? MyMessageCard(
+                            message: message.text,
+                            date: formatDate(message.timeSent, [HH, ':', nn]),
+                            type: message.type,
+                          )
+                        : SenderMessageCard(
+                            message: message.text,
+                            date: formatDate(message.timeSent, [HH, ':', nn]),
+                      type: message.type,
+                          );
+                  },
+                );
               },
+              loading: () => const Loader(),
+              error: (error, stack) => Center(
+                child: Text('Error: $error'),
+              ),
             );
-          },
-          loading: () => const Loader(),
-          error: (error, stack) => Center(
-            child: Text('Error: $error'),
-          ),
-        );
   }
 }
