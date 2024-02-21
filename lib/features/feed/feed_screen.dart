@@ -79,6 +79,17 @@ class FeedScreen extends ConsumerWidget {
                 }
                 return ref.watch(userPostsProvider(communities)).when(
                       data: (posts) {
+                        if (posts.isEmpty) {
+                          return const Center(
+                            child: Text(
+                              'No posts yet',
+                              style: TextStyle(
+                                fontSize: 20,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          );
+                        }
                         return ListView.builder(
                           itemCount: posts.length,
                           itemBuilder: (context, index) {
@@ -87,7 +98,21 @@ class FeedScreen extends ConsumerWidget {
                           },
                         );
                       },
-                      loading: () => const Loader(),
+                      loading: () {
+                        if (communities.isEmpty) {
+                          return const Center(
+                            child: Text(
+                              'Please join a community to see posts',
+                              style: TextStyle(
+                                fontSize: 20,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          );
+
+                        }
+                        return const Loader();
+                      },
                       error: (e, s) {
                         return ErrorText(error: e.toString());
                       },

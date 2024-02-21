@@ -83,7 +83,7 @@ class ContactsList extends ConsumerWidget {
             //       );
             //     }),
             StreamBuilder<List<ChatContact>>(
-                stream: ref.watch(chatControllerProvider.notifier).chatContacts(),
+                stream: ref.watch(chatControllerProvider).chatContacts(),
                 builder: (context, snapshot) {
                   if (snapshot.connectionState == ConnectionState.waiting) {
                     return const Loader();

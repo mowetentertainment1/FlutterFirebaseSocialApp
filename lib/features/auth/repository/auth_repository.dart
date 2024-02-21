@@ -62,7 +62,7 @@ class AuthRepository {
           description: 'Hey there! I am using Amigo',
           uid: userCredential.user!.uid,
           isAuthenticated: true,
-          isOnline: true,
+          isOnline: false,
           karma: 0,
           followers: [],
           following: [],
@@ -123,5 +123,10 @@ class AuthRepository {
   void logOut() async {
     await _auth.signOut();
     await _googleSignIn.signOut();
+  }
+  void setUserState(bool isOnline) async {
+    await _firestore.collection('users').doc(_auth.currentUser!.uid).update({
+      'isOnline': isOnline,
+    });
   }
 }

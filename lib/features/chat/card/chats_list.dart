@@ -5,6 +5,7 @@ import 'package:flutter/scheduler.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:untitled/core/common/loader.dart';
 import 'package:untitled/features/chat/card/sender_message_card.dart';
+import '../../../model/message.dart';
 import '../controller/chat_controller.dart';
 import 'my_message_card.dart';
 
@@ -17,31 +18,16 @@ class ChatList extends ConsumerStatefulWidget {
 }
 
 class _ChatListState extends ConsumerState<ChatList> {
-  final ScrollController _scrollController = ScrollController();
+  final ScrollController scrollController = ScrollController();
   @override
   void dispose() {
-    _scrollController.dispose();
     super.dispose();
+    scrollController.dispose();
   }
-
-  @override
-  void initState() {
-    super.initState();
-    _scrollController.addListener(() {
-      if (_scrollController.position.atEdge) {
-        if (_scrollController.position.pixels == 0) {
-          _scrollController.jumpTo(_scrollController.position.maxScrollExtent);
-        } else {
-          ref.read(chatControllerProvider.notifier).chatStream(widget.receiverId);
-        }
-      }
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
-    return StreamBuilder(
-      stream: ref.read(chatControllerProvider.notifier).chatStream(widget.receiverId),
+    return StreamBuilder<List<Message>>(
+      stream: ref.read(chatControllerProvider).chatStream(widget.receiverId),
       builder: (context, snapshot) {
         if (snapshot.hasError) {
           return const Center(child: Text('Something went wrong'));
@@ -49,13 +35,16 @@ class _ChatListState extends ConsumerState<ChatList> {
         if (!snapshot.hasData) {
           return const Loader();
         }
-        SchedulerBinding.instance.addPostFrameCallback((_) {
-          _scrollController
-              .jumpTo(_scrollController.position.maxScrollExtent);
+        if (snapshot.data!.isEmpty) {
+          return const Center(child: Text('No messages yet'));
+        }
+        SchedulerBinding.instance.addTimingsCallback((_) {
+          scrollController
+              .jumpTo(scrollController.position.maxScrollExtent);
         });
         return ListView.builder(
-          controller: _scrollController,
-          itemCount: snapshot.data?.length ?? 0,
+          controller: scrollController,
+          itemCount: snapshot.data!.length,
           itemBuilder: (context, index) {
             final messageData = snapshot.data![index];
             if (messageData.senderId == FirebaseAuth.instance.currentUser!.uid) {

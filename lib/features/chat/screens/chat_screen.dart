@@ -11,8 +11,47 @@ import '../../home/drawers/profile_drawer.dart';
 import 'contacts_list.dart';
 import '../../../core/colors.dart';
 
-class ChatScreen extends ConsumerWidget {
+class ChatScreen extends ConsumerStatefulWidget {
   const ChatScreen({super.key});
+  @override
+  ConsumerState<ChatScreen> createState() => _ChatScreenState();
+}
+class _ChatScreenState extends ConsumerState<ChatScreen>
+    with WidgetsBindingObserver, TickerProviderStateMixin {
+  late TabController tabBarController;
+  @override
+  void initState() {
+    super.initState();
+    tabBarController = TabController(length: 3, vsync: this);
+    WidgetsBinding.instance.addObserver(this);
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    WidgetsBinding.instance.removeObserver(this);
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    super.didChangeAppLifecycleState(state);
+    switch (state) {
+      case AppLifecycleState.resumed:
+        ref.read(authControllerProvider.notifier).setUserState(true);
+        break;
+      case AppLifecycleState.inactive:
+        ref.read(authControllerProvider.notifier).setUserState(false);
+      case AppLifecycleState.detached:
+        ref.read(authControllerProvider.notifier).setUserState(false);
+        break;
+      case AppLifecycleState.paused:
+        ref.read(authControllerProvider.notifier).setUserState(false);
+        break;
+      case AppLifecycleState.hidden:
+        ref.read(authControllerProvider.notifier).setUserState(false);
+        break;
+    }
+  }
   void displayDrawer(BuildContext context) {
     Scaffold.of(context).openDrawer();
   }
@@ -22,7 +61,7 @@ class ChatScreen extends ConsumerWidget {
   }
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  Widget build(BuildContext context) {
     final user = ref.watch(userProvider)!;
     return DefaultTabController(
       length: 3,

@@ -7,16 +7,17 @@ import '../../../model/chat_contact.dart';
 import '../../../model/message.dart';
 import '../../auth/controller/auth_controller.dart';
 import '../repository/chat_repo.dart';
-final chatControllerProvider = StateNotifierProvider<ChatController, bool>((ref) {
+// y
+final chatControllerProvider = Provider((ref) {
   final chatRepo = ref.watch(chatRepoProvider);
   final storageRepository = ref.watch(storageRepositoryProvider);
   return ChatController(
     chatRepo: chatRepo,
-    ref: ref,
     storageRepository: storageRepository,
+    ref: ref,
   );
 });
-class ChatController extends StateNotifier<bool> {
+class ChatController{
   final ChatRepo _chatRepo;
   final Ref _ref;
   final StorageRepository _storageRepository;
@@ -33,8 +34,7 @@ class ChatController extends StateNotifier<bool> {
     required StorageRepository storageRepository,
   })  : _chatRepo = chatRepo,
         _ref = ref,
-        _storageRepository = storageRepository,
-        super(false);
+        _storageRepository = storageRepository;
 
   void sendTextMessage(
       BuildContext context, String message, String receiverUserId) async {

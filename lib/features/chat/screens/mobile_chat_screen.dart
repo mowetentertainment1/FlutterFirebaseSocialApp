@@ -19,7 +19,7 @@ class MobileChatScreen extends ConsumerWidget {
         // automaticallyImplyLeading: false,
         backgroundColor: appBarColor,
         title: StreamBuilder<UserModel>(
-          stream: ref.watch(authControllerProvider.notifier).getUserData(uid),
+          stream: ref.read(authControllerProvider.notifier).getUserData(uid),
 
           builder: (context, snapshot) {
             if (snapshot.hasError) {

@@ -43,6 +43,9 @@ class AuthController extends StateNotifier<bool> {
         (userModel) =>
             _ref.read(userProvider.notifier).update((state) => userModel));
   }
+  void setUserState(bool isOnline) {
+    _authRepository.setUserState(isOnline);
+  }
   void signInAsGuest(BuildContext context) async {
     final user = await _authRepository.signInAsGuest();
     state = false;
