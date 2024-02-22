@@ -47,5 +47,9 @@
 	<true/>
 	<key>NSPhotoLibraryUsageDescription</key>
     <string>Explain why your app uses photo library</string>
+    <key>NSAppleMusicUsageDescription</key>
+          <string>MyApp does not need this permission</string>
+    <key>NSCameraUsageDescription</key>
+          <string>MyApp does not need this permission</string>
 </dict>
 </plist>

@@ -32,13 +32,18 @@ class _ChatListState extends ConsumerState<ChatList> {
     });
   }
 
-  @override
+  @override 
   Widget build(BuildContext context) {
     final isLoading = ref.watch(chatControllerProvider);
     return isLoading
         ? const Loader()
         : ref.watch(chatStream(widget.receiverId)).when(
               data: (chatList) {
+                if (chatList.isEmpty) {
+                  return const Center(
+                    child: Text('No messages yet'),
+                  );
+                }
                 return ListView.builder(
                   controller: scrollController,
                   itemCount: chatList.length,
@@ -48,6 +53,7 @@ class _ChatListState extends ConsumerState<ChatList> {
                         message.senderId == FirebaseAuth.instance.currentUser!.uid;
                     return isMyMessage
                         ? MyMessageCard(
+
                             message: message.text,
                             date: formatDate(message.timeSent, [HH, ':', nn]),
                             type: message.type,

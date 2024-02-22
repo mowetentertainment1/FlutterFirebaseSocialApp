@@ -11,7 +11,6 @@ import '../../../../core/constants/firebase_constants.dart';
 import '../../../../core/enums/message_enum.dart';
 import '../../../../model/chat_contact.dart';
 import '../../../../model/message.dart';
-import '../../../core/providers/storage_repository_provider.dart';
 import '../../../core/utils.dart';
 
 final chatRepoProvider = Provider((ref) {
@@ -243,6 +242,33 @@ class ChatRepo {
       );
     } catch (e) {
       showSnackBar(context, e.toString());
+    }
+  }
+  void deleteMessage(
+      {required String receiverUserId,
+      required String messageId,
+      required bool isGroupChat}) async {
+    try {
+      await _users
+          .doc(_auth.currentUser!.uid)
+          .collection(FirebaseConstants.chatsCollection)
+          .doc(receiverUserId)
+          .collection(FirebaseConstants.messagesCollection)
+          .doc(messageId)
+          .delete();
+      if (!isGroupChat) {
+        await _users
+            .doc(receiverUserId)
+            .collection(FirebaseConstants.chatsCollection)
+            .doc(_auth.currentUser!.uid)
+            .collection(FirebaseConstants.messagesCollection)
+            .doc(messageId)
+            .delete();
+      }
+    } on FirebaseException catch (e) {
+      throw e.message!;
+    } catch (e) {
+      throw e.toString();
     }
   }
 }
