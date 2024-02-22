@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../../core/enums/message_enum.dart';
+import '../display_message_type.dart';
 
 class SenderMessageCard extends StatelessWidget {
   const SenderMessageCard({
@@ -34,11 +35,9 @@ class SenderMessageCard extends StatelessWidget {
                   top: 5,
                   bottom: 20,
                 ),
-                child: Text(
-                  message,
-                  style: const TextStyle(
-                    fontSize: 16,
-                  ),
+                child: DisplayMessageType(
+                  message: message,
+                  type: type,
                 ),
               ),
               Positioned(

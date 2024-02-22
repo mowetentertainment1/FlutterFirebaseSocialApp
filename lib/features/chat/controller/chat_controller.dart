@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:uuid/uuid.dart';
 
 import '../../../../core/providers/storage_repository_provider.dart';
 import '../../../../core/utils.dart';
@@ -50,6 +51,7 @@ class ChatController extends StateNotifier<bool> {
           context: context,
         );
       });
+
       state = false;
     } catch (e) {
       showSnackBar(context, e.toString());
@@ -66,24 +68,65 @@ class ChatController extends StateNotifier<bool> {
       bool isGroupChat,
       ) async {
     state = true;
-    final imageSave= await _storageRepository.storeFile(
-      path:'chat/$receiverUserId/',
-      file: file,
-      id: messageEnum.type,
-    );
-    final imageUrl = imageSave.fold((l) => '', (r) => r);
+    switch (messageEnum) {
+      case MessageEnum.image:
+        final imageSave = await _storageRepository.storeFile(
+          path: 'chat/',
+          id: const Uuid().v1(),
+          file: file,
+        );
+        final imageUrl = imageSave.fold((l) => '', (r) => r);
+        _ref.read(getCurrentUserDataProvider).whenData(
+              (value) => _chatRepo.sendFileMessage(
+            context: context,
+            file: file,
+            receiverUserId: receiverUserId,
+            senderUserData: value!,
+            messageEnum: messageEnum,
+            imageUrl: imageUrl,
+            isGroupChat: isGroupChat,
+          ),
+        );
+        break;
+      case MessageEnum.audio:
+        final audioSave = await _storageRepository.storeAudio(
+          path: 'chat/${receiverUserId}/audio/',
+          file: file,
+        );
+        final audioUrl = audioSave.fold((l) => '', (r) => r);
+        _ref.read(getCurrentUserDataProvider).whenData(
+              (value) => _chatRepo.sendFileMessage(
+            context: context,
+            file: file,
+            receiverUserId: receiverUserId,
+            senderUserData: value!,
+            messageEnum: messageEnum,
+                imageUrl: audioUrl,
+            isGroupChat: isGroupChat,
+          ),
+        );
+        break;
+      case MessageEnum.video:
+        final videoSave = await _storageRepository.storeVideo(
+          path: 'chat/',
+          file: file,
+        );
+        final videoUrl = videoSave.fold((l) => '', (r) => r);
+        _ref.read(getCurrentUserDataProvider).whenData(
+              (value) => _chatRepo.sendFileMessage(
+            context: context,
+            file: file,
+            receiverUserId: receiverUserId,
+            senderUserData: value!,
+            messageEnum: messageEnum,
+                imageUrl: videoUrl,
+            isGroupChat: isGroupChat,
+          ),
+        );
+        break;
+      default:
+        break;
+    }
     state = false;
-
-    _ref.read(getCurrentUserDataProvider).whenData(
-          (value) => _chatRepo.sendFileMessage(
-        context: context,
-        file: file,
-        receiverUserId: receiverUserId,
-        senderUserData: value!,
-        messageEnum: messageEnum,
-        imageUrl: imageUrl,
-        isGroupChat: isGroupChat,
-      ),
-    );
   }
 }

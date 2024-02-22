@@ -1,5 +1,4 @@
 import 'dart:io';
-import 'dart:math';
 
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -31,6 +30,19 @@ class StorageRepository {
       return left(Failure(e.toString()));
     }
   }
+  FutureEither<String> storeAudio(
+      {required String path, required File? file}) async {
+    try {
+      final ref = _firebaseStorage.ref().child(path).child('${const Uuid().v4()}.mp3');
+      UploadTask uploadTask = ref.putFile(file!);
+      TaskSnapshot taskSnapshot = await uploadTask;
+      String url = await taskSnapshot.ref.getDownloadURL();
+      return right(url);
+    } catch (e) {
+      return left(Failure(e.toString()));
+    }
+  }
+
   FutureEither<String> storeVideo(
       {required String path,  required File? file}) async {
     try {
