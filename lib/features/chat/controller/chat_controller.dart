@@ -11,6 +11,7 @@ import '../../../model/chat_contact.dart';
 import '../../../model/message.dart';
 import '../../auth/controller/auth_controller.dart';
 import '../repository/chat_repo.dart';
+
 final chatControllerProvider = StateNotifierProvider<ChatController, bool>((ref) {
   final chatRepo = ref.watch(chatRepoProvider);
   final storageRepository = ref.watch(storageRepositoryProvider);
@@ -23,6 +24,7 @@ final chatControllerProvider = StateNotifierProvider<ChatController, bool>((ref)
 final chatStream = StreamProvider.family<List<Message>, String>((ref, receiverUserId) {
   return ref.read(chatControllerProvider.notifier).getChatStream(receiverUserId);
 });
+
 class ChatController extends StateNotifier<bool> {
   final ChatRepo _chatRepo;
   final Ref _ref;
@@ -30,6 +32,7 @@ class ChatController extends StateNotifier<bool> {
   Stream<List<ChatContact>> chatContacts() {
     return _chatRepo.getChatContacts();
   }
+
   ChatController({
     required ChatRepo chatRepo,
     required Ref ref,
@@ -39,8 +42,7 @@ class ChatController extends StateNotifier<bool> {
         _storageRepository = storageRepository,
         super(false);
 
-  void sendTextMessage(
-      BuildContext context, String message, String receiverUserId) async {
+  void sendTextMessage(BuildContext context, String message, String receiverUserId) {
     state = true;
     try {
       _ref.read(getCurrentUserDataProvider).whenData((user) {
@@ -51,82 +53,95 @@ class ChatController extends StateNotifier<bool> {
           context: context,
         );
       });
-
       state = false;
     } catch (e) {
       showSnackBar(context, e.toString());
     }
   }
+
   Stream<List<Message>> getChatStream(String receiverUserId) {
     return _chatRepo.getChatStream(receiverUserId);
   }
+
   Future<void> sendFileMessage(
-      BuildContext context,
-      File file,
-      String receiverUserId,
-      MessageEnum messageEnum,
-      bool isGroupChat,
-      ) async {
+    BuildContext context,
+    File file,
+    String receiverUserId,
+    MessageEnum messageEnum,
+    bool isGroupChat,
+  ) async {
     state = true;
     switch (messageEnum) {
       case MessageEnum.image:
         final imageSave = await _storageRepository.storeFile(
-          path: 'chat/',
+          path: 'chat/$receiverUserId/',
           id: const Uuid().v1(),
           file: file,
         );
         final imageUrl = imageSave.fold((l) => '', (r) => r);
         _ref.read(getCurrentUserDataProvider).whenData(
               (value) => _chatRepo.sendFileMessage(
-            context: context,
-            file: file,
-            receiverUserId: receiverUserId,
-            senderUserData: value!,
-            messageEnum: messageEnum,
-            imageUrl: imageUrl,
-            isGroupChat: isGroupChat,
-          ),
-        );
+                context: context,
+                file: file,
+                receiverUserId: receiverUserId,
+                senderUserData: value!,
+                messageEnum: messageEnum,
+                imageUrl: imageUrl,
+                isGroupChat: isGroupChat,
+              ),
+            );
         break;
       case MessageEnum.audio:
         final audioSave = await _storageRepository.storeAudio(
-          path: 'chat/${receiverUserId}/audio/',
+          path: 'chat/$receiverUserId/',
           file: file,
         );
         final audioUrl = audioSave.fold((l) => '', (r) => r);
         _ref.read(getCurrentUserDataProvider).whenData(
               (value) => _chatRepo.sendFileMessage(
-            context: context,
-            file: file,
-            receiverUserId: receiverUserId,
-            senderUserData: value!,
-            messageEnum: messageEnum,
+                context: context,
+                file: file,
+                receiverUserId: receiverUserId,
+                senderUserData: value!,
+                messageEnum: messageEnum,
                 imageUrl: audioUrl,
-            isGroupChat: isGroupChat,
-          ),
-        );
+                isGroupChat: isGroupChat,
+              ),
+            );
         break;
       case MessageEnum.video:
         final videoSave = await _storageRepository.storeVideo(
-          path: 'chat/',
+          path: 'chat/$receiverUserId/',
           file: file,
         );
         final videoUrl = videoSave.fold((l) => '', (r) => r);
         _ref.read(getCurrentUserDataProvider).whenData(
               (value) => _chatRepo.sendFileMessage(
-            context: context,
-            file: file,
-            receiverUserId: receiverUserId,
-            senderUserData: value!,
-            messageEnum: messageEnum,
+                context: context,
+                file: file,
+                receiverUserId: receiverUserId,
+                senderUserData: value!,
+                messageEnum: messageEnum,
                 imageUrl: videoUrl,
-            isGroupChat: isGroupChat,
-          ),
-        );
+                isGroupChat: isGroupChat,
+              ),
+            );
         break;
       default:
         break;
     }
     state = false;
+  }
+
+  void deleteChat(String receiverUserId, BuildContext context) async {
+    final res = await _chatRepo.deleteChat(receiverUserId);
+    final deleteChatFiles =
+        await _storageRepository.deleteChatFiles(receiverUserId: receiverUserId);
+    deleteChatFiles.fold((l) => showSnackBar(context, l.message), (r) {
+      showSnackBar(context, 'File Deleted');
+    });
+    res.fold((l) => showSnackBar(context, l.message), (r) {
+      showSnackBar(context, 'Deleted successfully!');
+    });
   }
 }

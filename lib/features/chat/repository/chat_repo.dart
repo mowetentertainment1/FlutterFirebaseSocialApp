@@ -4,6 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:fpdart/fpdart.dart';
 import 'package:untitled/model/user.dart';
 import 'package:uuid/uuid.dart';
 
@@ -11,6 +12,8 @@ import '../../../../core/constants/firebase_constants.dart';
 import '../../../../core/enums/message_enum.dart';
 import '../../../../model/chat_contact.dart';
 import '../../../../model/message.dart';
+import '../../../core/failure.dart';
+import '../../../core/type_defs.dart';
 import '../../../core/utils.dart';
 
 final chatRepoProvider = Provider((ref) {
@@ -36,10 +39,8 @@ class ChatRepo {
       List<ChatContact> contacts = [];
       for (var document in event.docs) {
         var chatContact = ChatContact.fromMap(document.data());
-        var userData = await _firestore
-            .collection('users')
-            .doc(chatContact.contactId)
-            .get();
+        var userData =
+            await _firestore.collection('users').doc(chatContact.contactId).get();
         var user = UserModel.fromMap(userData.data()!);
         contacts.add(
           ChatContact(
@@ -54,6 +55,7 @@ class ChatRepo {
       return contacts;
     });
   }
+
   Stream<List<Message>> getChatStream(String receiverUserId) {
     return _users
         .doc(_auth.currentUser!.uid)
@@ -70,6 +72,7 @@ class ChatRepo {
       return messages;
     });
   }
+
   void sendTextMessage(
       {required String message,
       required UserModel senderUser,
@@ -185,6 +188,7 @@ class ChatRepo {
         .doc(messageId)
         .set(receiverMessage.toMap());
   }
+
   void sendFileMessage({
     required BuildContext context,
     required File file,
@@ -198,11 +202,9 @@ class ChatRepo {
       var timeSent = DateTime.now();
       var messageId = const Uuid().v1();
 
-
       UserModel? receiverUserData;
       if (!isGroupChat) {
-        var userDataMap =
-        await _firestore.collection('users').doc(receiverUserId).get();
+        var userDataMap = await _firestore.collection('users').doc(receiverUserId).get();
         receiverUserData = UserModel.fromMap(userDataMap.data()!);
       }
 
@@ -244,25 +246,41 @@ class ChatRepo {
       showSnackBar(context, e.toString());
     }
   }
-  void deleteMessage(
-      {required String receiverUserId,
-      required String messageId,
-      required bool isGroupChat}) async {
+
+  FutureVoid deleteChat(
+    String receiverUserId,
+  ) async {
     try {
-      await _users
+      deleteAllMessages(receiverUserId);
+      return right(
+        _users
+            .doc(_auth.currentUser!.uid)
+            .collection(FirebaseConstants.chatsCollection)
+            .doc(receiverUserId)
+            .delete(),
+      );
+    } on FirebaseException catch (e) {
+      throw e.message!;
+    } catch (e) {
+      return left(Failure(e.toString()));
+    }
+  }
+
+  void deleteAllMessages(String receiverUserId) async {
+    try {
+      var messages = await _users
           .doc(_auth.currentUser!.uid)
           .collection(FirebaseConstants.chatsCollection)
           .doc(receiverUserId)
           .collection(FirebaseConstants.messagesCollection)
-          .doc(messageId)
-          .delete();
-      if (!isGroupChat) {
+          .get();
+      for (var message in messages.docs) {
         await _users
-            .doc(receiverUserId)
-            .collection(FirebaseConstants.chatsCollection)
             .doc(_auth.currentUser!.uid)
+            .collection(FirebaseConstants.chatsCollection)
+            .doc(receiverUserId)
             .collection(FirebaseConstants.messagesCollection)
-            .doc(messageId)
+            .doc(message.id)
             .delete();
       }
     } on FirebaseException catch (e) {

@@ -1,5 +1,6 @@
 import 'package:date_format/date_format.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -27,7 +28,12 @@ class _ChatListState extends ConsumerState<ChatList> {
   @override
   void initState() {
     super.initState();
-    SchedulerBinding.instance.addPostFrameCallback((_) {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      scrollController.jumpTo(scrollController.position.maxScrollExtent);
+    });
+  }
+  void _scrollToBottom() {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
       scrollController.jumpTo(scrollController.position.maxScrollExtent);
     });
   }
@@ -44,6 +50,10 @@ class _ChatListState extends ConsumerState<ChatList> {
                     child: Text('No messages yet'),
                   );
                 }
+                    // _scrollToBottom();
+                // if (scrollController.offset != 0) {
+                //   scrollController.jumpTo(scrollController.position.maxScrollExtent);
+                // }
                 return ListView.builder(
                   controller: scrollController,
                   itemCount: chatList.length,
@@ -53,7 +63,6 @@ class _ChatListState extends ConsumerState<ChatList> {
                         message.senderId == FirebaseAuth.instance.currentUser!.uid;
                     return isMyMessage
                         ? MyMessageCard(
-
                             message: message.text,
                             date: formatDate(message.timeSent, [HH, ':', nn]),
                             type: message.type,

@@ -92,11 +92,6 @@ class _BottomChatFieldState extends ConsumerState<BottomChatField> {
       widget.isGroupChat,
     );
   }
-
-  File? imageFile;
-
-  File? videoFile;
-
   void openPickImage() async {
     final res = await pickImage();
     if (res != null) {
@@ -111,10 +106,10 @@ class _BottomChatFieldState extends ConsumerState<BottomChatField> {
   void pickingVideo() async {
     final res = await pickVideo();
     if (res != null) {
-      setState(() {
-        videoFile = File(res.files.single.path!);
-        imageFile = null;
-      });
+      sendFileMessage(
+        File(res.files.single.path!),
+        MessageEnum.video,
+      );
     }
   }
 

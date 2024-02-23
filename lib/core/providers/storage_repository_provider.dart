@@ -91,4 +91,17 @@ class StorageRepository {
       return left(Failure(e.toString()));
     }
   }
+  FutureVoid deleteChatFiles({required String receiverUserId}) async {
+    try {
+      final ref = _firebaseStorage.ref().child('chat/$receiverUserId');
+      await ref.listAll().then((value) {
+        for (var item in value.items) {
+          item.delete();
+        }
+      });
+      return right(unit);
+    } catch (e) {
+      return left(Failure(e.toString()));
+    }
+  }
 }

@@ -25,9 +25,11 @@ class _DisplayMessageTypeState extends State<DisplayMessageType> {
   final AudioPlayer audioPlayer = AudioPlayer();
   Duration duration = const Duration();
   Duration position = const Duration();
+
   @override
   void initState() {
     super.initState();
+
     audioPlayer.onPlayerStateChanged.listen((event) {
       setState(() {
         isPlaying = event == PlayerState.playing;
@@ -78,38 +80,43 @@ class _DisplayMessageTypeState extends State<DisplayMessageType> {
   }
 
   Widget _buildAudioMessage() {
-    return Row(
-      crossAxisAlignment: CrossAxisAlignment.center,
-      children: [
-        Text(
-          '${position.inMinutes}:${position.inSeconds.remainder(60)} / ${duration.inMinutes}:${duration.inSeconds.remainder(60)}',
-        ),
-        IconButton(
-          onPressed: () async {
-            if (isPlaying) {
-              await audioPlayer.pause();
-              setState(() {
-                isPlaying = false;
-              });
-            } else {
-              await audioPlayer.play(UrlSource(widget.message));
-              setState(() {
-                isPlaying = true;
-              });
-            }
-          },
-          icon: Icon(
-            isPlaying ? Icons.pause_circle : Icons.play_circle,
-            size: 40,
+    final timeRemaining = duration - position;
+    final timeRemainingMinutes = '${timeRemaining.inMinutes}'.padLeft(2, '0');
+    final timeRemainingSeconds =
+        '${timeRemaining.inSeconds.remainder(60)}'.padLeft(2, '0');
+    final formattedTimeRemaining = '$timeRemainingMinutes:$timeRemainingSeconds';
+    return SizedBox(
+      width: 120,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          IconButton(
+            onPressed: () async {
+              if (isPlaying) {
+                await audioPlayer.pause();
+                setState(() {
+                  isPlaying = false;
+                });
+              } else {
+                await audioPlayer.play(UrlSource(widget.message));
+                setState(() {
+                  isPlaying = true;
+                });
+              }
+            },
+            icon: Icon(
+              isPlaying ? Icons.pause_circle : Icons.play_circle,
+              size: 40,
+            ),
           ),
-        ),
-        const Text(
-          'Audio',
-          style: TextStyle(
-            fontSize: 16,
+          Text(
+            formattedTimeRemaining,
+            style: const TextStyle(
+              fontSize: 16,
+            ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 }
