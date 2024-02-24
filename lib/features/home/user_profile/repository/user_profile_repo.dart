@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:fpdart/fpdart.dart';
 import 'package:untitled/core/constants/firebase_constants.dart';
@@ -9,18 +10,27 @@ import '../../../../core/providers/firebase_providers.dart';
 import '../../../../core/type_defs.dart';
 import '../../../../model/post_model.dart';
 
-
 final userProfileRepoProvider = Provider((ref) {
-  return UserProfileRepo(firestore: ref.watch(firestoreProvider));
+  return UserProfileRepo(
+      firestore: ref.watch(
+        firestoreProvider,
+      ),
+      auth: ref.watch(authProvider));
 });
+
 class UserProfileRepo {
   final FirebaseFirestore _firestore;
+  final FirebaseAuth _auth;
 
-
-  UserProfileRepo({required FirebaseFirestore firestore}) : _firestore = firestore;
+  UserProfileRepo({
+    required FirebaseFirestore firestore,
+    required FirebaseAuth auth,
+  })  : _firestore = firestore,
+        _auth = auth;
   CollectionReference get _posts => _firestore.collection("posts");
 
-  CollectionReference get _users => _firestore.collection(FirebaseConstants.usersCollection);
+  CollectionReference get _users =>
+      _firestore.collection(FirebaseConstants.usersCollection);
 
   FutureVoid editUser(UserModel user) async {
     try {
@@ -31,45 +41,49 @@ class UserProfileRepo {
       return left(Failure(e.toString()));
     }
   }
+
   Stream<List<Post>> getUserPosts(String uid) {
     return _posts
         .where("uid", isEqualTo: uid)
         .orderBy("createdAt", descending: true)
         .snapshots()
         .map((event) => event.docs
-        .map((e) => Post.fromMap(e.data() as Map<String, dynamic>))
-        .toList());
+            .map((e) => Post.fromMap(e.data() as Map<String, dynamic>))
+            .toList());
   }
+
   FutureVoid updateUserKarma(UserModel user) async {
     try {
-      return right(_users.doc(user.uid).update(
-          {"karma": user.karma}
-      ));
+      return right(_users.doc(user.uid).update({"karma": user.karma}));
     } on FirebaseException catch (e) {
       throw e.message!;
     } catch (e) {
       return left(Failure(e.toString()));
     }
   }
+
   Stream<List<UserModel>> searchUser(String query) {
     return _users
         .where(
-      "name",
-      isGreaterThanOrEqualTo: query.isEmpty ? 0 : query,
-      isLessThan: query.isEmpty
-          ? null
-          : query.substring(0, query.length - 1) +
-          String.fromCharCode(query.codeUnitAt(query.length - 1) + 1),
-    )
+          "name",
+          isGreaterThanOrEqualTo: query.isEmpty ? 0 : query,
+          isLessThan: query.isEmpty
+              ? null
+              : query.substring(0, query.length - 1) +
+                  String.fromCharCode(query.codeUnitAt(query.length - 1) + 1),
+        )
         .snapshots()
         .map((event) {
       List<UserModel> users = [];
       for (var doc in event.docs) {
-        users.add(UserModel.fromMap(doc.data() as Map<String, dynamic>));
+        if (doc.id != _auth.currentUser!.uid) {
+          users.add(UserModel.fromMap(doc.data() as Map<String, dynamic>));
+        }
       }
       return users;
     });
   }
+
   void followUser(String uid, String followUid) async {
     try {
       await _users.doc(uid).update({
@@ -84,6 +98,7 @@ class UserProfileRepo {
       throw Failure(e.toString());
     }
   }
+
   void unFollowUser(String uid, String followUid) async {
     try {
       await _users.doc(uid).update({

@@ -6,6 +6,7 @@ import '../../../core/colors.dart';
 import '../../auth/controller/auth_controller.dart';
 import '../bottom_chat_field.dart';
 import '../card/chats_list.dart';
+import '../controller/chat_controller.dart';
 
 class MobileChatScreen extends ConsumerWidget {
   final String uid;
@@ -20,7 +21,6 @@ class MobileChatScreen extends ConsumerWidget {
         backgroundColor: appBarColor,
         title: StreamBuilder<UserModel>(
           stream: ref.read(authControllerProvider.notifier).getUserData(uid),
-
           builder: (context, snapshot) {
             if (snapshot.hasError) {
               return const Text('Something went wrong');
@@ -73,11 +73,16 @@ class MobileChatScreen extends ConsumerWidget {
               ),
               const PopupMenuItem(
                 child: Text('Block'),
-              ),const PopupMenuItem(
+              ),
+              const PopupMenuItem(
                 child: Text('Delete Chat', style: TextStyle(color: Colors.red)),
-
               ),
             ],
+            onSelected: (value) {
+              if (value == 'Delete Chat') {
+                ref.read(chatControllerProvider.notifier).deleteChat(uid, context);
+              }
+            },
           ),
         ],
       ),

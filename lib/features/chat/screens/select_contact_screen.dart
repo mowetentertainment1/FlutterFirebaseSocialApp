@@ -3,7 +3,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:routemaster/routemaster.dart';
 import 'package:untitled/core/common/error_text.dart';
 import 'package:untitled/core/common/loader.dart';
-import 'package:untitled/features/community/controller/community_controller.dart';
 import 'package:untitled/features/home/user_profile/controller/user_profile_controller.dart';
 
 class SelectContactScreen extends SearchDelegate {
@@ -49,7 +48,7 @@ class SelectContactScreen extends SearchDelegate {
                   leading: CircleAvatar(
                     backgroundImage: NetworkImage(user.profilePic),
                   ),
-                  title: Text('r/${user.name}'),
+                  title: Text(user.name),
                   onTap: () {
                     navigateToChatBox(context, user.name, user.uid);
                   },
