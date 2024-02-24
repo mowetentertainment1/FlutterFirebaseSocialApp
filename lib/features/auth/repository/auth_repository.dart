@@ -110,16 +110,21 @@ class AuthRepository {
       return UserModel.fromMap(event.data() as Map<String, dynamic>);
     });
   }
-  Future<UserModel?> getCurrentUserData() async {
-    var userData =
-    await _firestore.collection('users').doc(_auth.currentUser?.uid).get();
-
-    UserModel? user;
-    if (userData.data() != null) {
-      user = UserModel.fromMap(userData.data()!);
-    }
-    return user;
+  Stream<UserModel> getCurrentUserData() {
+    return _users.doc(_auth.currentUser?.uid).snapshots().map((event) {
+      return UserModel.fromMap(event.data() as Map<String, dynamic>);
+    });
   }
+  // Future<UserModel?> getCurrentUserData() async {
+  //   var userData =
+  //   await _firestore.collection('users').doc(_auth.currentUser?.uid).get();
+  //
+  //   UserModel? user;
+  //   if (userData.data() != null) {
+  //     user = UserModel.fromMap(userData.data()!);
+  //   }
+  //   return user;
+  // }
   void logOut() async {
     await _auth.signOut();
     await _googleSignIn.signOut();

@@ -75,12 +75,41 @@ class MobileChatScreen extends ConsumerWidget {
                 child: Text('Block'),
               ),
               const PopupMenuItem(
+                value: 'deleteChat',
                 child: Text('Delete Chat', style: TextStyle(color: Colors.red)),
               ),
             ],
             onSelected: (value) {
-              if (value == 'Delete Chat') {
-                ref.read(chatControllerProvider.notifier).deleteChat(uid, context);
+              if (value == 'deleteChat') {
+                showDialog<void>(
+                  context: context,
+                  barrierDismissible: true,
+                  builder: (BuildContext dialogContext) {
+                    return AlertDialog(
+                      title: const Text('Delete Chat'),
+                      content: const Text('Are you sure you want to delete this chat?'),
+                      actions: <Widget>[
+                        TextButton(
+                          child: const Text('Cancel'),
+                          onPressed: () {
+                            Navigator.of(dialogContext).pop();
+                          },
+                        ),
+                        TextButton(
+                          child:
+                              const Text('Delete', style: TextStyle(color: Colors.red)),
+                          onPressed: () {
+                            Navigator.of(dialogContext).pop();
+                            Navigator.of(context).pop();
+                            ref
+                                .read(chatControllerProvider.notifier)
+                                .deleteChat(uid, context);
+                          },
+                        ),
+                      ],
+                    );
+                  },
+                );
               }
             },
           ),

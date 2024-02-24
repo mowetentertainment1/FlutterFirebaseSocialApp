@@ -7,6 +7,7 @@ import 'package:permission_handler/permission_handler.dart';
 import '../../core/colors.dart';
 import '../../core/enums/message_enum.dart';
 import '../../core/utils.dart';
+import '../auth/controller/auth_controller.dart';
 import 'controller/chat_controller.dart';
 
 class BottomChatField extends ConsumerStatefulWidget {
@@ -36,6 +37,7 @@ class _BottomChatFieldState extends ConsumerState<BottomChatField> {
     super.initState();
     _soundRecorder = FlutterSoundRecorder();
     openAudio();
+    ref.read(getCurrentUserDataProvider);
   }
 
   void openAudio() async {
@@ -72,26 +74,26 @@ class _BottomChatFieldState extends ConsumerState<BottomChatField> {
         await _soundRecorder!.startRecorder(
           toFile: path,
         );
+        setState(() {
+          isRecording = !isRecording;
+        });
       }
-
-      setState(() {
-        isRecording = !isRecording;
-      });
     }
   }
 
   void sendFileMessage(
-      File file,
-      MessageEnum messageEnum,
-      ) {
+    File file,
+    MessageEnum messageEnum,
+  ) {
     ref.read(chatControllerProvider.notifier).sendFileMessage(
-      context,
-      file,
-      widget.receiverUserId,
-      messageEnum,
-      widget.isGroupChat,
-    );
+          context,
+          file,
+          widget.receiverUserId,
+          messageEnum,
+          widget.isGroupChat,
+        );
   }
+
   void openPickImage() async {
     final res = await pickImage();
     if (res != null) {
@@ -100,7 +102,6 @@ class _BottomChatFieldState extends ConsumerState<BottomChatField> {
         MessageEnum.image,
       );
     }
-
   }
 
   void pickingVideo() async {
@@ -132,86 +133,86 @@ class _BottomChatFieldState extends ConsumerState<BottomChatField> {
         bottom: 6.0,
       ),
       color: mobileChatBoxColor,
-        child: Column(
-          children: [
-            Row(
-              children: [
-                Expanded(
-                  child: TextFormField(
-                    focusNode: focusNode,
-                    controller: _messageController,
-                    onChanged: (val) {
-                      if (val.isNotEmpty) {
-                        setState(() {
-                          isShowSendButton = true;
-                        });
-                      } else {
-                        setState(() {
-                          isShowSendButton = false;
-                        });
-                      }
-                    },
-                    decoration: InputDecoration(
-                      filled: true,
-                      fillColor: mobileChatBoxColor,
-                      suffixIcon: SizedBox(
-                        width: 100,
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.end,
-                          children: [
-                            IconButton(
-                              onPressed: openPickImage,
-                              icon: const Icon(
-                                Icons.camera_alt,
-                                color: Colors.grey,
-                              ),
+      child: Column(
+        children: [
+          Row(
+            children: [
+              Expanded(
+                child: TextFormField(
+                  focusNode: focusNode,
+                  controller: _messageController,
+                  onChanged: (val) {
+                    if (val.isNotEmpty) {
+                      setState(() {
+                        isShowSendButton = true;
+                      });
+                    } else {
+                      setState(() {
+                        isShowSendButton = false;
+                      });
+                    }
+                  },
+                  decoration: InputDecoration(
+                    filled: true,
+                    fillColor: mobileChatBoxColor,
+                    suffixIcon: SizedBox(
+                      width: 100,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          IconButton(
+                            onPressed: openPickImage,
+                            icon: const Icon(
+                              Icons.camera_alt,
+                              color: Colors.grey,
                             ),
-                            const IconButton(
-                              onPressed: pickVideo,
-                              icon: Icon(
-                                Icons.video_collection,
-                                color: Colors.grey,
-                              ),
+                          ),
+                          const IconButton(
+                            onPressed: pickVideo,
+                            icon: Icon(
+                              Icons.video_collection,
+                              color: Colors.grey,
                             ),
-                          ],
-                        ),
+                          ),
+                        ],
                       ),
-                      hintText: 'Type a message!',
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(20.0),
-                        borderSide: const BorderSide(
-                          width: 0,
-                          style: BorderStyle.none,
-                        ),
+                    ),
+                    hintText: 'Type a message!',
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(20.0),
+                      borderSide: const BorderSide(
+                        width: 0,
+                        style: BorderStyle.none,
                       ),
-                      contentPadding: const EdgeInsets.all(10),
+                    ),
+                    contentPadding: const EdgeInsets.all(10),
+                  ),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.only(
+                  right: 2,
+                  left: 2,
+                ),
+                child: CircleAvatar(
+                  backgroundColor: tabColor,
+                  child: GestureDetector(
+                    onTap: sendTextMessage,
+                    child: Icon(
+                      isShowSendButton
+                          ? Icons.send
+                          : isRecording
+                              ? Icons.close
+                              : Icons.mic,
+                      color: Colors.white,
                     ),
                   ),
                 ),
-                Padding(
-                  padding: const EdgeInsets.only(
-                    right: 2,
-                    left: 2,
-                  ),
-                  child: CircleAvatar(
-                    backgroundColor: tabColor,
-                    child: GestureDetector(
-                      onTap: sendTextMessage,
-                      child: Icon(
-                        isShowSendButton
-                            ? Icons.send
-                            : isRecording
-                                ? Icons.close
-                                : Icons.mic,
-                        color: Colors.white,
-                      ),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ],
-        ),
+              ),
+            ],
+          ),
+        ],
+      ),
     );
   }
 }

@@ -16,14 +16,19 @@ final authStateChangeProvider = StreamProvider((ref) {
   return authController.authStateChanges;
 });
 
-final   getUserDataProvider = StreamProvider.family((ref, String uid) {
+final getUserDataProvider = StreamProvider.family((ref, String uid) {
   final authController = ref.watch(authControllerProvider.notifier);
   return authController.getUserData(uid);
 });
-final getCurrentUserDataProvider = FutureProvider((ref) {
+final getCurrentUserDataProvider = StreamProvider((ref) {
   final authController = ref.watch(authControllerProvider.notifier);
   return authController.getCurrentUserData();
 });
+
+// final getCurrentUserDataProvider = FutureProvider((ref) {
+//   final authController = ref.watch(authControllerProvider.notifier);
+//   return authController.getCurrentUserData();
+// });
 class AuthController extends StateNotifier<bool> {
   final AuthRepository _authRepository;
   final Ref _ref;
@@ -38,32 +43,35 @@ class AuthController extends StateNotifier<bool> {
   void signInWithGoogle(BuildContext context) async {
     final user = await _authRepository.signInWithGoogle();
     state = false;
-    user.fold(
-        (l) => showSnackBar(context, l.message),
-        (userModel) =>
-            _ref.read(userProvider.notifier).update((state) => userModel));
+    user.fold((l) => showSnackBar(context, l.message),
+        (userModel) => _ref.read(userProvider.notifier).update((state) => userModel));
   }
+
   void setUserState(bool isOnline) {
     _authRepository.setUserState(isOnline);
   }
+
   void signInAsGuest(BuildContext context) async {
     final user = await _authRepository.signInAsGuest();
     state = false;
-    user.fold(
-        (l) => showSnackBar(context, l.message),
-        (userModel) =>
-            _ref.read(userProvider.notifier).update((state) => userModel));
+    user.fold((l) => showSnackBar(context, l.message),
+        (userModel) => _ref.read(userProvider.notifier).update((state) => userModel));
   }
+
   Stream<UserModel> getUserData(String uid) {
     return _authRepository.getUserData(uid);
   }
-  Future<UserModel?> getCurrentUserData() async {
-    UserModel? user = await _authRepository.getCurrentUserData();
-    return user;
+
+  Stream<UserModel> getCurrentUserData() {
+    return _authRepository.getCurrentUserData();
   }
+
+  // Future<UserModel?> getCurrentUserData() async {
+  //   UserModel? user = await _authRepository.getCurrentUserData();
+  //   return user;
+  // }
   void logOut() async {
     _authRepository.logOut();
     _ref.read(userProvider.notifier).update((state) => null);
   }
-
 }

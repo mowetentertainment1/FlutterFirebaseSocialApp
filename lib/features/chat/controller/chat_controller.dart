@@ -42,17 +42,18 @@ class ChatController extends StateNotifier<bool> {
         _storageRepository = storageRepository,
         super(false);
 
-  void sendTextMessage(BuildContext context, String message, String receiverUserId) {
+  void sendTextMessage(
+      BuildContext context, String message, String receiverUserId) async {
     state = true;
     try {
-      _ref.read(getCurrentUserDataProvider).whenData((user) {
-        _chatRepo.sendTextMessage(
-          message: message,
-          senderUser: user!,
-          receiverUserId: receiverUserId,
-          context: context,
-        );
-      });
+      _ref.read(getCurrentUserDataProvider).whenData(
+            (value) => _chatRepo.sendTextMessage(
+              message: message,
+              senderUser: value,
+              receiverUserId: receiverUserId,
+              context: context,
+            ),
+          );
       state = false;
     } catch (e) {
       showSnackBar(context, e.toString());
@@ -84,7 +85,7 @@ class ChatController extends StateNotifier<bool> {
                 context: context,
                 file: file,
                 receiverUserId: receiverUserId,
-                senderUserData: value!,
+                senderUserData: value,
                 messageEnum: messageEnum,
                 imageUrl: imageUrl,
                 isGroupChat: isGroupChat,
@@ -102,7 +103,7 @@ class ChatController extends StateNotifier<bool> {
                 context: context,
                 file: file,
                 receiverUserId: receiverUserId,
-                senderUserData: value!,
+                senderUserData: value,
                 messageEnum: messageEnum,
                 imageUrl: audioUrl,
                 isGroupChat: isGroupChat,
@@ -120,7 +121,7 @@ class ChatController extends StateNotifier<bool> {
                 context: context,
                 file: file,
                 receiverUserId: receiverUserId,
-                senderUserData: value!,
+                senderUserData: value,
                 messageEnum: messageEnum,
                 imageUrl: videoUrl,
                 isGroupChat: isGroupChat,
