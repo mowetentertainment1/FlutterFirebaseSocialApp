@@ -1,11 +1,11 @@
-class Comment {
+class CommentModel {
   final String id;
   final String text;
   final DateTime createdAt;
   final String postId;
   final String username;
   final String profilePic;
-  Comment({
+  CommentModel({
     required this.id,
     required this.text,
     required this.createdAt,
@@ -14,7 +14,7 @@ class Comment {
     required this.profilePic,
   });
 
-  Comment copyWith({
+  CommentModel copyWith({
     String? id,
     String? text,
     DateTime? createdAt,
@@ -22,7 +22,7 @@ class Comment {
     String? username,
     String? profilePic,
   }) {
-    return Comment(
+    return CommentModel(
       id: id ?? this.id,
       text: text ?? this.text,
       createdAt: createdAt ?? this.createdAt,
@@ -43,8 +43,8 @@ class Comment {
     };
   }
 
-  factory Comment.fromMap(Map<String, dynamic> map) {
-    return Comment(
+  factory CommentModel.fromMap(Map<String, dynamic> map) {
+    return CommentModel(
       id: map['id'] ?? '',
       text: map['text'] ?? '',
       createdAt: DateTime.fromMillisecondsSinceEpoch(map['createdAt']),
@@ -63,7 +63,7 @@ class Comment {
   bool operator ==(Object other) {
     if (identical(this, other)) return true;
 
-    return other is Comment &&
+    return other is CommentModel &&
         other.id == id &&
         other.text == text &&
         other.createdAt == createdAt &&

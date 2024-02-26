@@ -1,6 +1,6 @@
 import 'package:flutter/foundation.dart';
 
-class Community {
+class CommunityModel {
   final String id;
   final String name;
   final String description;
@@ -9,7 +9,7 @@ class Community {
   final List<String> members;
   final List<String> mods;
 
-  Community({
+  CommunityModel({
     required this.id,
     required this.name,
     required this.description,
@@ -19,7 +19,7 @@ class Community {
     required this.mods,
   });
 
-  Community copyWith({
+  CommunityModel copyWith({
     String? id,
     String? name,
     String? description,
@@ -28,7 +28,7 @@ class Community {
     List<String>? members,
     List<String>? mods,
   }) {
-    return Community(
+    return CommunityModel(
       id: id ?? this.id,
       name: name ?? this.name,
       description: description ?? this.description,
@@ -51,8 +51,8 @@ class Community {
     };
   }
 
-  factory Community.fromMap(Map<String, dynamic> map) {
-    return Community(
+  factory CommunityModel.fromMap(Map<String, dynamic> map) {
+    return CommunityModel(
       id: map['id'] ?? '',
       name: map['name'] ?? '',
       description: map['description'] ?? '',
@@ -72,7 +72,7 @@ class Community {
   bool operator ==(Object other) {
     if (identical(this, other)) return true;
 
-    return other is Community &&
+    return other is CommunityModel &&
         other.id == id &&
         other.name == name &&
         other.description == description &&

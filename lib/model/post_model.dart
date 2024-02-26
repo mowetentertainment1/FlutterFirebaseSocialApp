@@ -1,6 +1,6 @@
 import 'package:flutter/foundation.dart';
 
-class Post {
+class PostModel {
   final String id;
   final String title;
   final List<String> linkImage;
@@ -15,7 +15,7 @@ class Post {
   final String type;
   final DateTime createdAt;
   final List<String> awards;
-  Post({
+  PostModel({
     required this.id,
     required this.title,
     required this.linkImage,
@@ -32,7 +32,7 @@ class Post {
     required this.awards,
   });
 
-  Post copyWith({
+  PostModel copyWith({
     String? id,
     String? title,
     List<String>? linkImage,
@@ -48,7 +48,7 @@ class Post {
     DateTime? createdAt,
     List<String>? awards,
   }) {
-    return Post(
+    return PostModel(
       id: id ?? this.id,
       title: title ?? this.title,
       linkImage: linkImage ?? this.linkImage,
@@ -85,8 +85,8 @@ class Post {
     };
   }
 
-  factory Post.fromMap(Map<String, dynamic> map) {
-    return Post(
+  factory PostModel.fromMap(Map<String, dynamic> map) {
+    return PostModel(
       id: map['id'] ?? '',
       title: map['title'] ?? '',
       linkImage: List<String>.from(map['linkImage']),
@@ -113,7 +113,7 @@ class Post {
   bool operator ==(Object other) {
     if (identical(this, other)) return true;
 
-    return other is Post &&
+    return other is PostModel &&
         other.id == id &&
         other.title == title &&
         listEquals(other.linkImage, linkImage) &&

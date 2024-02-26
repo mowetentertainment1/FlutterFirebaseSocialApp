@@ -1,29 +1,25 @@
-
 import '../core/enums/message_enum.dart';
 
-class Message {
+class CommunityMessageModel {
   final String senderId;
   final String receiverId;
   final String text;
   final MessageEnum type;
   final DateTime timeSent;
   final String messageId;
-  final bool isSeen;
-  final String repliedMessage;
-  final String repliedTo;
-  final MessageEnum repliedMessageType;
-
-  Message({
+  final String senderProfilePic;
+  final String senderUsername;
+final bool isModerator;
+  CommunityMessageModel({
     required this.senderId,
     required this.receiverId,
     required this.text,
     required this.type,
     required this.timeSent,
     required this.messageId,
-    required this.isSeen,
-    required this.repliedMessage,
-    required this.repliedTo,
-    required this.repliedMessageType,
+    required this.senderProfilePic,
+    required this.senderUsername,
+    required this.isModerator,
   });
 
   Map<String, dynamic> toMap() {
@@ -34,25 +30,23 @@ class Message {
       'type': type.type,
       'timeSent': timeSent.millisecondsSinceEpoch,
       'messageId': messageId,
-      'isSeen': isSeen,
-      'repliedMessage': repliedMessage,
-      'repliedTo': repliedTo,
-      'repliedMessageType': repliedMessageType.type,
+      'senderProfilePic': senderProfilePic,
+      'senderUsername': senderUsername,
+      'isModerator': isModerator,
     };
   }
 
-  factory Message.fromMap(Map<String, dynamic> map) {
-    return Message(
+  factory CommunityMessageModel.fromMap(Map<String, dynamic> map) {
+    return CommunityMessageModel(
       senderId: map['senderId'] ?? '',
       receiverId: map['receiverId'] ?? '',
       text: map['text'] ?? '',
       type: (map['type'] as String).toEnum(),
       timeSent: DateTime.fromMillisecondsSinceEpoch(map['timeSent']),
       messageId: map['messageId'] ?? '',
-      isSeen: map['isSeen'] ?? false,
-      repliedMessage: map['repliedMessage'] ?? '',
-      repliedTo: map['repliedTo'] ?? '',
-      repliedMessageType: (map['repliedMessageType'] as String).toEnum(),
+      senderProfilePic: map['senderProfilePic'] ?? '',
+      senderUsername: map['senderUsername'] ?? '',
+      isModerator: map['isModerator'] ?? false,
     );
   }
 }

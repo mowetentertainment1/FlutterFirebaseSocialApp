@@ -1,10 +1,10 @@
-class ChatContact {
+class ChatContactModel {
   final String name;
   final String profilePic;
   final String contactId;
   final DateTime timeSent;
   final String lastMessage;
-  ChatContact({
+  ChatContactModel({
     required this.name,
     required this.profilePic,
     required this.contactId,
@@ -22,8 +22,8 @@ class ChatContact {
     };
   }
 
-  factory ChatContact.fromMap(Map<String, dynamic> map) {
-    return ChatContact(
+  factory ChatContactModel.fromMap(Map<String, dynamic> map) {
+    return ChatContactModel(
       name: map['name'] ?? '',
       profilePic: map['profilePic'] ?? '',
       contactId: map['contactId'] ?? '',
