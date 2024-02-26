@@ -5,6 +5,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:fpdart/fpdart.dart';
+import 'package:untitled/model/community_chat_model.dart';
 import 'package:untitled/model/user_model.dart';
 import 'package:uuid/uuid.dart';
 
@@ -15,58 +16,61 @@ import '../../../../model/message_model.dart';
 import '../../../core/failure.dart';
 import '../../../core/type_defs.dart';
 import '../../../core/utils.dart';
+import '../../../model/community_model.dart';
 
-final chatRepoProvider = Provider((ref) {
-  return ChatRepo(firestore: FirebaseFirestore.instance, auth: FirebaseAuth.instance);
+final communityChatRepoProvider = Provider((ref) {
+  return CommunityChatRepo(
+      firestore: FirebaseFirestore.instance, auth: FirebaseAuth.instance);
 });
 
-class ChatRepo {
+class CommunityChatRepo {
   final FirebaseFirestore _firestore;
   final FirebaseAuth _auth;
-  ChatRepo({required FirebaseFirestore firestore, required FirebaseAuth auth})
+  CommunityChatRepo({required FirebaseFirestore firestore, required FirebaseAuth auth})
       : _firestore = firestore,
         _auth = auth;
 
   CollectionReference get _users =>
       _firestore.collection(FirebaseConstants.usersCollection);
-  Stream<List<ChatContactModel>> getChatContacts() {
+  CollectionReference get _communities =>
+      _firestore.collection(FirebaseConstants.communitiesCollection);
+  Stream<List<CommunityChatModel>> getChatGroups() {
     return _firestore
-        .collection('users')
-        .doc(_auth.currentUser!.uid)
-        .collection('chats')
+        .collection(FirebaseConstants.communitiesCollection)
+        .where("members", arrayContains: _auth.currentUser!.uid)
         .snapshots()
-        .asyncMap((event) async {
-      List<ChatContactModel> contacts = [];
-      for (var document in event.docs) {
-        var chatContact = ChatContactModel.fromMap(document.data());
-        var userData =
-            await _firestore.collection('users').doc(chatContact.contactId).get();
-        var user = UserModel.fromMap(userData.data()!);
-        contacts.add(
-          ChatContactModel(
-            name: user.name,
-            profilePic: user.profilePic,
-            contactId: chatContact.contactId,
-            timeSent: chatContact.timeSent,
-            lastMessage: chatContact.lastMessage,
+        .map((event) {
+      List<CommunityChatModel> chats = [];
+      for (var doc in event.docs) {
+        var community = CommunityModel.fromMap(doc.data());
+        chats.add(
+          CommunityChatModel(
+            name: community.name,
+            timeSent: DateTime.now(),
+            lastMessage: '',
+            senderId: '',
+            communityId: community.id,
+            groupPic: community.avatar,
+            membersUid: community.members,
           ),
         );
       }
-      return contacts;
+      return chats;
     });
   }
-  Stream<List<MessageModel>> getChatStream(String receiverUserId) {
-    return _users
-        .doc(_auth.currentUser!.uid)
-        .collection('chats')
-        .doc(receiverUserId)
-        .collection('messages')
+
+  Stream<List<MessageModel>> getChatStream(String communityId) {
+    return _communities
+        .doc(communityId)
+        .collection(FirebaseConstants.chatsCollection)
+        .doc('GeneralChat')
+        .collection(FirebaseConstants.messagesCollection)
         .orderBy('timeSent', descending: true)
         .snapshots()
         .map((event) {
       List<MessageModel> messages = [];
-      for (var document in event.docs) {
-        messages.add(MessageModel.fromMap(document.data()));
+      for (var doc in event.docs) {
+        messages.add(MessageModel.fromMap(doc.data()));
       }
       return messages;
     });
@@ -75,29 +79,28 @@ class ChatRepo {
   void sendTextMessage(
       {required String message,
       required UserModel senderUser,
-      required String receiverUserId,
+      required String receiverCommunityId,
       required BuildContext context}) async {
     try {
       var timeSent = DateTime.now();
       var messageId = const Uuid().v4();
-      UserModel receiverUserData;
+      CommunityModel receiverUserData;
       var receiverData = await _firestore
-          .collection(FirebaseConstants.usersCollection)
-          .doc(receiverUserId)
+          .collection(FirebaseConstants.communitiesCollection)
+          .doc(receiverCommunityId)
           .get();
-      receiverUserData = UserModel.fromMap(receiverData.data()!);
+      receiverUserData = CommunityModel.fromMap(receiverData.data()!);
       _saveDataToContactsSubCollection(
-          senderUser, receiverUserData, message, timeSent, receiverUserId);
+          senderUser, receiverUserData, message, timeSent, receiverCommunityId);
       _saveChatToMessagesSubCollection(
-          receiverUserId: receiverUserId,
-          text: message,
-          timeSent: timeSent,
-          messageId: messageId,
-          username: receiverUserData.name,
-          messageType: MessageEnum.text,
-          senderUsername: senderUser.name,
-          receiverUserName: receiverUserData.name,
-          );
+        receiverCommunityId: receiverCommunityId,
+        text: message,
+        timeSent: timeSent,
+        messageId: messageId,
+        username: receiverUserData.name,
+        messageType: MessageEnum.text,
+        senderUsername: senderUser.name,
+      );
     } on FirebaseException catch (e) {
       throw e.message!;
     } catch (e) {
@@ -107,81 +110,70 @@ class ChatRepo {
 
   void _saveDataToContactsSubCollection(
       UserModel senderUserData,
-      UserModel receiverUserData,
+      CommunityModel receiverCommunityData,
       String message,
       DateTime timeSent,
-      String receiverUserId) async {
-    var receiverChatContact = ChatContactModel(
-      name: senderUserData.name,
-      profilePic: senderUserData.profilePic,
-      contactId: senderUserData.uid,
+      String receiverCommunityId) async {
+    var senderChatContact = CommunityChatModel(
+      name: receiverCommunityData.name,
       timeSent: timeSent,
       lastMessage: message,
+      senderId: senderUserData.uid,
+      communityId: receiverCommunityData.id,
+      groupPic: receiverCommunityData.avatar,
+      membersUid: receiverCommunityData.members,
     );
-    await _users
-        .doc(receiverUserId)
+    await _communities
+        .doc(receiverCommunityData.id)
         .collection(FirebaseConstants.chatsCollection)
         .doc(senderUserData.uid)
-        .set(receiverChatContact.toMap());
-    var senderChatContact = ChatContactModel(
-      name: receiverUserData.name,
-      profilePic: receiverUserData.profilePic,
-      contactId: receiverUserData.uid,
-      timeSent: timeSent,
-      lastMessage: message,
-    );
-    await _users
-        .doc(senderUserData.uid)
-        .collection(FirebaseConstants.chatsCollection)
-        .doc(receiverUserData.uid)
         .set(senderChatContact.toMap());
   }
 
   void _saveChatToMessagesSubCollection({
-    required String receiverUserId,
+    required String receiverCommunityId,
     required String text,
     required DateTime timeSent,
     required String messageId,
     required String username,
     required MessageEnum messageType,
     required String senderUsername,
-    required String? receiverUserName,
   }) async {
-    final message = MessageModel(
-      senderId: _auth.currentUser!.uid,
-      receiverId: receiverUserId,
-      text: text,
-      type: messageType,
-      timeSent: timeSent,
-      messageId: messageId,
-      isSeen: false,
-      repliedMessage: '',
-      repliedTo: '',
-      repliedMessageType: MessageEnum.text,
-    );
-    await _users
-        .doc(_auth.currentUser!.uid)
-        .collection(FirebaseConstants.chatsCollection)
-        .doc(receiverUserId)
-        .collection(FirebaseConstants.messagesCollection)
-        .doc(messageId)
-        .set(message.toMap());
+    // final message = MessageModel(
+    //   senderId: _auth.currentUser!.uid,
+    //   receiverId: receiverCommunityId,
+    //   text: text,
+    //   type: messageType,
+    //   timeSent: timeSent,
+    //   messageId: messageId,
+    //   isSeen: false,
+    //   repliedMessage: '',
+    //   repliedTo: senderUsername,
+    //   repliedMessageType: MessageEnum.text,
+    // );
+    // await _users
+    //     .doc(_auth.currentUser!.uid)
+    //     .collection(FirebaseConstants.chatsCollection)
+    //     .doc(receiverCommunityId)
+    //     .collection(FirebaseConstants.messagesCollection)
+    //     .doc(messageId)
+    //     .set(message.toMap());
     final receiverMessage = MessageModel(
       senderId: _auth.currentUser!.uid,
-      receiverId: receiverUserId,
+      receiverId: receiverCommunityId,
       text: text,
       type: messageType,
       timeSent: timeSent,
       messageId: messageId,
       isSeen: false,
       repliedMessage: '',
-      repliedTo: '',
+      repliedTo: senderUsername,
       repliedMessageType: MessageEnum.text,
     );
-    await _users
-        .doc(receiverUserId)
+    await _communities
+        .doc(receiverCommunityId)
         .collection(FirebaseConstants.chatsCollection)
-        .doc(_auth.currentUser!.uid)
+        .doc('GeneralChat')
         .collection(FirebaseConstants.messagesCollection)
         .doc(messageId)
         .set(receiverMessage.toMap());
@@ -198,8 +190,10 @@ class ChatRepo {
     try {
       var timeSent = DateTime.now();
       var messageId = const Uuid().v1();
-      UserModel? receiverUserData;
+
+      CommunityModel? receiverCommunityData;
       String contactMsg;
+
       switch (messageEnum) {
         case MessageEnum.image:
           contactMsg = '📷 Photo';
@@ -215,20 +209,19 @@ class ChatRepo {
       }
       _saveDataToContactsSubCollection(
         senderUserData,
-        receiverUserData!,
+        receiverCommunityData!,
         contactMsg,
         timeSent,
         receiverUserId,
       );
 
       _saveChatToMessagesSubCollection(
-        receiverUserId: receiverUserId,
+        receiverCommunityId: receiverUserId,
         text: imageUrl,
         timeSent: timeSent,
         messageId: messageId,
         username: senderUserData.name,
         messageType: messageEnum,
-        receiverUserName: receiverUserData.name,
         senderUsername: senderUserData.name,
       );
     } catch (e) {
@@ -278,6 +271,4 @@ class ChatRepo {
       throw e.toString();
     }
   }
-
-
 }

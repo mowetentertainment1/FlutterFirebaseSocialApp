@@ -1,8 +1,6 @@
 import 'package:date_format/date_format.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/scheduler.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:untitled/core/common/loader.dart';
 import 'package:untitled/features/chat/card/sender_message_card.dart';
@@ -50,11 +48,8 @@ class _ChatListState extends ConsumerState<ChatList> {
                     child: Text('No messages yet'),
                   );
                 }
-                    // _scrollToBottom();
-                // if (scrollController.offset != 0) {
-                //   scrollController.jumpTo(scrollController.position.maxScrollExtent);
-                // }
                 return ListView.builder(
+                  reverse: true,
                   controller: scrollController,
                   itemCount: chatList.length,
                   itemBuilder: (context, index) {

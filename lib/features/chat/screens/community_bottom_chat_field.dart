@@ -4,24 +4,24 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_sound/public/flutter_sound_recorder.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
-import '../../core/colors.dart';
-import '../../core/enums/message_enum.dart';
-import '../../core/utils.dart';
-import '../auth/controller/auth_controller.dart';
-import 'controller/chat_controller.dart';
 
-class BottomChatField extends ConsumerStatefulWidget {
+import '../../../core/colors.dart';
+import '../../../core/enums/message_enum.dart';
+import '../../../core/utils.dart';
+import '../../auth/controller/auth_controller.dart';
+import '../controller/community_chat_controller.dart';
+class CommunityBottomChatField extends ConsumerStatefulWidget {
   final String receiverUserId;
-  const BottomChatField({
+  const CommunityBottomChatField({
     super.key,
     required this.receiverUserId,
   });
 
   @override
-  ConsumerState<BottomChatField> createState() => _BottomChatFieldState();
+  ConsumerState<CommunityBottomChatField> createState() => _CommunityBottomChatFieldState();
 }
 
-class _BottomChatFieldState extends ConsumerState<BottomChatField> {
+class _CommunityBottomChatFieldState extends ConsumerState<CommunityBottomChatField> {
   bool isShowSendButton = false;
   final TextEditingController _messageController = TextEditingController();
   FlutterSoundRecorder? _soundRecorder;
@@ -49,11 +49,11 @@ class _BottomChatFieldState extends ConsumerState<BottomChatField> {
 
   void sendTextMessage() async {
     if (isShowSendButton && _messageController.text.trim().isNotEmpty) {
-      ref.read(chatControllerProvider.notifier).sendTextMessage(
-            context,
-            _messageController.text.trim(),
-            widget.receiverUserId,
-          );
+      ref.read(communityChatControllerProvider.notifier).sendTextMessage(
+        context,
+        _messageController.text.trim(),
+        widget.receiverUserId,
+      );
       setState(() {
         _messageController.text = '';
         isShowSendButton = false;
@@ -79,15 +79,15 @@ class _BottomChatFieldState extends ConsumerState<BottomChatField> {
   }
 
   void sendFileMessage(
-    File file,
-    MessageEnum messageEnum,
-  ) {
-    ref.read(chatControllerProvider.notifier).sendFileMessage(
-          context,
-          file,
-          widget.receiverUserId,
-          messageEnum
-        );
+      File file,
+      MessageEnum messageEnum,
+      ) {
+    ref.read(communityChatControllerProvider.notifier).sendFileMessage(
+        context,
+        file,
+        widget.receiverUserId,
+        messageEnum
+    );
   }
 
   void openPickImage() async {
@@ -198,8 +198,8 @@ class _BottomChatFieldState extends ConsumerState<BottomChatField> {
                       isShowSendButton
                           ? Icons.send
                           : isRecording
-                              ? Icons.close
-                              : Icons.mic,
+                          ? Icons.close
+                          : Icons.mic,
                       color: Colors.white,
                     ),
                   ),

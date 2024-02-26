@@ -27,7 +27,7 @@ class _CommentScreenState extends ConsumerState<CommentsScreen> {
     super.dispose();
   }
 
-  void addComment(Post post) {
+  void addComment(PostModel post) {
     ref.read(postControllerProvider.notifier).addComment(
           context: context,
           text: _commentController.text.trim(),

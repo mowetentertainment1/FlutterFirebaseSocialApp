@@ -21,7 +21,7 @@ class CommunityRepo {
   CommunityRepo({required FirebaseFirestore firestore,required StorageRepository storageRepository})
       : _storageRepository = storageRepository,_firestore = firestore;
 
-  FutureVoid createCommunity(Community community) async {
+  FutureVoid createCommunity(CommunityModel community) async {
     try {
       var communityDoc = await _communities.doc(community.name).get();
       if (communityDoc.exists) {
@@ -35,14 +35,14 @@ class CommunityRepo {
     }
   }
 
-  Stream<List<Community>> getCommunities(String uid) {
+  Stream<List<CommunityModel>> getCommunities(String uid) {
     return _communities
         .where("members", arrayContains: uid)
         .snapshots()
         .map((event) {
-      List<Community> communities = [];
+      List<CommunityModel> communities = [];
       for (var doc in event.docs) {
-        communities.add(Community.fromMap(doc.data() as Map<String, dynamic>));
+        communities.add(CommunityModel.fromMap(doc.data() as Map<String, dynamic>));
       }
       return communities;
     });
@@ -79,12 +79,12 @@ class CommunityRepo {
     }
   }
 
-  Stream<Community> getCommunityName(String communityName) {
+  Stream<CommunityModel> getCommunityName(String communityName) {
     return _communities.doc(communityName).snapshots().map(
-        (event) => Community.fromMap(event.data() as Map<String, dynamic>));
+        (event) => CommunityModel.fromMap(event.data() as Map<String, dynamic>));
   }
 
-  FutureVoid editCommunity(Community community) async {
+  FutureVoid editCommunity(CommunityModel community) async {
     try {
       return right(_communities.doc(community.name).update(community.toMap()));
     } on FirebaseException catch (e) {
@@ -94,7 +94,7 @@ class CommunityRepo {
     }
   }
 
-  Stream<List<Community>> searchCommunity(String query) {
+  Stream<List<CommunityModel>> searchCommunity(String query) {
     return _communities
         .where(
           "name",
@@ -106,9 +106,9 @@ class CommunityRepo {
         )
         .snapshots()
         .map((event) {
-      List<Community> communities = [];
+      List<CommunityModel> communities = [];
       for (var doc in event.docs) {
-        communities.add(Community.fromMap(doc.data() as Map<String, dynamic>));
+        communities.add(CommunityModel.fromMap(doc.data() as Map<String, dynamic>));
       }
       return communities;
     });
@@ -129,13 +129,13 @@ class CommunityRepo {
       return left(Failure(e.toString()));
     }
   }
-  Stream<List<Post>> getCommunityPosts(String communityName) {
+  Stream<List<PostModel>> getCommunityPosts(String communityName) {
     return _posts
         .where("communityName", isEqualTo: communityName)
         .orderBy("createdAt", descending: true)
         .snapshots()
         .map((event) => event.docs
-        .map((e) => Post.fromMap(e.data() as Map<String, dynamic>))
+        .map((e) => PostModel.fromMap(e.data() as Map<String, dynamic>))
         .toList());
   }
   FutureVoid deleteCommunity(String communityName) async {

@@ -3,7 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:fpdart/fpdart.dart';
 import 'package:untitled/core/constants/firebase_constants.dart';
-import 'package:untitled/model/user.dart';
+import 'package:untitled/model/user_model.dart';
 
 import '../../../../core/failure.dart';
 import '../../../../core/providers/firebase_providers.dart';
@@ -42,13 +42,13 @@ class UserProfileRepo {
     }
   }
 
-  Stream<List<Post>> getUserPosts(String uid) {
+  Stream<List<PostModel>> getUserPosts(String uid) {
     return _posts
         .where("uid", isEqualTo: uid)
         .orderBy("createdAt", descending: true)
         .snapshots()
         .map((event) => event.docs
-            .map((e) => Post.fromMap(e.data() as Map<String, dynamic>))
+            .map((e) => PostModel.fromMap(e.data() as Map<String, dynamic>))
             .toList());
   }
 

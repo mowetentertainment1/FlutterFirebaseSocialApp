@@ -65,7 +65,7 @@ class CommunityController extends StateNotifier<bool> {
   void createCommunity(String name, String des, BuildContext context) async {
     state = true;
     final userUid = _ref.read(userProvider)?.uid ?? "";
-    Community community = Community(
+    CommunityModel community = CommunityModel(
         id: name,
         name: name,
         description: des,
@@ -83,7 +83,7 @@ class CommunityController extends StateNotifier<bool> {
     state = false;
   }
 
-  void joinCommunity(Community community, BuildContext context) async {
+  void joinCommunity(CommunityModel community, BuildContext context) async {
     final user = _ref.read(userProvider)!;
     Either<Failure, void> res;
     if (community.members.contains(user.uid)) {
@@ -106,12 +106,12 @@ class CommunityController extends StateNotifier<bool> {
     }
   }
 
-  Stream<List<Community>> getCommunities() {
+  Stream<List<CommunityModel>> getCommunities() {
     final userUid = _ref.read(userProvider)?.uid ?? "";
     return _communityRepo.getCommunities(userUid);
   }
 
-  Stream<Community> getCommunityName(String communityName) {
+  Stream<CommunityModel> getCommunityName(String communityName) {
     return _communityRepo.getCommunityName(communityName);
   }
 
@@ -119,7 +119,7 @@ class CommunityController extends StateNotifier<bool> {
       {required File? avatarFile,
       required File? bannerFile,
       required BuildContext context,
-      required Community community,
+      required CommunityModel community,
       required String description}) async {
     state = true;
 
@@ -174,7 +174,7 @@ class CommunityController extends StateNotifier<bool> {
 
   }
 
-  Stream<List<Community>> searchCommunity(String query) {
+  Stream<List<CommunityModel>> searchCommunity(String query) {
     return _communityRepo.searchCommunity(query);
   }
 
@@ -191,7 +191,7 @@ class CommunityController extends StateNotifier<bool> {
     state = false;
   }
 
-  Stream<List<Post>> getCommunityPosts(String communityName) {
+  Stream<List<PostModel>> getCommunityPosts(String communityName) {
     return _communityRepo.getCommunityPosts(communityName);
   }
 }

@@ -1,23 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:routemaster/routemaster.dart';
-import 'package:untitled/model/user.dart';
+import 'package:untitled/model/user_model.dart';
 import '../../../core/colors.dart';
 import '../../auth/controller/auth_controller.dart';
 import '../bottom_chat_field.dart';
 import '../card/chats_list.dart';
 import '../controller/chat_controller.dart';
 
-class MobileChatScreen extends ConsumerWidget {
+class MobileContactChatScreen extends ConsumerWidget {
   final String uid;
   final String name;
-  const MobileChatScreen({super.key, required this.uid, required this.name});
+  const MobileContactChatScreen({super.key, required this.uid, required this.name});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return Scaffold(
       appBar: AppBar(
-        // automaticallyImplyLeading: false,
         backgroundColor: appBarColor,
         title: StreamBuilder<UserModel>(
           stream: ref.read(authControllerProvider.notifier).getUserData(uid),
@@ -122,7 +121,6 @@ class MobileChatScreen extends ConsumerWidget {
           ),
           BottomChatField(
             receiverUserId: uid,
-            isGroupChat: false,
           ),
         ],
       ),

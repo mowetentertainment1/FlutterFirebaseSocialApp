@@ -8,43 +8,54 @@ import '../../auth/controller/auth_controller.dart';
 import '../../home/delegates/search_delegates.dart';
 import '../../home/drawers/community_list_drawer.dart';
 import '../../home/drawers/profile_drawer.dart';
+import 'community_chat_list.dart';
 import 'contacts_list.dart';
 import '../../../core/colors.dart';
-
-class ChatScreen extends ConsumerWidget {
+class ChatScreen extends ConsumerStatefulWidget {
   const ChatScreen({super.key});
-  void displayDrawer(BuildContext context) {
-    Scaffold.of(context).openDrawer();
-  }
 
-  void displayEndDrawer(BuildContext context) {
-    Scaffold.of(context).openEndDrawer();
+  @override
+  _ChatScreenState createState() => _ChatScreenState();
+}
+
+class _ChatScreenState extends ConsumerState<ChatScreen> with SingleTickerProviderStateMixin {
+  late TabController _tabController;
+@override
+  void initState() {
+    super.initState();
+    _tabController = TabController(length: 2, vsync: this);
+  }
+  @override
+  void dispose() {
+    _tabController.dispose();
+    super.dispose();
   }
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  Widget build(BuildContext context) {
     final user = ref.watch(userProvider)!;
-    return DefaultTabController(
-      length: 3,
-      child: Scaffold(
-        drawer: const CommunityListDrawer(),
-        endDrawer: const ProfileDrawer(),
-        appBar: AppBar(
-          leading: Builder(builder: (context) {
+    return Scaffold(
+      drawer: const CommunityListDrawer(),
+      endDrawer: const ProfileDrawer(),
+      appBar: AppBar(
+        leading: Builder(
+          builder: (context) {
             return IconButton(
               icon: const Icon(Icons.menu),
               onPressed: () => displayDrawer(context),
             );
-          }),
-          title: Text('Chats', style: GoogleFonts.poppins()),
-          actions: [
-            IconButton(
-              icon: const Icon(CupertinoIcons.search),
-              onPressed: () {
-                showSearch(context: context, delegate: SearchCommunityScreen(ref: ref));
-              },
-            ),
-            Builder(builder: (context) {
+          },
+        ),
+        title: Text('Chats', style: GoogleFonts.poppins()),
+        actions: [
+          IconButton(
+            icon: const Icon(CupertinoIcons.search),
+            onPressed: () {
+              showSearch(context: context, delegate: SearchCommunityScreen(ref: ref));
+            },
+          ),
+          Builder(
+            builder: (context) {
               return IconButton(
                 icon: Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 5.0),
@@ -54,38 +65,53 @@ class ChatScreen extends ConsumerWidget {
                 ),
                 onPressed: () => displayEndDrawer(context),
               );
-            })
-          ],
-          bottom: const TabBar(
-            indicatorColor: tabColor,
-            indicatorWeight: 4,
-            labelColor: tabColor,
-            unselectedLabelColor: Colors.grey,
-            labelStyle: TextStyle(
-              fontWeight: FontWeight.bold,
+            },
+          )
+        ],
+        bottom: TabBar(
+          controller: _tabController,
+          indicatorColor: tabColor,
+          indicatorWeight: 4,
+          labelColor: tabColor,
+          unselectedLabelColor: Colors.grey,
+          labelStyle: const TextStyle(
+            fontWeight: FontWeight.bold,
+          ),
+          tabs: const [
+            Tab(
+              text: 'CHATS',
             ),
-            tabs: [
-              Tab(
-                text: 'CHATS',
-              ),
-              Tab(
-                text: 'COMMUNITIES',
-              ),
-            ],
-          ),
+            Tab(
+              text: 'COMMUNITIES',
+            ),
+          ],
         ),
-        body: const ContactsList(),
-        floatingActionButton: FloatingActionButton(
-          onPressed: () {
-            showSearch(context: context, delegate: SelectContactScreen(ref: ref));
-          },
-          backgroundColor: tabColor,
-          child: const Icon(
-            Icons.comment,
-            color: Colors.white,
-          ),
+      ),
+      body: TabBarView(
+        controller: _tabController,
+        children: const [
+          ContactsList(),
+          CommunityChatList(),
+        ],
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          showSearch(context: context, delegate: SelectContactScreen(ref: ref));
+        },
+        backgroundColor: tabColor,
+        child: const Icon(
+          Icons.comment,
+          color: Colors.white,
         ),
       ),
     );
+  }
+
+  void displayDrawer(BuildContext context) {
+    Scaffold.of(context).openDrawer();
+  }
+
+  void displayEndDrawer(BuildContext context) {
+    Scaffold.of(context).openEndDrawer();
   }
 }

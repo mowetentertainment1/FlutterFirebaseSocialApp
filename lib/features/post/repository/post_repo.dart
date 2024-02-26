@@ -22,7 +22,7 @@ class PostRepo {
   CollectionReference get _posts => _firestore.collection(FirebaseConstants.postsCollection);
   CollectionReference get _comments => _firestore.collection(FirebaseConstants.commentsCollection);
 
-  FutureVoid addPost(Post post) async {
+  FutureVoid addPost(PostModel post) async {
     try {
       return right(_posts.doc(post.id).set(post.toMap()));
     } on FirebaseException catch (e) {
@@ -32,26 +32,26 @@ class PostRepo {
     }
   }
 
-  Stream<List<Post>> getPosts(List<Community> communities) {
+  Stream<List<PostModel>> getPosts(List<CommunityModel> communities) {
     return _posts
         .where("communityName",
             whereIn: communities.map((e) => e.name).toList())
         .orderBy("createdAt", descending: true)
         .snapshots()
         .map((event) => event.docs
-            .map((e) => Post.fromMap(e.data() as Map<String, dynamic>))
+            .map((e) => PostModel.fromMap(e.data() as Map<String, dynamic>))
             .toList());
   }
-  Stream<List<Post>> getGuestPosts() {
+  Stream<List<PostModel>> getGuestPosts() {
     return _posts
         .orderBy("createdAt", descending: true).limit(10)
         .snapshots()
         .map((event) => event.docs
-            .map((e) => Post.fromMap(e.data() as Map<String, dynamic>))
+            .map((e) => PostModel.fromMap(e.data() as Map<String, dynamic>))
             .toList());
   }
 
-  FutureVoid deletePost(Post post) async {
+  FutureVoid deletePost(PostModel post) async {
     try {
       return right(_posts.doc(post.id).delete());
     } on FirebaseException catch (e) {
@@ -61,7 +61,7 @@ class PostRepo {
     }
   }
 
-  void upVotePost(Post post, String userId) async {
+  void upVotePost(PostModel post, String userId) async {
     if (post.downvotes.contains(userId)) {
       _posts.doc(post.id).update({
         'downvotes': FieldValue.arrayRemove([userId]),
@@ -78,7 +78,7 @@ class PostRepo {
       });
     }
 }
-  void downVotePost(Post post, String userId) async {
+  void downVotePost(PostModel post, String userId) async {
     if (post.upvotes.contains(userId)) {
       _posts.doc(post.id).update({
         'upvotes': FieldValue.arrayRemove([userId]),
@@ -95,23 +95,23 @@ class PostRepo {
       });
     }
   }
-  Stream<Post> getPostById(String postId) {
+  Stream<PostModel> getPostById(String postId) {
     return _posts.doc(postId).snapshots().map(
-        (event) => Post.fromMap(event.data() as Map<String, dynamic>));
+        (event) => PostModel.fromMap(event.data() as Map<String, dynamic>));
   }
 
-  Stream<List<Comment>> getCommentsOfPost(String postId) {
+  Stream<List<CommentModel>> getCommentsOfPost(String postId) {
     return _comments.where('postId', isEqualTo: postId).orderBy('createdAt', descending: true).snapshots().map(
           (event) => event.docs
           .map(
-            (e) => Comment.fromMap(
+            (e) => CommentModel.fromMap(
           e.data() as Map<String, dynamic>,
         ),
       )
           .toList(),
     );
   }
-  FutureVoid addComment(Comment comment) async {
+  FutureVoid addComment(CommentModel comment) async {
     try {
       await _comments.doc(comment.id).set(comment.toMap());
 

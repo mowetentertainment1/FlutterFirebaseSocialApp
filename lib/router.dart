@@ -11,7 +11,8 @@ import 'package:untitled/features/home/user_profile/screens/user_profile_screen.
 import 'package:untitled/features/post/screens/comment_screen.dart';
 import 'core/common/photo_view.dart';
 import 'features/auth/screens/login_screen.dart';
-import 'features/chat/screens/mobile_chat_screen.dart';
+import 'features/chat/screens/mobile_community_chatbox.dart';
+import 'features/chat/screens/mobile_contact_chatbox.dart';
 
 final loggedOutRoute = RouteMap(routes: {
   '/': (_) => const MaterialPage(child: LoginScreen()),
@@ -49,7 +50,13 @@ final loggedInRoute = RouteMap(routes: {
     );
   },
   '/chat/:name/:uid': (routeData) => MaterialPage(
-      child: MobileChatScreen(
+      child: MobileContactChatScreen(
           name: routeData.pathParameters['name']!,
           uid: routeData.pathParameters['uid']!)),
+  '/chat/:name': (routeData) => MaterialPage(
+      child: MobileCommunityChatScreen(
+          name: routeData.pathParameters['name']!,
+          ),
+  ),
 });
+

@@ -1,7 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:riverpod/riverpod.dart';
-import 'package:untitled/model/user.dart';
+import 'package:untitled/model/user_model.dart';
 import '../../../core/utils.dart';
 import '../repository/auth_repository.dart';
 
@@ -65,11 +65,6 @@ class AuthController extends StateNotifier<bool> {
   Stream<UserModel> getCurrentUserData() {
     return _authRepository.getCurrentUserData();
   }
-
-  // Future<UserModel?> getCurrentUserData() async {
-  //   UserModel? user = await _authRepository.getCurrentUserData();
-  //   return user;
-  // }
   void logOut() async {
     _authRepository.logOut();
     _ref.read(userProvider.notifier).update((state) => null);

@@ -5,7 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter/material.dart';
 import 'package:untitled/features/auth/controller/auth_controller.dart';
 import 'package:untitled/features/home/user_profile/controller/user_profile_controller.dart';
-import 'package:untitled/model/user.dart';
+import 'package:untitled/model/user_model.dart';
 
 import '../../../../core/common/error_text.dart';
 import '../../../../core/common/loader.dart';

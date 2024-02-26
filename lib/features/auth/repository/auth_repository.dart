@@ -7,7 +7,7 @@ import 'package:riverpod/riverpod.dart';
 import 'package:untitled/core/constants/constants.dart';
 import 'package:untitled/core/constants/firebase_constants.dart';
 import 'package:untitled/core/failure.dart';
-import 'package:untitled/model/user.dart';
+import 'package:untitled/model/user_model.dart';
 
 import '../../../core/providers/firebase_providers.dart';
 import '../../../core/type_defs.dart';

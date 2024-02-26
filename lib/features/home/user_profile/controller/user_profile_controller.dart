@@ -5,7 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:routemaster/routemaster.dart';
 import 'package:untitled/core/enums/enums.dart';
 import 'package:untitled/features/home/user_profile/repository/user_profile_repo.dart';
-import 'package:untitled/model/user.dart';
+import 'package:untitled/model/user_model.dart';
 
 import '../../../../core/providers/storage_repository_provider.dart';
 import '../../../../core/utils.dart';
@@ -79,7 +79,7 @@ class UserProfileController extends StateNotifier<bool> {
             });
   }
 
-  Stream<List<Post>> getUserPosts(String uid) {
+  Stream<List<PostModel>> getUserPosts(String uid) {
     return _userRepo.getUserPosts(uid);
   }
   Stream<List<UserModel>> searchUser(String query) {

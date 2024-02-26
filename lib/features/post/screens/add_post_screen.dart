@@ -29,8 +29,8 @@ class AddPostScreen extends ConsumerStatefulWidget {
 
 class _CreateAddPostScreenState extends ConsumerState<AddPostScreen> {
   final titleController = TextEditingController();
-  Community? selectedCommunity;
-  List<Community> communitie = [];
+  CommunityModel? selectedCommunity;
+  List<CommunityModel> communitie = [];
   late VideoPlayerController _videoPlayerController;
   late ChewieController _chewieController;
 
@@ -248,7 +248,7 @@ class _CreateAddPostScreenState extends ConsumerState<AddPostScreen> {
                           });
                         },
                         items: communities
-                            .map<DropdownMenuItem<String>>((Community value) {
+                            .map<DropdownMenuItem<String>>((CommunityModel value) {
                           return DropdownMenuItem<String>(
                             value: value.name,
                             child: Text(value.name),

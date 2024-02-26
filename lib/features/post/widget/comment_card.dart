@@ -4,7 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../model/comment_model.dart';
 
 class CommentCard extends ConsumerWidget {
-  final Comment comment;
+  final CommentModel comment;
   const CommentCard({
     super.key,
     required this.comment,

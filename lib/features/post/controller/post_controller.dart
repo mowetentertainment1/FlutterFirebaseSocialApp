@@ -26,13 +26,13 @@ final postControllerProvider =
   );
 });
 final userPostsProvider =
-    StreamProvider.family<List<Post>, List<Community>>((ref, communities) {
+    StreamProvider.family<List<PostModel>, List<CommunityModel>>((ref, communities) {
   return ref.read(postControllerProvider.notifier).getPosts(communities);
 });
 final guestPostsProvider = StreamProvider((ref) {
   return ref.read(postControllerProvider.notifier).getGuestPosts();
 });
-final getPostByIdProvider = StreamProvider.family<Post, String>((ref, postId) {
+final getPostByIdProvider = StreamProvider.family<PostModel, String>((ref, postId) {
   return ref.watch(postControllerProvider.notifier).getPost(postId);
 });
 final getPostCommentsProvider = StreamProvider.family((ref, String postId) {
@@ -57,7 +57,7 @@ class PostController extends StateNotifier<bool> {
   void shareImagePost({
     required BuildContext context,
     required String title,
-    required Community selectedCommunity,
+    required CommunityModel selectedCommunity,
     required List<File> files,
   }) async {
     state = true;
@@ -75,7 +75,7 @@ class PostController extends StateNotifier<bool> {
               (l) => showSnackBar(context, l.message),
               (r) => urls = r,
         );
-      final Post post = Post(
+      final PostModel post = PostModel(
         id: postId,
         title: title,
         communityName: selectedCommunity.name,
@@ -115,14 +115,14 @@ class PostController extends StateNotifier<bool> {
   void shareTextPost({
     required BuildContext context,
     required String title,
-    required Community selectedCommunity,
+    required CommunityModel selectedCommunity,
     required String linkVideo,
   }) async {
     state = true;
     String postId = const Uuid().v1();
     final user = _ref.read(userProvider)!;
 
-    final Post post = Post(
+    final PostModel post = PostModel(
       id: postId,
       title: title,
       communityName: selectedCommunity.name,
@@ -151,7 +151,7 @@ class PostController extends StateNotifier<bool> {
   void shareVideoPost({
     required BuildContext context,
     required String title,
-    required Community selectedCommunity,
+    required CommunityModel selectedCommunity,
     required File? file,
   }) async {
     state = true;
@@ -162,7 +162,7 @@ class PostController extends StateNotifier<bool> {
       file: file,
     );
     imageRes.fold((l) => showSnackBar(context, l.message), (r) async {
-      final Post post = Post(
+      final PostModel post = PostModel(
         id: postId,
         title: title,
         communityName: selectedCommunity.name,
@@ -189,7 +189,7 @@ class PostController extends StateNotifier<bool> {
     });
   }
 
-  void deletePost(List<String> urls, Post post, BuildContext context
+  void deletePost(List<String> urls, PostModel post, BuildContext context
       ) async {
     state = true;
     final res = await _postRepo.deletePost(post);
@@ -208,17 +208,17 @@ class PostController extends StateNotifier<bool> {
       });
   }
 
-  void upVotePost(Post post) async {
+  void upVotePost(PostModel post) async {
     final userId = _ref.read(userProvider)!.uid;
     _postRepo.upVotePost(post, userId);
   }
 
-  void downVotePost(Post post) async {
+  void downVotePost(PostModel post) async {
     final userId = _ref.read(userProvider)!.uid;
     _postRepo.downVotePost(post, userId);
   }
 
-  Stream<List<Post>> getPosts(List<Community> communities) {
+  Stream<List<PostModel>> getPosts(List<CommunityModel> communities) {
     if (communities.isNotEmpty) {
       return _postRepo.getPosts(communities);
     } else {
@@ -226,26 +226,26 @@ class PostController extends StateNotifier<bool> {
     }
   }
 
-  Stream<List<Post>> getGuestPosts() {
+  Stream<List<PostModel>> getGuestPosts() {
     return _postRepo.getGuestPosts();
   }
 
-  Stream<Post> getPost(String postId) {
+  Stream<PostModel> getPost(String postId) {
     return _postRepo.getPostById(postId);
   }
 
-  Stream<List<Comment>> fetchPostComments(String postId) {
+  Stream<List<CommentModel>> fetchPostComments(String postId) {
     return _postRepo.getCommentsOfPost(postId);
   }
 
   void addComment({
     required BuildContext context,
     required String text,
-    required Post post,
+    required PostModel post,
   }) async {
     final user = _ref.read(userProvider)!;
     String commentId = const Uuid().v1();
-    Comment comment = Comment(
+    CommentModel comment = CommentModel(
       id: commentId,
       text: text,
       createdAt: DateTime.now(),

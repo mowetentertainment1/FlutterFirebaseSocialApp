@@ -2,56 +2,58 @@ import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:untitled/features/chat/repository/community_chat_repo.dart';
 import 'package:uuid/uuid.dart';
 
 import '../../../../core/providers/storage_repository_provider.dart';
 import '../../../../core/utils.dart';
 import '../../../core/enums/message_enum.dart';
-import '../../../model/chat_contact_model.dart';
+import '../../../model/community_chat_model.dart';
 import '../../../model/message_model.dart';
 import '../../auth/controller/auth_controller.dart';
-import '../repository/chat_repo.dart';
 
-final chatControllerProvider = StateNotifierProvider<ChatController, bool>((ref) {
-  final chatRepo = ref.watch(chatRepoProvider);
+final communityChatControllerProvider =
+    StateNotifierProvider<CommunityChatController, bool>((ref) {
+  final communityChatRepo = ref.watch(communityChatRepoProvider);
   final storageRepository = ref.watch(storageRepositoryProvider);
-  return ChatController(
-    chatRepo: chatRepo,
+  return CommunityChatController(
+    communityChatRepo: communityChatRepo,
     ref: ref,
     storageRepository: storageRepository,
   );
 });
-final chatStream = StreamProvider.family<List<MessageModel>, String>((ref, receiverUserId) {
-  return ref.read(chatControllerProvider.notifier).getChatStream(receiverUserId);
+final communityChatStream =
+    StreamProvider.family<List<MessageModel>, String>((ref, receiverUserId) {
+  return ref.read(communityChatControllerProvider.notifier).getChatStream(receiverUserId);
 });
 
-class ChatController extends StateNotifier<bool> {
-  final ChatRepo _chatRepo;
+class CommunityChatController extends StateNotifier<bool> {
+  final CommunityChatRepo _communityChatRepo;
   final Ref _ref;
   final StorageRepository _storageRepository;
-  Stream<List<ChatContactModel>> chatContactList() {
-    return _chatRepo.getChatContacts();
+  Stream<List<CommunityChatModel>> chatContacts() {
+    return _communityChatRepo.getChatGroups();
   }
 
-  ChatController({
-    required ChatRepo chatRepo,
+  CommunityChatController({
+    required CommunityChatRepo communityChatRepo,
     required Ref ref,
     required StorageRepository storageRepository,
-  })  : _chatRepo = chatRepo,
+  })  : _communityChatRepo = communityChatRepo,
         _ref = ref,
         _storageRepository = storageRepository,
         super(false);
 
   void sendTextMessage(
-      BuildContext context, String message, String receiverUserId) async {
+      BuildContext context, String message, String receiverCommunityId) async {
     state = true;
     try {
       _ref.read(getCurrentUserDataProvider).whenData(
-            (value) => _chatRepo.sendTextMessage(
+            (value) => _communityChatRepo.sendTextMessage(
               message: message,
               senderUser: value,
-              receiverUserId: receiverUserId,
               context: context,
+              receiverCommunityId: receiverCommunityId,
             ),
           );
       state = false;
@@ -61,7 +63,7 @@ class ChatController extends StateNotifier<bool> {
   }
 
   Stream<List<MessageModel>> getChatStream(String receiverUserId) {
-    return _chatRepo.getChatStream(receiverUserId);
+    return _communityChatRepo.getChatStream(receiverUserId);
   }
 
   Future<void> sendFileMessage(
@@ -80,7 +82,7 @@ class ChatController extends StateNotifier<bool> {
         );
         final imageUrl = imageSave.fold((l) => '', (r) => r);
         _ref.read(getCurrentUserDataProvider).whenData(
-              (value) => _chatRepo.sendFileMessage(
+              (value) => _communityChatRepo.sendFileMessage(
                 context: context,
                 file: file,
                 receiverUserId: receiverUserId,
@@ -97,7 +99,7 @@ class ChatController extends StateNotifier<bool> {
         );
         final audioUrl = audioSave.fold((l) => '', (r) => r);
         _ref.read(getCurrentUserDataProvider).whenData(
-              (value) => _chatRepo.sendFileMessage(
+              (value) => _communityChatRepo.sendFileMessage(
                 context: context,
                 file: file,
                 receiverUserId: receiverUserId,
@@ -114,7 +116,7 @@ class ChatController extends StateNotifier<bool> {
         );
         final videoUrl = videoSave.fold((l) => '', (r) => r);
         _ref.read(getCurrentUserDataProvider).whenData(
-              (value) => _chatRepo.sendFileMessage(
+              (value) => _communityChatRepo.sendFileMessage(
                 context: context,
                 file: file,
                 receiverUserId: receiverUserId,
@@ -131,7 +133,7 @@ class ChatController extends StateNotifier<bool> {
   }
 
   void deleteChat(String receiverUserId, BuildContext context) async {
-    final res = await _chatRepo.deleteChat(receiverUserId);
+    final res = await _communityChatRepo.deleteChat(receiverUserId);
     final deleteChatFiles =
         await _storageRepository.deleteChatFiles(receiverUserId: receiverUserId);
     deleteChatFiles.fold((l) => showSnackBar(context, l.message), (r) {

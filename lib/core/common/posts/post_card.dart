@@ -15,7 +15,7 @@ import '../../../features/auth/controller/auth_controller.dart';
 import '../../../features/post/controller/post_controller.dart';
 
 class PostCard extends ConsumerWidget {
-  final Post post;
+  final PostModel post;
 
 
   const PostCard({super.key, required this.post});

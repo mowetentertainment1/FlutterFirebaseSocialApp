@@ -2,13 +2,14 @@ import 'package:date_format/date_format.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:routemaster/routemaster.dart';
+import 'package:untitled/features/chat/controller/community_chat_controller.dart';
+import 'package:untitled/model/community_chat_model.dart';
 import '../../../core/colors.dart';
 import '../../../core/common/loader.dart';
-import '../../../model/chat_contact_model.dart';
 import '../controller/chat_controller.dart';
 
-class ContactsList extends ConsumerWidget {
-  const ContactsList({super.key});
+class CommunityChatList extends ConsumerWidget {
+  const CommunityChatList({super.key});
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return Padding(
@@ -16,9 +17,9 @@ class ContactsList extends ConsumerWidget {
       child: SingleChildScrollView(
         child: Column(
           children: [
-
-            StreamBuilder<List<ChatContactModel>>(
-                stream: ref.watch(chatControllerProvider.notifier).chatContactList(),
+            StreamBuilder<List<CommunityChatModel>>(
+                stream:
+                    ref.watch(communityChatControllerProvider.notifier).chatContacts(),
                 builder: (context, snapshot) {
                   if (snapshot.connectionState == ConnectionState.waiting) {
                     return const Loader();
@@ -47,24 +48,24 @@ class ContactsList extends ConsumerWidget {
                                 builder: (BuildContext dialogContext) {
                                   return AlertDialog(
                                     title: const Text('Delete Chat'),
-                                    content: const Text('Are you sure you want to delete this chat?'),
+                                    content: const Text(
+                                        'Are you sure you want to delete this chat?'),
                                     actions: <Widget>[
                                       TextButton(
                                         child: const Text('Cancel'),
                                         onPressed: () {
-                                          Navigator.of(dialogContext)
-                                              .pop();
+                                          Navigator.of(dialogContext).pop();
                                         },
                                       ),
                                       TextButton(
                                         child: const Text('Delete',
                                             style: TextStyle(color: Colors.red)),
                                         onPressed: () {
-                                          Navigator.of(dialogContext)
-                                              .pop();
+                                          Navigator.of(dialogContext).pop();
                                           ref
                                               .read(chatControllerProvider.notifier)
-                                              .deleteChat(chatContactData.contactId, context);
+                                              .deleteChat(
+                                                  chatContactData.communityId, context);
                                         },
                                       ),
                                     ],
@@ -73,8 +74,8 @@ class ContactsList extends ConsumerWidget {
                               );
                             },
                             onTap: () {
-                              Routemaster.of(context).push(
-                                  '/chat/${chatContactData.name}/${chatContactData.contactId}');
+                              Routemaster.of(context)
+                                  .push('/chat/${chatContactData.communityId}');
                             },
                             child: Padding(
                               padding: const EdgeInsets.only(bottom: 8.0),
@@ -94,7 +95,7 @@ class ContactsList extends ConsumerWidget {
                                 ),
                                 leading: CircleAvatar(
                                   backgroundImage: NetworkImage(
-                                    chatContactData.profilePic,
+                                    chatContactData.groupPic,
                                   ),
                                   radius: 30,
                                 ),
