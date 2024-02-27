@@ -1,9 +1,18 @@
 import 'package:flutter/material.dart';
-
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:untitled/core/common/loader.dart';
 import '../../../core/enums/message_enum.dart';
 import '../display_message_type.dart';
+import '../../community/controller/community_controller.dart';
 
-class OtherCommunityMessageCard extends StatelessWidget {
+class OtherCommunityMessageCard extends ConsumerWidget {
+  final String message;
+  final String senderName;
+  final String senderUid;
+  final String receiverId;
+  final String senderProfilePic;
+  final String date;
+  final MessageEnum type;
   const OtherCommunityMessageCard({
     super.key,
     required this.message,
@@ -11,21 +20,14 @@ class OtherCommunityMessageCard extends StatelessWidget {
     required this.type,
     required this.senderName,
     required this.senderUid,
-    required this.isMods,
     required this.senderProfilePic,
+    required this.receiverId,
   });
-  final String message;
-  final String senderName;
-  final String senderUid;
-  final bool isMods;
-  final String senderProfilePic;
-  final String date;
-  final MessageEnum type;
-
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
+      mainAxisAlignment: MainAxisAlignment.start,
       children: [
         const SizedBox(
           width: 5,
@@ -41,12 +43,30 @@ class OtherCommunityMessageCard extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(
-              senderName,
-              style: const TextStyle(
-                fontSize: 14,
-                fontWeight: FontWeight.bold,
-              ),
+            Row(
+              children: [
+                Text(
+                  senderName,
+                  style: const TextStyle(
+                    fontSize: 14,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+
+                ref.watch(communityNameProvider(receiverId)).when(
+                    data: (community) => community.mods.contains(senderUid)
+                        ? const Padding(
+                            padding: EdgeInsets.only(left: 5),
+                            child: Icon(
+                              Icons.admin_panel_settings,
+                              color: Colors.blue,
+                              size: 15,
+                            ),
+                          )
+                        : const SizedBox(),
+                    loading: () => const Loader(),
+                    error: (error, stack) => const SizedBox()),
+              ],
             ),
             ConstrainedBox(
               constraints: BoxConstraints(
@@ -54,7 +74,7 @@ class OtherCommunityMessageCard extends StatelessWidget {
               child: Card(
                 elevation: 1,
                 shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
-                margin: const EdgeInsets.symmetric(horizontal: 15, vertical: 5),
+                margin: const EdgeInsets.only(top: 5),
                 child: Stack(
                   children: [
                     Padding(

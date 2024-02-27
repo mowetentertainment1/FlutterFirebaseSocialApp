@@ -131,21 +131,6 @@ class CommunityChatRepo {
         .set(senderChatContact.toMap());
   }
 
-Stream<bool> checkUserIsModerator(String communityId, String userId){
-    return _firestore
-        .collection(FirebaseConstants.communitiesCollection)
-        .doc(communityId)
-        .snapshots()
-        .map((event) {
-          if (event.data()!.containsKey('mods')) {
-            List<String> moderators = event.data()!['mods'];
-            if (moderators.contains(userId)) {
-              return true;
-            }
-          }
-          return false;
-    });
-}
 
   void _saveChatToMessagesSubCollection({
     required String receiverCommunityId,
@@ -159,32 +144,6 @@ Stream<bool> checkUserIsModerator(String communityId, String userId){
     required String senderUid,
 
   }) async {
-    // final message = MessageModel(
-    //   senderId: _auth.currentUser!.uid,
-    //   receiverId: receiverCommunityId,
-    //   text: text,
-    //   type: messageType,
-    //   timeSent: timeSent,
-    //   messageId: messageId,
-    //   isSeen: false,
-    //   repliedMessage: '',
-    //   repliedTo: senderUsername,
-    //   repliedMessageType: MessageEnum.text,
-    // );
-    // await _users
-    //     .doc(_auth.currentUser!.uid)
-    //     .collection(FirebaseConstants.chatsCollection)
-    //     .doc(receiverCommunityId)
-    //     .collection(FirebaseConstants.messagesCollection)
-    //     .doc(messageId)
-    //     .set(message.toMap());
-    Stream<bool> isModerator =
-    checkUserIsModerator(receiverCommunityId, senderUid);
-    bool isMod = false;
-    isModerator.listen((event) {
-      isMod = event;
-    });
-
     final receiverMessage = CommunityMessageModel(
       senderId: _auth.currentUser!.uid,
       receiverId: receiverCommunityId,
@@ -194,7 +153,6 @@ Stream<bool> checkUserIsModerator(String communityId, String userId){
       messageId: messageId,
       senderProfilePic: senderProfilePic,
       senderUsername: senderUsername,
-      isModerator: isMod,
     );
     await _communities
         .doc(receiverCommunityId)

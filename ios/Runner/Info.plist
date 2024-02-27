@@ -51,5 +51,20 @@
           <string>MyApp does not need this permission</string>
     <key>NSCameraUsageDescription</key>
           <string>MyApp does not need this permission</string>
+          <key>CFBundleURLTypes</key>
+          <array>
+            <dict>
+              <key>CFBundleTypeRole</key>
+              <string>Editor</string>
+              <key>CFBundleURLName</key>
+          	<!-- You can find it on /ios/project.pbxproj - 'PRODUCT_BUNDLE_IDENTIFIER' -->
+              <string>[Your project PRODUCT_BUNDLE_IDENTIFIER value]</string>
+              <key>CFBundleURLSchemes</key>
+              <array>
+                <!-- Your app title -->
+                <string>example</string>
+              </array>
+            </dict>
+          </array>
 </dict>
 </plist>

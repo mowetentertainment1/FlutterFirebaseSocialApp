@@ -9,7 +9,6 @@ class CommunityMessageModel {
   final String messageId;
   final String senderProfilePic;
   final String senderUsername;
-final bool isModerator;
   CommunityMessageModel({
     required this.senderId,
     required this.receiverId,
@@ -19,7 +18,6 @@ final bool isModerator;
     required this.messageId,
     required this.senderProfilePic,
     required this.senderUsername,
-    required this.isModerator,
   });
 
   Map<String, dynamic> toMap() {
@@ -32,7 +30,6 @@ final bool isModerator;
       'messageId': messageId,
       'senderProfilePic': senderProfilePic,
       'senderUsername': senderUsername,
-      'isModerator': isModerator,
     };
   }
 
@@ -46,7 +43,6 @@ final bool isModerator;
       messageId: map['messageId'] ?? '',
       senderProfilePic: map['senderProfilePic'] ?? '',
       senderUsername: map['senderUsername'] ?? '',
-      isModerator: map['isModerator'] ?? false,
     );
   }
 }

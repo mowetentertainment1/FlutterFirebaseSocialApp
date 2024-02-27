@@ -60,21 +60,21 @@ class _CommunityChatListState extends ConsumerState<CommunityChatList> {
                     return isMyMessage
                         ? MyCommunityMessageCard(
                             message: message.text,
+                            receiverId: widget.receiverId,
                             date: formatDate(message.timeSent, [HH, ':', nn]),
                             type: message.type,
                             senderName: message.senderUsername,
                             senderUid: message.senderId,
-                            isMods: message.isModerator,
                             senderProfilePic: message.senderProfilePic,
                           )
                         : OtherCommunityMessageCard(
-                            message: message.text,
-                            date: formatDate(message.timeSent, [HH, ':', nn]),
-                            type: message.type,
-                            senderName: message.senderUsername,
-                            senderUid: message.senderId,
-                            isMods: message.isModerator,
-                            senderProfilePic: message.senderProfilePic,
+                      message: message.text,
+                      receiverId: widget.receiverId,
+                      date: formatDate(message.timeSent, [HH, ':', nn]),
+                      type: message.type,
+                      senderName: message.senderUsername,
+                      senderUid: message.senderId,
+                      senderProfilePic: message.senderProfilePic,
                           );
                   },
                 );

@@ -1,14 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:untitled/core/common/loader.dart';
 import 'package:untitled/core/enums/message_enum.dart';
 import 'package:untitled/features/chat/display_message_type.dart';
 
 import '../../../core/colors.dart';
+import '../../community/controller/community_controller.dart';
 
-class MyCommunityMessageCard extends StatelessWidget {
+class MyCommunityMessageCard extends ConsumerWidget {
   final String message;
   final String senderName;
+  final String receiverId;
   final String senderUid;
-  final bool isMods;
   final String senderProfilePic;
   final String date;
   final MessageEnum type;
@@ -19,18 +22,31 @@ class MyCommunityMessageCard extends StatelessWidget {
       required this.date,
       required this.type,
       required this.senderName,
+      required this.receiverId,
       required this.senderUid,
-      required this.isMods,
       required this.senderProfilePic});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return Column(
         crossAxisAlignment: CrossAxisAlignment.end,
         children: [
           Row(
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
+              ref.watch(communityNameProvider(receiverId)).when(
+                  data: (community) => community.mods.contains(senderUid)
+                      ? const Padding(
+                          padding: EdgeInsets.only(right: 5),
+                          child: Icon(
+                            Icons.admin_panel_settings,
+                            color: Colors.blue,
+                            size: 15,
+                          ),
+                        )
+                      : const SizedBox(),
+                  loading: () => const Loader(),
+                  error: (error, stack) => const SizedBox()),
 
               Text(
                 senderName,
