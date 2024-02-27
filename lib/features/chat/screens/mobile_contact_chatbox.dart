@@ -17,7 +17,6 @@ class MobileContactChatScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: appBarColor,
         title: StreamBuilder<UserModel>(
           stream: ref.read(authControllerProvider.notifier).getUserData(uid),
           builder: (context, snapshot) {

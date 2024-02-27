@@ -154,10 +154,6 @@ class ChatRepo {
       type: messageType,
       timeSent: timeSent,
       messageId: messageId,
-      isSeen: false,
-      repliedMessage: '',
-      repliedTo: '',
-      repliedMessageType: MessageEnum.text,
     );
     await _users
         .doc(_auth.currentUser!.uid)
@@ -173,10 +169,6 @@ class ChatRepo {
       type: messageType,
       timeSent: timeSent,
       messageId: messageId,
-      isSeen: false,
-      repliedMessage: '',
-      repliedTo: '',
-      repliedMessageType: MessageEnum.text,
     );
     await _users
         .doc(receiverUserId)
@@ -198,7 +190,12 @@ class ChatRepo {
     try {
       var timeSent = DateTime.now();
       var messageId = const Uuid().v1();
-      UserModel? receiverUserData;
+      UserModel receiverUserData;
+      var receiverData = await _firestore
+          .collection(FirebaseConstants.usersCollection)
+          .doc(receiverUserId)
+          .get();
+      receiverUserData = UserModel.fromMap(receiverData.data()!);
       String contactMsg;
       switch (messageEnum) {
         case MessageEnum.image:
@@ -215,7 +212,7 @@ class ChatRepo {
       }
       _saveDataToContactsSubCollection(
         senderUserData,
-        receiverUserData!,
+        receiverUserData,
         contactMsg,
         timeSent,
         receiverUserId,

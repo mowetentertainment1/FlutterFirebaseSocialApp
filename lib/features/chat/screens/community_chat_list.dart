@@ -74,7 +74,7 @@ class CommunityChatList extends ConsumerWidget {
                             },
                             onTap: () {
                               Routemaster.of(context)
-                                  .push('/chat/${chatContactData.communityId}');
+                                  .push('/community-chat/${chatContactData.communityId}');
                             },
                             child: Padding(
                               padding: const EdgeInsets.only(bottom: 8.0),

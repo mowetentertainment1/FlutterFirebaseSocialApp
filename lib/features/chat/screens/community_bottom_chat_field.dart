@@ -71,10 +71,10 @@ class _CommunityBottomChatFieldState extends ConsumerState<CommunityBottomChatFi
         await _soundRecorder!.startRecorder(
           toFile: path,
         );
+      }
         setState(() {
           isRecording = !isRecording;
         });
-      }
     }
   }
 

@@ -53,7 +53,7 @@ final loggedInRoute = RouteMap(routes: {
       child: MobileContactChatScreen(
           name: routeData.pathParameters['name']!,
           uid: routeData.pathParameters['uid']!)),
-  '/chat/:name': (routeData) => MaterialPage(
+  '/community-chat/:name': (routeData) => MaterialPage(
       child: MobileCommunityChatScreen(
           name: routeData.pathParameters['name']!,
           ),

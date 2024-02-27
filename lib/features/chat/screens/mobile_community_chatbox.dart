@@ -16,7 +16,6 @@ class MobileCommunityChatScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: appBarColor,
         title: StreamBuilder<CommunityModel>(
           stream: ref.read(communityControllerProvider.notifier).getCommunityName(name),
           builder: (context, snapshot) {

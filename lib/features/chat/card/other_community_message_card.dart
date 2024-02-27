@@ -74,7 +74,7 @@ class OtherCommunityMessageCard extends ConsumerWidget {
               child: Card(
                 elevation: 1,
                 shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
-                margin: const EdgeInsets.only(top: 5),
+                margin: const EdgeInsets.only(top: 5, bottom: 5).copyWith(right: 80),
                 child: Stack(
                   children: [
                     Padding(

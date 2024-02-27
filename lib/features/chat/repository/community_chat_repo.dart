@@ -89,8 +89,10 @@ class CommunityChatRepo {
           .doc(receiverCommunityId)
           .get();
       receiverUserData = CommunityModel.fromMap(receiverData.data()!);
-      _saveDataToContactsSubCollection(
-          senderUser, receiverUserData, message, timeSent, receiverCommunityId);
+      // _saveDataToContactsSubCollection(
+      //     senderUser,
+      //     receiverUserData,
+      //     message, timeSent, receiverCommunityId);
       _saveChatToMessagesSubCollection(
         receiverCommunityId: receiverCommunityId,
         text: message,
@@ -108,30 +110,6 @@ class CommunityChatRepo {
       throw e.toString();
     }
   }
-
-  void _saveDataToContactsSubCollection(
-      UserModel senderUserData,
-      CommunityModel receiverCommunityData,
-      String message,
-      DateTime timeSent,
-      String receiverCommunityId) async {
-    var senderChatContact = CommunityChatModel(
-      name: receiverCommunityData.name,
-      timeSent: timeSent,
-      lastMessage: message,
-      senderId: senderUserData.uid,
-      communityId: receiverCommunityData.id,
-      groupPic: receiverCommunityData.avatar,
-      membersUid: receiverCommunityData.members,
-    );
-    await _communities
-        .doc(receiverCommunityData.id)
-        .collection(FirebaseConstants.chatsCollection)
-        .doc(senderUserData.uid)
-        .set(senderChatContact.toMap());
-  }
-
-
   void _saveChatToMessagesSubCollection({
     required String receiverCommunityId,
     required String text,
@@ -142,7 +120,6 @@ class CommunityChatRepo {
     required String senderUsername,
     required String senderProfilePic,
     required String senderUid,
-
   }) async {
     final receiverMessage = CommunityMessageModel(
       senderId: _auth.currentUser!.uid,
@@ -174,31 +151,6 @@ class CommunityChatRepo {
     try {
       var timeSent = DateTime.now();
       var messageId = const Uuid().v1();
-
-      CommunityModel? receiverCommunityData;
-      String contactMsg;
-
-      switch (messageEnum) {
-        case MessageEnum.image:
-          contactMsg = '📷 Photo';
-          break;
-        case MessageEnum.video:
-          contactMsg = '📸 Video';
-          break;
-        case MessageEnum.audio:
-          contactMsg = '🎵 Audio';
-          break;
-        default:
-          contactMsg = 'File';
-      }
-      _saveDataToContactsSubCollection(
-        senderUserData,
-        receiverCommunityData!,
-        contactMsg,
-        timeSent,
-        receiverUserId,
-      );
-
       _saveChatToMessagesSubCollection(
         receiverCommunityId: receiverUserId,
         text: imageUrl,
