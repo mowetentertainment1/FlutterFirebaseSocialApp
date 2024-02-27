@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:fpdart/fpdart.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:restart_app/restart_app.dart';
 import 'package:riverpod/riverpod.dart';
 import 'package:untitled/core/constants/constants.dart';
 import 'package:untitled/core/constants/firebase_constants.dart';
@@ -115,19 +116,12 @@ class AuthRepository {
       return UserModel.fromMap(event.data() as Map<String, dynamic>);
     });
   }
-  // Future<UserModel?> getCurrentUserData() async {
-  //   var userData =
-  //   await _firestore.collection('users').doc(_auth.currentUser?.uid).get();
-  //
-  //   UserModel? user;
-  //   if (userData.data() != null) {
-  //     user = UserModel.fromMap(userData.data()!);
-  //   }
-  //   return user;
-  // }
+
   void logOut() async {
     await _auth.signOut();
     await _googleSignIn.signOut();
+    Restart.restartApp(webOrigin: '/');
+
   }
   void setUserState(bool isOnline) async {
     await _firestore.collection('users').doc(_auth.currentUser!.uid).update({

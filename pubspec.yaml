@@ -60,6 +60,7 @@ dependencies:
   permission_handler: ^11.3.0
   path_provider: ^2.1.2
   audioplayers: ^5.2.1
+  restart_app: ^1.2.1
 
 androidx:
   activity:activity:1:
