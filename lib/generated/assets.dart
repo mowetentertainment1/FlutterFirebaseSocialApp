@@ -4,7 +4,9 @@ class Assets {
 
   static const String cardChatsList = 'lib/features/chat/card/chats_list.dart';
   static const String cardCommunityMessageList = 'lib/features/chat/card/community_message_list.dart';
+  static const String cardMyCommunityMessageCard = 'lib/features/chat/card/my_community_message_card.dart';
   static const String cardMyMessageCard = 'lib/features/chat/card/my_message_card.dart';
+  static const String cardOrtherCommunityMessageCard = 'lib/features/chat/card/other_community_message_card.dart';
   static const String cardSenderMessageCard = 'lib/features/chat/card/sender_message_card.dart';
   static const String chatBottomChatField = 'lib/features/chat/bottom_chat_field.dart';
   static const String chatDisplayMessageType = 'lib/features/chat/display_message_type.dart';

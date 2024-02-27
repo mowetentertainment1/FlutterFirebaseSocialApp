@@ -37,7 +37,6 @@ class CommunityChatList extends ConsumerWidget {
                     itemCount: snapshot.data!.length,
                     itemBuilder: (context, index) {
                       var chatContactData = snapshot.data![index];
-
                       return Column(
                         children: [
                           InkWell(

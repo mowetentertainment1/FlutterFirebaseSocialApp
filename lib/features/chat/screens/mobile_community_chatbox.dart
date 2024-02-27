@@ -5,7 +5,6 @@ import 'package:untitled/features/chat/card/community_message_list.dart';
 import 'package:untitled/model/community_model.dart';
 import '../../../core/colors.dart';
 import '../../community/controller/community_controller.dart';
-import '../card/chats_list.dart';
 import '../controller/chat_controller.dart';
 import 'community_bottom_chat_field.dart';
 
@@ -43,11 +42,14 @@ class MobileCommunityChatScreen extends ConsumerWidget {
                       onTap: () {
                         Routemaster.of(context).push('/r/${user.name}');
                       },
-                      child: Text(
-                        user.name,
-                        style: const TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.bold,
+                      child: SizedBox(
+                        width: 150,
+                        child: Text(
+                          user.name,
+                          style: const TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
                       ),
                     ),

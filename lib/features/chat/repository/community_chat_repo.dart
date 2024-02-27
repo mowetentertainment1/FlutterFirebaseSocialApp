@@ -6,13 +6,12 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:fpdart/fpdart.dart';
 import 'package:untitled/model/community_chat_model.dart';
+import 'package:untitled/model/community_message_model.dart';
 import 'package:untitled/model/user_model.dart';
 import 'package:uuid/uuid.dart';
 
 import '../../../../core/constants/firebase_constants.dart';
 import '../../../../core/enums/message_enum.dart';
-import '../../../../model/chat_contact_model.dart';
-import '../../../../model/message_model.dart';
 import '../../../core/failure.dart';
 import '../../../core/type_defs.dart';
 import '../../../core/utils.dart';
@@ -59,7 +58,7 @@ class CommunityChatRepo {
     });
   }
 
-  Stream<List<MessageModel>> getChatStream(String communityId) {
+  Stream<List<CommunityMessageModel>> getChatStream(String communityId) {
     return _communities
         .doc(communityId)
         .collection(FirebaseConstants.chatsCollection)
@@ -68,9 +67,9 @@ class CommunityChatRepo {
         .orderBy('timeSent', descending: true)
         .snapshots()
         .map((event) {
-      List<MessageModel> messages = [];
+      List<CommunityMessageModel> messages = [];
       for (var doc in event.docs) {
-        messages.add(MessageModel.fromMap(doc.data()));
+        messages.add(CommunityMessageModel.fromMap(doc.data()));
       }
       return messages;
     });
@@ -100,6 +99,8 @@ class CommunityChatRepo {
         username: receiverUserData.name,
         messageType: MessageEnum.text,
         senderUsername: senderUser.name,
+        senderProfilePic: senderUser.profilePic,
+        senderUid: senderUser.uid,
       );
     } on FirebaseException catch (e) {
       throw e.message!;
@@ -130,6 +131,22 @@ class CommunityChatRepo {
         .set(senderChatContact.toMap());
   }
 
+Stream<bool> checkUserIsModerator(String communityId, String userId){
+    return _firestore
+        .collection(FirebaseConstants.communitiesCollection)
+        .doc(communityId)
+        .snapshots()
+        .map((event) {
+          if (event.data()!.containsKey('mods')) {
+            List<String> moderators = event.data()!['mods'];
+            if (moderators.contains(userId)) {
+              return true;
+            }
+          }
+          return false;
+    });
+}
+
   void _saveChatToMessagesSubCollection({
     required String receiverCommunityId,
     required String text,
@@ -138,6 +155,9 @@ class CommunityChatRepo {
     required String username,
     required MessageEnum messageType,
     required String senderUsername,
+    required String senderProfilePic,
+    required String senderUid,
+
   }) async {
     // final message = MessageModel(
     //   senderId: _auth.currentUser!.uid,
@@ -158,17 +178,23 @@ class CommunityChatRepo {
     //     .collection(FirebaseConstants.messagesCollection)
     //     .doc(messageId)
     //     .set(message.toMap());
-    final receiverMessage = MessageModel(
+    Stream<bool> isModerator =
+    checkUserIsModerator(receiverCommunityId, senderUid);
+    bool isMod = false;
+    isModerator.listen((event) {
+      isMod = event;
+    });
+
+    final receiverMessage = CommunityMessageModel(
       senderId: _auth.currentUser!.uid,
       receiverId: receiverCommunityId,
       text: text,
       type: messageType,
       timeSent: timeSent,
       messageId: messageId,
-      isSeen: false,
-      repliedMessage: '',
-      repliedTo: senderUsername,
-      repliedMessageType: MessageEnum.text,
+      senderProfilePic: senderProfilePic,
+      senderUsername: senderUsername,
+      isModerator: isMod,
     );
     await _communities
         .doc(receiverCommunityId)
@@ -223,6 +249,8 @@ class CommunityChatRepo {
         username: senderUserData.name,
         messageType: messageEnum,
         senderUsername: senderUserData.name,
+        senderProfilePic: senderUserData.profilePic,
+        senderUid: senderUserData.uid,
       );
     } catch (e) {
       showSnackBar(context, e.toString());

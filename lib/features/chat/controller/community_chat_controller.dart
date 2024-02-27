@@ -3,13 +3,13 @@ import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:untitled/features/chat/repository/community_chat_repo.dart';
+import 'package:untitled/model/community_message_model.dart';
 import 'package:uuid/uuid.dart';
 
 import '../../../../core/providers/storage_repository_provider.dart';
 import '../../../../core/utils.dart';
 import '../../../core/enums/message_enum.dart';
 import '../../../model/community_chat_model.dart';
-import '../../../model/message_model.dart';
 import '../../auth/controller/auth_controller.dart';
 
 final communityChatControllerProvider =
@@ -23,7 +23,7 @@ final communityChatControllerProvider =
   );
 });
 final communityChatStream =
-    StreamProvider.family<List<MessageModel>, String>((ref, receiverUserId) {
+    StreamProvider.family<List<CommunityMessageModel>, String>((ref, receiverUserId) {
   return ref.read(communityChatControllerProvider.notifier).getChatStream(receiverUserId);
 });
 
@@ -62,7 +62,7 @@ class CommunityChatController extends StateNotifier<bool> {
     }
   }
 
-  Stream<List<MessageModel>> getChatStream(String receiverUserId) {
+  Stream<List<CommunityMessageModel>> getChatStream(String receiverUserId) {
     return _communityChatRepo.getChatStream(receiverUserId);
   }
 
