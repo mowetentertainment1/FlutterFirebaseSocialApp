@@ -10,7 +10,6 @@ class NotificationModel {
   final NotificationEnum type;
   final DateTime createdAt;
 
-//<editor-fold desc="Data Methods">
   const NotificationModel({
     required this.profilePic,
     required this.name,
@@ -83,7 +82,7 @@ class NotificationModel {
       'id': id,
       'isRead': isRead,
       'type': type.type,
-      'createdAt': createdAt,
+      'createdAt': createdAt.millisecondsSinceEpoch,
     };
   }
 
@@ -96,7 +95,7 @@ class NotificationModel {
       id: map['id'] as String,
       isRead: map['isRead'] as bool,
       type: (map['type'] as String).toEnum(),
-      createdAt: map['createdAt'] as DateTime,
+      createdAt: DateTime.fromMillisecondsSinceEpoch(map['createdAt']),
     );
   }
 }

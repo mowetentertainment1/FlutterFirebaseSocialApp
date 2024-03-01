@@ -21,6 +21,7 @@ class Assets {
   static const String controllerChatController = 'lib/features/chat/controller/chat_controller.dart';
   static const String controllerCommunityChatController = 'lib/features/chat/controller/community_chat_controller.dart';
   static const String controllerCommunityController = 'lib/features/community/controller/community_controller.dart';
+  static const String controllerNotificationController = 'lib/features/notification/controller/notification_controller.dart';
   static const String controllerPostController = 'lib/features/post/controller/post_controller.dart';
   static const String controllerUserProfileController = 'lib/features/home/user_profile/controller/user_profile_controller.dart';
   static const String coreColors = 'lib/core/colors.dart';

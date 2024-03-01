@@ -122,9 +122,11 @@ class PostController extends StateNotifier<bool> {
               text: '${user.name} posted in ${selectedCommunity.name}',
               isRead: false,
             );
-            _notificationRepo.sendNotification(
-              notification: notification,
-            );
+            if (user.uid != uid) {
+              _notificationRepo.sendNotification(
+                notification: notification,
+              );
+            }
           }
         },
       );
@@ -178,9 +180,12 @@ class PostController extends StateNotifier<bool> {
           text: '${user.name} posted in ${selectedCommunity.name}',
           isRead: false,
         );
-        _notificationRepo.sendNotification(
-          notification: notification,
-        );
+        if (user.uid != uid) {
+          _notificationRepo.sendNotification(
+            notification: notification,
+          );
+
+        }
       }
     });
   }
@@ -236,9 +241,12 @@ class PostController extends StateNotifier<bool> {
             text: '${user.name} posted in ${selectedCommunity.name}',
             isRead: false,
           );
-          _notificationRepo.sendNotification(
-            notification: notification,
-          );
+          if (user.uid != uid) {
+            _notificationRepo.sendNotification(
+              notification: notification,
+            );
+
+          }
         }
       });
     });
@@ -271,7 +279,7 @@ class PostController extends StateNotifier<bool> {
       name: post.id,
       createdAt: DateTime.now(),
       uid: post.userUid,
-      profilePic: '',
+      profilePic: post.userProfilePic,
       text: '${user.name} upvoted your post',
       isRead: false,
     );
@@ -350,7 +358,7 @@ class PostController extends StateNotifier<bool> {
         name: post.id,
         createdAt: DateTime.now(),
         uid: post.userUid,
-        profilePic: '',
+        profilePic: post.userProfilePic,
         text: '${user.name} commented on your post',
         isRead: false,
       );

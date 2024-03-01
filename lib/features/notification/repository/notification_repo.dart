@@ -38,11 +38,13 @@ class NotificationRepo {
       return left(Failure(e.toString()));
     }
   }
-  Stream<List<QueryDocumentSnapshot>> getNotifications() {
-    return _firestore
-        .collection('notifications')
-        .where('uid', isEqualTo: _auth.currentUser!.uid)
+  Stream<List<NotificationModel>> getNotifications() {
+    return _users
+        .doc(_auth.currentUser!.uid)
+        .collection(FirebaseConstants.notificationsCollection)
         .snapshots()
-        .map((event) => event.docs);
+        .map((event) => event.docs
+            .map((e) => NotificationModel.fromMap(e.data()))
+            .toList());
   }
 }
