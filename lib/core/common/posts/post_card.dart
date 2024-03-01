@@ -162,7 +162,7 @@ class PostCard extends ConsumerWidget {
                                           loading: () =>
                                               const CircularProgressIndicator(),
                                           error: (e, s) => const Text('Error')),
-                                  if (post.uid == user.uid)
+                                  if (post.userUid == user.uid)
                                     PopupMenuButton(
                                         itemBuilder: (context) => [
                                               const PopupMenuItem(

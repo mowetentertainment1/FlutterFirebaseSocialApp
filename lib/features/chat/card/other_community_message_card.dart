@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:untitled/core/common/loader.dart';
-import '../../../core/enums/message_enum.dart';
+import '../../../core/enums/message_enums.dart';
 import '../display_message_type.dart';
 import '../../community/controller/community_controller.dart';
 

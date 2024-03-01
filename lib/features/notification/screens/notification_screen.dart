@@ -3,13 +3,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-import '../../core/common/loader.dart';
-import '../../theme/palette.dart';
-import '../auth/controller/auth_controller.dart';
-import '../home/delegates/search_delegates.dart';
-import '../home/drawers/community_list_drawer.dart';
-import '../home/drawers/profile_drawer.dart';
-import '../post/controller/post_controller.dart';
+import '../../../core/common/loader.dart';
+import '../../../theme/palette.dart';
+import '../../auth/controller/auth_controller.dart';
+import '../../home/delegates/search_delegates.dart';
+import '../../home/drawers/community_list_drawer.dart';
+import '../../home/drawers/profile_drawer.dart';
+import '../../post/controller/post_controller.dart';
 
 class NotificationScreen extends ConsumerWidget {
   const NotificationScreen({super.key});

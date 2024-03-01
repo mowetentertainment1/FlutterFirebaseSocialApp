@@ -72,6 +72,10 @@ class UserProfileScreen extends ConsumerWidget {
                                       Text(
                                         'Karma: ${user.karma}',
                                         style: const TextStyle(fontSize: 12),
+                                      ),const SizedBox(height: 5),
+                                      Text(
+                                        'Follower: ${user.followers.length}',
+                                        style: const TextStyle(fontSize: 12),
                                       ),
                                       const SizedBox(height: 10),
                                     ],

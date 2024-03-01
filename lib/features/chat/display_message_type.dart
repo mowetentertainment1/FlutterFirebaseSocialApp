@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:video_player/video_player.dart';
 
 import '../../core/common/video_player_view.dart';
-import '../../core/enums/message_enum.dart';
+import '../../core/enums/message_enums.dart';
 
 class DisplayMessageType extends StatefulWidget {
   final String message;

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:untitled/core/enums/message_enum.dart';
+import 'package:untitled/core/enums/message_enums.dart';
 import 'package:untitled/features/chat/display_message_type.dart';
 
 import '../../../core/colors.dart';

@@ -61,38 +61,52 @@ class PostRepo {
     }
   }
 
-  void upVotePost(PostModel post, String userId) async {
-    if (post.downvotes.contains(userId)) {
-      _posts.doc(post.id).update({
-        'downvotes': FieldValue.arrayRemove([userId]),
-      });
-    }
+  FutureVoid upVotePost(PostModel post, String userId) async {
+    try {
+      if (post.downvotes.contains(userId)) {
+        _posts.doc(post.id).update({
+          'downvotes': FieldValue.arrayRemove([userId]),
+        });
+      }
 
-    if (post.upvotes.contains(userId)) {
-      _posts.doc(post.id).update({
-        'upvotes': FieldValue.arrayRemove([userId]),
-      });
-    } else {
-      _posts.doc(post.id).update({
-        'upvotes': FieldValue.arrayUnion([userId]),
-      });
+      if (post.upvotes.contains(userId)) {
+        _posts.doc(post.id).update({
+          'upvotes': FieldValue.arrayRemove([userId]),
+        });
+      } else {
+        _posts.doc(post.id).update({
+          'upvotes': FieldValue.arrayUnion([userId]),
+        });
+      }
+      return right(unit);
+    } on FirebaseException catch (e) {
+      throw e.message!;
+    } catch (e) {
+      return left(Failure(e.toString()));
     }
-}
-  void downVotePost(PostModel post, String userId) async {
-    if (post.upvotes.contains(userId)) {
-      _posts.doc(post.id).update({
-        'upvotes': FieldValue.arrayRemove([userId]),
-      });
-    }
+  }
+  FutureVoid downVotePost(PostModel post, String userId) async {
+    try {
+      if (post.upvotes.contains(userId)) {
+        _posts.doc(post.id).update({
+          'upvotes': FieldValue.arrayRemove([userId]),
+        });
+      }
 
-    if (post.downvotes.contains(userId)) {
-      _posts.doc(post.id).update({
-        'downvotes': FieldValue.arrayRemove([userId]),
-      });
-    } else {
-      _posts.doc(post.id).update({
-        'downvotes': FieldValue.arrayUnion([userId]),
-      });
+      if (post.downvotes.contains(userId)) {
+        _posts.doc(post.id).update({
+          'downvotes': FieldValue.arrayRemove([userId]),
+        });
+      } else {
+        _posts.doc(post.id).update({
+          'downvotes': FieldValue.arrayUnion([userId]),
+        });
+      }
+      return right(unit);
+    } on FirebaseException catch (e) {
+      throw e.message!;
+    } catch (e) {
+      return left(Failure(e.toString()));
     }
   }
   Stream<PostModel> getPostById(String postId) {

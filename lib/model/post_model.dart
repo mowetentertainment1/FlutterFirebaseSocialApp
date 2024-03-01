@@ -7,11 +7,14 @@ class PostModel {
   final String linkVideo;
   final String communityName;
   final String communityProfilePic;
+
   final List<String> upvotes;
   final List<String> downvotes;
   final int commentCount;
   final String username;
-  final String uid;
+  final String userUid;
+  final String userProfilePic;
+
   final String type;
   final DateTime createdAt;
   final List<String> awards;
@@ -26,7 +29,8 @@ class PostModel {
     required this.downvotes,
     required this.commentCount,
     required this.username,
-    required this.uid,
+    required this.userUid,
+    required this.userProfilePic,
     required this.type,
     required this.createdAt,
     required this.awards,
@@ -43,7 +47,8 @@ class PostModel {
     List<String>? downvotes,
     int? commentCount,
     String? username,
-    String? uid,
+    String? userUid,
+    String? userProfilePic,
     String? type,
     DateTime? createdAt,
     List<String>? awards,
@@ -59,7 +64,8 @@ class PostModel {
       downvotes: downvotes ?? this.downvotes,
       commentCount: commentCount ?? this.commentCount,
       username: username ?? this.username,
-      uid: uid ?? this.uid,
+      userUid: username ?? this.userUid,
+      userProfilePic: username ?? this.userProfilePic,
       type: type ?? this.type,
       createdAt: createdAt ?? this.createdAt,
       awards: awards ?? this.awards,
@@ -78,7 +84,8 @@ class PostModel {
       'downvotes': downvotes,
       'commentCount': commentCount,
       'username': username,
-      'uid': uid,
+      'userUid': userUid,
+      'userProfilePic': userProfilePic,
       'type': type,
       'createdAt': createdAt.millisecondsSinceEpoch,
       'awards': awards,
@@ -97,7 +104,8 @@ class PostModel {
       downvotes: List<String>.from(map['downvotes']),
       commentCount: map['commentCount']?.toInt() ?? 0,
       username: map['username'] ?? '',
-      uid: map['uid'] ?? '',
+      userUid: map['userUid'] ?? '',
+      userProfilePic: map['userProfilePic'] ?? '',
       type: map['type'] ?? '',
       createdAt: DateTime.fromMillisecondsSinceEpoch(map['createdAt']),
       awards: List<String>.from(map['awards']),
@@ -106,13 +114,12 @@ class PostModel {
 
   @override
   String toString() {
-    return 'Post(id: $id, title: $title, linkImage: $linkImage, linkVideo: $linkVideo, communityName: $communityName, communityProfilePic: $communityProfilePic, upvotes: $upvotes, downvotes: $downvotes, commentCount: $commentCount, username: $username, uid: $uid, type: $type, createdAt: $createdAt, awards: $awards)';
+    return 'Post(id: $id, title: $title, linkImage: $linkImage, linkVideo: $linkVideo, communityName: $communityName, communityProfilePic: $communityProfilePic, upvotes: $upvotes, downvotes: $downvotes, commentCount: $commentCount, username: $username, userUid: $userUid, userProfilePic: $userProfilePic, type: $type, createdAt: $createdAt, awards: $awards)';
   }
 
   @override
   bool operator ==(Object other) {
     if (identical(this, other)) return true;
-
     return other is PostModel &&
         other.id == id &&
         other.title == title &&
@@ -124,7 +131,8 @@ class PostModel {
         listEquals(other.downvotes, downvotes) &&
         other.commentCount == commentCount &&
         other.username == username &&
-        other.uid == uid &&
+        other.userUid == userUid &&
+        other.userProfilePic == userProfilePic &&
         other.type == type &&
         other.createdAt == createdAt &&
         listEquals(other.awards, awards);
@@ -142,7 +150,8 @@ class PostModel {
     downvotes.hashCode ^
     commentCount.hashCode ^
     username.hashCode ^
-    uid.hashCode ^
+    userUid.hashCode ^
+    userProfilePic.hashCode ^
     type.hashCode ^
     createdAt.hashCode ^
     awards.hashCode;

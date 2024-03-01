@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../../core/enums/message_enum.dart';
+import '../../../core/enums/message_enums.dart';
 import '../display_message_type.dart';
 
 class SenderMessageCard extends StatelessWidget {

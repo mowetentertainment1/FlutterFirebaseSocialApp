@@ -5,7 +5,7 @@ import 'package:flutter_sound/public/flutter_sound_recorder.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
 import '../../core/colors.dart';
-import '../../core/enums/message_enum.dart';
+import '../../core/enums/message_enums.dart';
 import '../../core/utils.dart';
 import '../auth/controller/auth_controller.dart';
 import 'controller/chat_controller.dart';

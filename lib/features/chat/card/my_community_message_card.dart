@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:untitled/core/common/loader.dart';
-import 'package:untitled/core/enums/message_enum.dart';
+import 'package:untitled/core/enums/message_enums.dart';
 import 'package:untitled/features/chat/display_message_type.dart';
 
 import '../../../core/colors.dart';

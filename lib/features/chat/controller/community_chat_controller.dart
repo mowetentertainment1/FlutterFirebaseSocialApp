@@ -8,7 +8,7 @@ import 'package:uuid/uuid.dart';
 
 import '../../../../core/providers/storage_repository_provider.dart';
 import '../../../../core/utils.dart';
-import '../../../core/enums/message_enum.dart';
+import '../../../core/enums/message_enums.dart';
 import '../../../model/community_chat_model.dart';
 import '../../auth/controller/auth_controller.dart';
 

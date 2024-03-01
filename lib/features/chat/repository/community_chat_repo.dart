@@ -11,7 +11,7 @@ import 'package:untitled/model/user_model.dart';
 import 'package:uuid/uuid.dart';
 
 import '../../../../core/constants/firebase_constants.dart';
-import '../../../../core/enums/message_enum.dart';
+import '../../../../core/enums/message_enums.dart';
 import '../../../core/failure.dart';
 import '../../../core/type_defs.dart';
 import '../../../core/utils.dart';
@@ -89,10 +89,6 @@ class CommunityChatRepo {
           .doc(receiverCommunityId)
           .get();
       receiverUserData = CommunityModel.fromMap(receiverData.data()!);
-      // _saveDataToContactsSubCollection(
-      //     senderUser,
-      //     receiverUserData,
-      //     message, timeSent, receiverCommunityId);
       _saveChatToMessagesSubCollection(
         receiverCommunityId: receiverCommunityId,
         text: message,

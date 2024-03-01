@@ -1,5 +1,5 @@
 
-import '../core/enums/message_enum.dart';
+import '../core/enums/message_enums.dart';
 
 class MessageModel {
   final String senderId;

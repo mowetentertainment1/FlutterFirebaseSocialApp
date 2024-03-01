@@ -1,4 +1,4 @@
-import '../core/enums/message_enum.dart';
+import '../core/enums/message_enums.dart';
 
 class CommunityMessageModel {
   final String senderId;

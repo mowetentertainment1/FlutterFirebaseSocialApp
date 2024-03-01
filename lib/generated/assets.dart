@@ -6,7 +6,7 @@ class Assets {
   static const String cardCommunityMessageList = 'lib/features/chat/card/community_message_list.dart';
   static const String cardMyCommunityMessageCard = 'lib/features/chat/card/my_community_message_card.dart';
   static const String cardMyMessageCard = 'lib/features/chat/card/my_message_card.dart';
-  static const String cardOrtherCommunityMessageCard = 'lib/features/chat/card/other_community_message_card.dart';
+  static const String cardOtherCommunityMessageCard = 'lib/features/chat/card/other_community_message_card.dart';
   static const String cardSenderMessageCard = 'lib/features/chat/card/sender_message_card.dart';
   static const String chatBottomChatField = 'lib/features/chat/bottom_chat_field.dart';
   static const String chatDisplayMessageType = 'lib/features/chat/display_message_type.dart';
@@ -31,7 +31,8 @@ class Assets {
   static const String drawersCommunityListDrawer = 'lib/features/home/drawers/community_list_drawer.dart';
   static const String drawersProfileDrawer = 'lib/features/home/drawers/profile_drawer.dart';
   static const String enumsEnums = 'lib/core/enums/enums.dart';
-  static const String enumsMessageEnum = 'lib/core/enums/message_enum.dart';
+  static const String enumsMessageEnums = 'lib/core/enums/message_enums.dart';
+  static const String enumsNotificationEnums = 'lib/core/enums/notification_enums.dart';
   static const String feedFeedScreen = 'lib/features/feed/feed_screen.dart';
   static const String generatedAssets = 'lib/generated/assets.dart';
   static const String imagesGoogle = 'assets/images/google.png';
@@ -46,9 +47,9 @@ class Assets {
   static const String modelCommunityMessageModel = 'lib/model/community_message_model.dart';
   static const String modelCommunityModel = 'lib/model/community_model.dart';
   static const String modelMessageModel = 'lib/model/message_model.dart';
+  static const String modelNotificationModel = 'lib/model/notification_model.dart';
   static const String modelPostModel = 'lib/model/post_model.dart';
   static const String modelUserModel = 'lib/model/user_model.dart';
-  static const String notificationNotificationScreen = 'lib/features/notification/notification_screen.dart';
   static const String postsPostCard = 'lib/core/common/posts/post_card.dart';
   static const String providersFirebaseProviders = 'lib/core/providers/firebase_providers.dart';
   static const String providersStorageRepositoryProvider = 'lib/core/providers/storage_repository_provider.dart';
@@ -56,6 +57,7 @@ class Assets {
   static const String repositoryChatRepo = 'lib/features/chat/repository/chat_repo.dart';
   static const String repositoryCommunityChatRepo = 'lib/features/chat/repository/community_chat_repo.dart';
   static const String repositoryCommunityRepo = 'lib/features/community/repository/community_repo.dart';
+  static const String repositoryNotificationRepo = 'lib/features/notification/repository/notification_repo.dart';
   static const String repositoryPostRepo = 'lib/features/post/repository/post_repo.dart';
   static const String repositoryUserProfileRepo = 'lib/features/home/user_profile/repository/user_profile_repo.dart';
   static const String responsiveResponsive = 'lib/responsive/responsive.dart';
@@ -75,6 +77,7 @@ class Assets {
   static const String screensMobileCommunityChatbox = 'lib/features/chat/screens/mobile_community_chatbox.dart';
   static const String screensMobileContactChatbox = 'lib/features/chat/screens/mobile_contact_chatbox.dart';
   static const String screensModToolScreen = 'lib/features/community/screens/mod_tool_screen.dart';
+  static const String screensNotificationScreen = 'lib/features/notification/screens/notification_screen.dart';
   static const String screensSelectContactScreen = 'lib/features/chat/screens/select_contact_screen.dart';
   static const String screensUserProfileScreen = 'lib/features/home/user_profile/screens/user_profile_screen.dart';
   static const String themePalette = 'lib/theme/palette.dart';

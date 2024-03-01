@@ -9,7 +9,7 @@ import 'package:untitled/model/user_model.dart';
 import 'package:uuid/uuid.dart';
 
 import '../../../../core/constants/firebase_constants.dart';
-import '../../../../core/enums/message_enum.dart';
+import '../../../../core/enums/message_enums.dart';
 import '../../../../model/chat_contact_model.dart';
 import '../../../../model/message_model.dart';
 import '../../../core/failure.dart';
