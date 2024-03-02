@@ -1,3 +1,5 @@
+import 'dart:ffi';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -27,9 +29,9 @@ class NotificationRepo {
   }) async {
     try {
       return right( _users
-          .doc(notification.id)
+          .doc(notification.uid)
           .collection(FirebaseConstants.notificationsCollection)
-          .doc(notification.name)
+          .doc(notification.id)
           .set(notification.toMap()),
       );
     } on FirebaseException catch (e) {
@@ -46,5 +48,47 @@ class NotificationRepo {
         .map((event) => event.docs
             .map((e) => NotificationModel.fromMap(e.data()))
             .toList());
+  }
+  void markAsRead(String id) {
+    _users
+        .doc(_auth.currentUser!.uid)
+        .collection(FirebaseConstants.notificationsCollection)
+        .doc(id)
+        .update({'isRead': true});
+  }
+  void deleteAllNotifications() {
+    _users
+        .doc(_auth.currentUser!.uid)
+        .collection(FirebaseConstants.notificationsCollection)
+        .get()
+        .then((value) => value.docs.forEach((element) {
+              element.reference.delete();
+            }));
+  }
+  void readAllNotifications() {
+    _users
+        .doc(_auth.currentUser!.uid)
+        .collection(FirebaseConstants.notificationsCollection)
+        .get()
+        .then((value) => value.docs.forEach((element) {
+              element.reference.update({'isRead': true});
+            }));
+  }
+  Future<void> checkNewNotifications(String lastCheckedTimestamp) async {
+    QuerySnapshot querySnapshot = await _users
+        .doc(_auth.currentUser!.uid)
+        .collection(FirebaseConstants.notificationsCollection)
+        .where('createAt', isGreaterThan: lastCheckedTimestamp)
+        .get();
+    querySnapshot.docs.forEach((doc) {
+    });
+  }
+  Stream<int> getUnreadNotificationsCount() {
+    return _users
+        .doc(_auth.currentUser!.uid)
+        .collection(FirebaseConstants.notificationsCollection)
+        .where('isRead', isEqualTo: false)
+        .snapshots()
+        .map((event) => event.docs.length);
   }
 }

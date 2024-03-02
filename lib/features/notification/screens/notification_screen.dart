@@ -3,9 +3,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:routemaster/routemaster.dart';
 
 import '../../../core/common/loader.dart';
-import '../../../core/enums/notification_enums.dart';
 import '../../../theme/palette.dart';
 import '../../auth/controller/auth_controller.dart';
 import '../../home/delegates/search_delegates.dart';
@@ -15,7 +15,7 @@ import '../../post/controller/post_controller.dart';
 import '../controller/notification_controller.dart';
 
 class NotificationScreen extends ConsumerWidget {
-  const NotificationScreen({super.key});
+  const NotificationScreen({Key? key});
 
   void displayDrawer(BuildContext context) {
     Scaffold.of(context).openDrawer();
@@ -33,117 +33,87 @@ class NotificationScreen extends ConsumerWidget {
     return isLoading
         ? const Loader()
         : Scaffold(
-            drawer: const CommunityListDrawer(),
-            endDrawer: const ProfileDrawer(),
             appBar: AppBar(
-              leading: Builder(builder: (context) {
-                return IconButton(
-                  icon: const Icon(Icons.menu),
-                  onPressed: () => displayDrawer(context),
-                );
-              }),
               title: Text('Notifications', style: GoogleFonts.poppins()),
               actions: [
-                IconButton(
-                  icon: const Icon(CupertinoIcons.search),
-                  onPressed: () {
-                    showSearch(
-                        context: context, delegate: SearchCommunityScreen(ref: ref));
-                  },
-                ),
-                Builder(builder: (context) {
-                  return IconButton(
-                    icon: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 5.0),
-                      child: CircleAvatar(
-                        backgroundImage: NetworkImage(user.profilePic),
-                      ),
+                PopupMenuButton(
+                  icon: const Icon(Icons.more_horiz_outlined),
+                  itemBuilder: (context) => [
+                    const PopupMenuItem(
+                      value: 'readAll',
+                      child: Text('Read all', style: TextStyle(color: Colors.green)),
                     ),
-                    onPressed: () => displayEndDrawer(context),
-                  );
-                })
+                    const PopupMenuItem(
+                      value: 'deleteAll',
+                      child: Text('Delete all', style: TextStyle(color: Colors.red)),
+                    ),
+                  ],
+                  onSelected: (value) {
+                    if (value == 'readAll') {
+                      ref.read(notificationController.notifier).readAllNotifications();
+                    } else {
+                      ref.read(notificationController.notifier).deleteAllNotifications();
+                    }
+                  },
+                )
               ],
             ),
             body: ref.watch(notificationStream).when(
                   data: (notifications) {
-                    return notifications.isEmpty
-                        ? const Center(
-                            child: Text(
-                              'No notifications yet',
-                              style: TextStyle(
-                                fontSize: 20,
+                    if (notifications.isEmpty) {
+                      return const Center(
+                        child: Text(
+                          'No notifications yet',
+                          style: TextStyle(
+                            fontSize: 20,
+                          ),
+                        ),
+                      );
+                    }
+                    return ListView.builder(
+                      itemCount: notifications.length,
+                      itemBuilder: (context, index) {
+                        final notification = notifications[index];
+                        return Container(
+                          color: notification.isRead
+                              ? null
+                              : currentTheme.colorScheme.background,
+                          child: GestureDetector(
+                            onTap: () {
+                              ref
+                                  .read(notificationController.notifier)
+                                  .markAsRead(notification.id);
+                              Routemaster.of(context)
+                                  .push('/post/${notification.id}/comments');
+                            },
+                            child: Padding(
+                              padding: const EdgeInsets.symmetric(vertical: 8.0),
+                              child: ListTile(
+                                leading: CircleAvatar(
+                                  backgroundImage: NetworkImage(notification.profilePic),
+                                ),
+                                title: Text(
+                                  notification.text,
+                                  style: GoogleFonts.poppins(
+                                      color: notification.isRead
+                                          ? currentTheme.colorScheme.outline
+                                          : currentTheme.colorScheme.inverseSurface),
+                                ),
+                                trailing: Text(
+                                  formatDate(
+                                    notification.createdAt,
+                                    [HH, ':', nn],
+                                  ),
+                                  style: GoogleFonts.poppins(
+                                      color:
+                                          notification.isRead ? null : Colors.blueAccent),
+                                ),
                               ),
                             ),
-                          )
-                        : ListView.builder(
-                            itemCount: notifications.length,
-                            itemBuilder: (context, index) {
-                              return notifications[index].type == NotificationEnum.upvote
-                                  ? Padding(
-                                      padding: const EdgeInsets.symmetric(vertical: 8.0),
-                                      child: ListTile(
-                                        leading: CircleAvatar(
-                                          backgroundImage: NetworkImage(
-                                              notifications[index].profilePic),
-                                        ),
-                                        title: Text(
-                                          notifications[index].text,
-                                          style: GoogleFonts.poppins(),
-                                        ),
-                                        trailing: Text(
-                                          formatDate(
-                                            notifications[index].createdAt,
-                                            [HH, ':', nn],
-                                          ),
-                                          style: GoogleFonts.poppins(),
-                                        ),
-                                      ),
-                                    )
-                                  : notifications[index].type == NotificationEnum.comment
-                                      ? Padding(
-                                          padding:
-                                              const EdgeInsets.symmetric(vertical: 8.0),
-                                          child: ListTile(
-                                            leading: CircleAvatar(
-                                              backgroundImage: NetworkImage(
-                                                  notifications[index].profilePic),
-                                            ),
-                                            title: Text(
-                                              notifications[index].text,
-                                              style: GoogleFonts.poppins(),
-                                            ),
-                                            trailing: Text(
-                                              formatDate(
-                                                notifications[index].createdAt,
-                                                [HH, ':', nn],
-                                              ),
-                                              style: GoogleFonts.poppins(),
-                                            ),
-                                          ),
-                                        )
-                                      : Padding(
-                                          padding:
-                                              const EdgeInsets.symmetric(vertical: 8.0),
-                                          child: ListTile(
-                                            leading: CircleAvatar(
-                                              backgroundImage: NetworkImage(
-                                                  notifications[index].profilePic),
-                                            ),
-                                            title: Text(
-                                              notifications[index].text,
-                                              style: GoogleFonts.poppins(),
-                                            ),
-                                            trailing: Text(
-                                              formatDate(
-                                                notifications[index].createdAt,
-                                                [HH, ':', nn],
-                                              ),
-                                              style: GoogleFonts.poppins(),
-                                            ),
-                                          ),
-                                        );
-                            },
-                          );
+                          ),
+                        );
+                      },
+                    );
                   },
                   loading: () => const Loader(),
                   error: (error, stack) {

@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../core/constants/constants.dart';
 import '../../../theme/palette.dart';
 import '../../auth/controller/auth_controller.dart';
+import '../../notification/controller/notification_controller.dart';
 
 class HomeScreen extends ConsumerStatefulWidget {
   const HomeScreen({super.key});
@@ -12,7 +13,8 @@ class HomeScreen extends ConsumerStatefulWidget {
   ConsumerState<ConsumerStatefulWidget> createState() => _HomeScreenState();
 }
 
-class _HomeScreenState extends ConsumerState<HomeScreen> with WidgetsBindingObserver, TickerProviderStateMixin {
+class _HomeScreenState extends ConsumerState<HomeScreen>
+    with WidgetsBindingObserver, TickerProviderStateMixin {
   late TabController tabBarController;
   @override
   void initState() {
@@ -47,6 +49,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> with WidgetsBindingObse
         break;
     }
   }
+
   int _page = 0;
 
   void onPageChange(int index) {
@@ -61,38 +64,75 @@ class _HomeScreenState extends ConsumerState<HomeScreen> with WidgetsBindingObse
     final currentTheme = ref.watch(themeNotifierProvider);
     final isGuest = !user!.isAuthenticated;
     return Scaffold(
-        body: Constants.tabWidgets[_page],
-        bottomNavigationBar: isGuest
-            ? null
-            : CupertinoTabBar(
-                height: 60,
-                currentIndex: _page,
-                activeColor: currentTheme.iconTheme.color,
-                backgroundColor: currentTheme.colorScheme.background,
-                border: const Border(
-                  top: BorderSide(
-                    color: Colors.grey,
-                    width: 0.5,
-                  ),
+      body: Constants.tabWidgets[_page],
+      bottomNavigationBar: isGuest
+          ? null
+          : CupertinoTabBar(
+              height: 60,
+              currentIndex: _page,
+              activeColor: currentTheme.iconTheme.color,
+              backgroundColor: currentTheme.colorScheme.background,
+              border: const Border(
+                top: BorderSide(
+                  color: Colors.grey,
+                  width: 0.5,
                 ),
-                items: const [
-                  BottomNavigationBarItem(
-                      icon: Icon(CupertinoIcons.home), label: 'Home'),
-                  BottomNavigationBarItem(
-                    icon: Icon(CupertinoIcons.add),
-                    label: 'Create',
-                  ),
-                  BottomNavigationBarItem(
-                    icon: Icon(CupertinoIcons.chat_bubble),
-                    label: 'Chat',
-                  ),
-                  BottomNavigationBarItem(
-                    icon: Icon(CupertinoIcons.bell),
-                    label: 'Notification',
-                  ),
-                ],
-                onTap: onPageChange,
               ),
-      );
+              items: [
+                const BottomNavigationBarItem(
+                  icon: Icon(CupertinoIcons.home),
+                  label: 'Home',
+                ),
+                const BottomNavigationBarItem(
+                  icon: Icon(CupertinoIcons.add),
+                  label: 'Create',
+                ),
+                const BottomNavigationBarItem(
+                  icon: Icon(CupertinoIcons.chat_bubble),
+                  label: 'Chat',
+                ),
+                BottomNavigationBarItem(
+                    icon: ref.watch(unreadNotificationsCount).when(
+                          data: (count) {
+                            return count == 0
+                                ? const Icon(CupertinoIcons.bell)
+                                : Stack(
+                                    alignment: Alignment.center,
+                                    children: [
+                                      const Icon(CupertinoIcons.bell),
+                                      Positioned(
+                                        right: 0,
+                                        top: 0,
+                                        child: Container(
+                                          padding: const EdgeInsets.all(1),
+                                          decoration: BoxDecoration(
+                                            color: Colors.red,
+                                            borderRadius: BorderRadius.circular(6),
+                                          ),
+                                          constraints: const BoxConstraints(
+                                            minWidth: 12,
+                                            minHeight: 12,
+                                          ),
+                                          child: Text(
+                                            count.toString(),
+                                            style: const TextStyle(
+                                              color: Colors.white,
+                                              fontSize: 8,
+                                            ),
+                                            textAlign: TextAlign.center,
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  );
+                          },
+                          loading: () => const Icon(CupertinoIcons.bell),
+                          error: (error, stackTrace) => const Icon(CupertinoIcons.bell),
+                        ),
+                    label: 'Notification'),
+              ],
+              onTap: onPageChange,
+            ),
+    );
   }
 }

@@ -15,10 +15,8 @@ import '../../../features/auth/controller/auth_controller.dart';
 import '../../../features/post/controller/post_controller.dart';
 
 class PostCard extends ConsumerWidget {
-  final PostModel post;
-
-
   const PostCard({super.key, required this.post});
+  final PostModel post;
 
   void deletePost(BuildContext context, WidgetRef ref) {
     ref.read(postControllerProvider.notifier).deletePost(post.linkImage, post, context);
@@ -43,7 +41,6 @@ class PostCard extends ConsumerWidget {
   void navigateToImgPost(BuildContext context, int index, List<String> imageUrls) {
     Routemaster.of(context).push('/post/img?imageUrls=${Uri.encodeComponent(imageUrls.join(','))}&initialIndex=$index');
   }
-
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -177,13 +174,7 @@ class PostCard extends ConsumerWidget {
                                             ],
                                         onSelected: (value) {
                                           if (value == 'edit') {
-                                            // Navigator.push(
-                                            //   context,
-                                            //   MaterialPageRoute(
-                                            //     builder: (context) =>
-                                            //         EditPostScreen(post: post),
-                                            //   ),
-                                            // );
+
                                           } else {
                                             deletePost(context, ref);
                                           }

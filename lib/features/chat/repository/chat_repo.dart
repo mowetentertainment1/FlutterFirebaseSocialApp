@@ -275,6 +275,15 @@ class ChatRepo {
       throw e.toString();
     }
   }
-
-
+Stream<bool> isNewMessage(String receiverUserId) {
+    return _users
+        .doc(_auth.currentUser!.uid)
+        .collection(FirebaseConstants.chatsCollection)
+        .doc(receiverUserId)
+        .collection(FirebaseConstants.messagesCollection)
+        .snapshots()
+        .map((event) {
+      return event.docs.isNotEmpty;
+    });
+  }
 }

@@ -113,11 +113,11 @@ class PostController extends StateNotifier<bool> {
           showSnackBar(context, 'Posted.');
           for (var uid in selectedCommunity.members) {
             final NotificationModel notification = NotificationModel(
-              id: uid,
+              id:postId ,
               type: NotificationEnum.post,
               name: selectedCommunity.name,
               createdAt: DateTime.now(),
-              uid: postId,
+              uid: uid,
               profilePic: selectedCommunity.avatar,
               text: '${user.name} posted in ${selectedCommunity.name}',
               isRead: false,
@@ -171,11 +171,11 @@ class PostController extends StateNotifier<bool> {
       showSnackBar(context, 'Posted.');
       for (var uid in selectedCommunity.members) {
         final NotificationModel notification = NotificationModel(
-          id: uid,
+          id:postId ,
           type: NotificationEnum.post,
           name: selectedCommunity.name,
           createdAt: DateTime.now(),
-          uid: postId,
+          uid:uid ,
           profilePic: selectedCommunity.avatar,
           text: '${user.name} posted in ${selectedCommunity.name}',
           isRead: false,
@@ -232,11 +232,11 @@ class PostController extends StateNotifier<bool> {
         Routemaster.of(context).pop();
         for (var uid in selectedCommunity.members) {
           final NotificationModel notification = NotificationModel(
-            id: uid,
+            id: postId,
             type: NotificationEnum.post,
             name: selectedCommunity.name,
             createdAt: DateTime.now(),
-            uid: postId,
+            uid:uid ,
             profilePic: selectedCommunity.avatar,
             text: '${user.name} posted in ${selectedCommunity.name}',
             isRead: false,
@@ -274,9 +274,9 @@ class PostController extends StateNotifier<bool> {
     final user = _ref.read(userProvider)!;
     final res = await _postRepo.upVotePost(post, user.uid);
     final NotificationModel notification = NotificationModel(
-      id: post.userUid,
+      id: post.id,
       type: NotificationEnum.post,
-      name: post.id,
+      name: post.username,
       createdAt: DateTime.now(),
       uid: post.userUid,
       profilePic: post.userProfilePic,
@@ -296,7 +296,7 @@ class PostController extends StateNotifier<bool> {
     final user = _ref.read(userProvider)!;
     final res = await _postRepo.downVotePost(post, user.uid);
     final NotificationModel notification = NotificationModel(
-      id: post.userUid,
+      id: post.id,
       type: NotificationEnum.post,
       name: post.id,
       createdAt: DateTime.now(),
@@ -353,9 +353,9 @@ class PostController extends StateNotifier<bool> {
     _ref.read(userProfileControllerProvider.notifier).updateUserKarma(UserKarma.comment);
     res.fold((l) => showSnackBar(context, l.message), (r) {
       final NotificationModel notification = NotificationModel(
-        id: post.userUid,
+        id: post.id,
         type: NotificationEnum.comment,
-        name: post.id,
+        name: post.username,
         createdAt: DateTime.now(),
         uid: post.userUid,
         profilePic: post.userProfilePic,

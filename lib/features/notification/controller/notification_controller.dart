@@ -12,6 +12,9 @@ final notificationController = StateNotifierProvider<NotificationController, boo
 final notificationStream = StreamProvider<List<NotificationModel>>((ref) {
   return ref.read(notificationController.notifier).getNotifications();
 });
+final unreadNotificationsCount = StreamProvider<int>((ref) {
+  return ref.read(notificationController.notifier).getUnreadNotificationsCount();
+});
 
 class NotificationController extends StateNotifier<bool> {
   final NotificationRepo _notificationRepo;
@@ -26,4 +29,17 @@ class NotificationController extends StateNotifier<bool> {
   })  : _notificationRepo = notificationRepo,
         _ref = ref,
         super(false);
+
+  void markAsRead(String id) {
+    _notificationRepo.markAsRead(id);
+  }
+  void deleteAllNotifications() {
+    _notificationRepo.deleteAllNotifications();
+  }
+  void readAllNotifications() {
+    _notificationRepo.readAllNotifications();
+  }
+  Stream<int> getUnreadNotificationsCount() {
+    return _notificationRepo.getUnreadNotificationsCount();
+  }
 }
