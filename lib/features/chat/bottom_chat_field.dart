@@ -12,9 +12,11 @@ import 'controller/chat_controller.dart';
 
 class BottomChatField extends ConsumerStatefulWidget {
   final String receiverUserId;
+  final String receiverUserToken;
   const BottomChatField({
     super.key,
     required this.receiverUserId,
+    required this.receiverUserToken,
   });
 
   @override
@@ -53,7 +55,9 @@ class _BottomChatFieldState extends ConsumerState<BottomChatField> {
             context,
             _messageController.text.trim(),
             widget.receiverUserId,
+            widget.receiverUserToken,
           );
+
       setState(() {
         _messageController.text = '';
         isShowSendButton = false;
@@ -72,9 +76,9 @@ class _BottomChatFieldState extends ConsumerState<BottomChatField> {
           toFile: path,
         );
       }
-        setState(() {
-          isRecording = !isRecording;
-        });
+      setState(() {
+        isRecording = !isRecording;
+      });
     }
   }
 
@@ -83,11 +87,7 @@ class _BottomChatFieldState extends ConsumerState<BottomChatField> {
     MessageEnum messageEnum,
   ) {
     ref.read(chatControllerProvider.notifier).sendFileMessage(
-          context,
-          file,
-          widget.receiverUserId,
-          messageEnum
-        );
+        context, file, widget.receiverUserId, widget.receiverUserToken, messageEnum);
   }
 
   void openPickImage() async {

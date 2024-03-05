@@ -62,6 +62,7 @@ class AuthRepository {
           banner: Constants.bannerDefault,
           description: 'Hey there! I am using Amigo',
           uid: userCredential.user!.uid,
+          token: '',
           isAuthenticated: true,
           isOnline: false,
           karma: 0,
@@ -80,6 +81,7 @@ class AuthRepository {
     }
   }
 
+
   FutureEither<UserModel> signInAsGuest() async {
     try {
       var userCredential = await _auth.signInAnonymously();
@@ -90,6 +92,7 @@ class AuthRepository {
         banner: Constants.bannerDefault,
         description: 'Hey there! I am using Amigo',
         uid: userCredential.user!.uid,
+        token: '',
         isAuthenticated: false,
         isOnline: false,
         karma: 0,
@@ -126,6 +129,11 @@ class AuthRepository {
   void setUserState(bool isOnline) async {
     await _firestore.collection('users').doc(_auth.currentUser!.uid).update({
       'isOnline': isOnline,
+    });
+  }
+  void updateToken(String token) async {
+    await _firestore.collection('users').doc(_auth.currentUser!.uid).update({
+      'token': token,
     });
   }
 }

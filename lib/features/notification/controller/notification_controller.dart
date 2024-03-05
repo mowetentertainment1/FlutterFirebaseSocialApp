@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:untitled/features/notification/repository/notification_repo.dart';
 import 'package:untitled/model/notification_model.dart';
@@ -39,7 +40,16 @@ class NotificationController extends StateNotifier<bool> {
   void readAllNotifications() {
     _notificationRepo.readAllNotifications();
   }
+  void requestPermission() {
+    _notificationRepo.requestNotificationPermission();
+  }
+  Future<String> getToken() {
+    return _notificationRepo.getToken();
+  }
   Stream<int> getUnreadNotificationsCount() {
     return _notificationRepo.getUnreadNotificationsCount();
+  }
+  void onMessage(BuildContext context) {
+    _notificationRepo.onMessage(context);
   }
 }

@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -7,6 +8,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:fpdart/fpdart.dart';
 import 'package:untitled/model/user_model.dart';
 import 'package:uuid/uuid.dart';
+import 'package:http/http.dart' as http;
 
 import '../../../../core/constants/firebase_constants.dart';
 import '../../../../core/enums/message_enums.dart';
@@ -48,7 +50,7 @@ class ChatRepo {
             profilePic: user.profilePic,
             contactId: chatContact.contactId,
             timeSent: chatContact.timeSent,
-            lastMessage: chatContact.lastMessage,
+            lastMessage: chatContact.lastMessage, token: user.token,
           ),
         );
       }
@@ -76,6 +78,7 @@ class ChatRepo {
       {required String message,
       required UserModel senderUser,
       required String receiverUserId,
+      required String receiverUserToken,
       required BuildContext context}) async {
     try {
       var timeSent = DateTime.now();
@@ -98,6 +101,26 @@ class ChatRepo {
           senderUsername: senderUser.name,
           receiverUserName: receiverUserData.name,
           );
+      var data = {
+        'to': receiverUserToken,
+        'priority': 'high',
+        'notification': {
+          'title': senderUser.name,
+          'body': message,
+        },
+        'data': {
+          'type': 'chat',
+          'id': senderUser.uid,
+        },
+      };
+      await http.post(
+        Uri.parse('https://fcm.googleapis.com/fcm/send'),
+        body: jsonEncode(data),
+        headers: {
+          'Content-Type': 'application/json; charset=UTF-8',
+          'Authorization': 'key=AAAAGsP2NR8:APA91bHtsAcxrHePGTKReAcE5f5HvSHkmdWjUpdjqEWEBqjTRr3JGYqLbzNVzm9IZD6JLABdMpqPY9rH7xLrI2crH2fZOYcJFaMOsHY-jsEeC_rWMyYQjBEWXf88rWiDUeUbM_77h4gs',
+        },
+      );
     } on FirebaseException catch (e) {
       throw e.message!;
     } catch (e) {
@@ -116,7 +139,7 @@ class ChatRepo {
       profilePic: senderUserData.profilePic,
       contactId: senderUserData.uid,
       timeSent: timeSent,
-      lastMessage: message,
+      lastMessage: message, token: senderUserData.token,
     );
     await _users
         .doc(receiverUserId)
@@ -128,7 +151,7 @@ class ChatRepo {
       profilePic: receiverUserData.profilePic,
       contactId: receiverUserData.uid,
       timeSent: timeSent,
-      lastMessage: message,
+      lastMessage: message, token: receiverUserData.token,
     );
     await _users
         .doc(senderUserData.uid)
@@ -186,6 +209,7 @@ class ChatRepo {
     required UserModel senderUserData,
     required String imageUrl,
     required MessageEnum messageEnum,
+    required String receiverUserToken,
   }) async {
     try {
       var timeSent = DateTime.now();
@@ -210,6 +234,26 @@ class ChatRepo {
         default:
           contactMsg = 'File';
       }
+      var data = {
+        'to': receiverUserToken,
+        'priority': 'high',
+        'notification': {
+          'title': senderUserData.name,
+          'body': contactMsg,
+        },
+        'data': {
+          'type': 'chat',
+          'id': senderUserData.uid,
+        },
+      };
+      await http.post(
+        Uri.parse('https://fcm.googleapis.com/fcm/send'),
+        body: jsonEncode(data),
+        headers: {
+          'Content-Type': 'application/json; charset=UTF-8',
+          'Authorization': 'key=AAAAGsP2NR8:APA91bHtsAcxrHePGTKReAcE5f5HvSHkmdWjUpdjqEWEBqjTRr3JGYqLbzNVzm9IZD6JLABdMpqPY9rH7xLrI2crH2fZOYcJFaMOsHY-jsEeC_rWMyYQjBEWXf88rWiDUeUbM_77h4gs',
+        },
+      );
       _saveDataToContactsSubCollection(
         senderUserData,
         receiverUserData,

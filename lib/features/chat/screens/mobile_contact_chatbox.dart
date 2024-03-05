@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:routemaster/routemaster.dart';
 import 'package:untitled/model/user_model.dart';
-import '../../../core/colors.dart';
 import '../../auth/controller/auth_controller.dart';
 import '../bottom_chat_field.dart';
 import '../card/chats_list.dart';
@@ -11,7 +10,8 @@ import '../controller/chat_controller.dart';
 class MobileContactChatScreen extends ConsumerWidget {
   final String uid;
   final String name;
-  const MobileContactChatScreen({super.key, required this.uid, required this.name});
+  final String token;
+  const MobileContactChatScreen({super.key, required this.uid, required this.name, required this.token});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -120,6 +120,7 @@ class MobileContactChatScreen extends ConsumerWidget {
           ),
           BottomChatField(
             receiverUserId: uid,
+            receiverUserToken: token,
           ),
         ],
       ),

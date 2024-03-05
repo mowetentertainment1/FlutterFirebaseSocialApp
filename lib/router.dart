@@ -49,10 +49,13 @@ final loggedInRoute = RouteMap(routes: {
       ),
     );
   },
-  '/chat/:name/:uid': (routeData) => MaterialPage(
+  '/chat/:name/:uid/:token': (routeData) => MaterialPage(
       child: MobileContactChatScreen(
+          uid: routeData.pathParameters['uid']!,
           name: routeData.pathParameters['name']!,
-          uid: routeData.pathParameters['uid']!)),
+          token: routeData.pathParameters['token']!,
+          ),
+  ),
   '/community-chat/:name': (routeData) => MaterialPage(
       child: MobileCommunityChatScreen(
           name: routeData.pathParameters['name']!,

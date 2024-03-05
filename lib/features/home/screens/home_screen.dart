@@ -21,6 +21,13 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
     super.initState();
     tabBarController = TabController(length: 3, vsync: this);
     WidgetsBinding.instance.addObserver(this);
+    ref.read(notificationController.notifier).requestPermission();
+    ref.read(notificationController.notifier).getToken().then((value) {
+      ref.read(authControllerProvider.notifier).updateToken(value);
+    });
+    ref.read(notificationController.notifier).onMessage(context);
+
+
   }
 
   @override

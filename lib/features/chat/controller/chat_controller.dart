@@ -43,7 +43,7 @@ class ChatController extends StateNotifier<bool> {
         super(false);
 
   void sendTextMessage(
-      BuildContext context, String message, String receiverUserId) async {
+      BuildContext context, String message, String receiverUserId, String receiverUserToken) async {
     state = true;
     try {
       _ref.read(getCurrentUserDataProvider).whenData(
@@ -52,7 +52,9 @@ class ChatController extends StateNotifier<bool> {
               senderUser: value,
               receiverUserId: receiverUserId,
               context: context,
+              receiverUserToken: receiverUserToken,
             ),
+
           );
       state = false;
     } catch (e) {
@@ -68,6 +70,7 @@ class ChatController extends StateNotifier<bool> {
     BuildContext context,
     File file,
     String receiverUserId,
+    String receiverUserToken,
     MessageEnum messageEnum,
   ) async {
     state = true;
@@ -84,6 +87,7 @@ class ChatController extends StateNotifier<bool> {
                 context: context,
                 file: file,
                 receiverUserId: receiverUserId,
+                receiverUserToken: receiverUserToken,
                 senderUserData: value,
                 messageEnum: messageEnum,
                 imageUrl: imageUrl,
@@ -101,6 +105,7 @@ class ChatController extends StateNotifier<bool> {
                 context: context,
                 file: file,
                 receiverUserId: receiverUserId,
+                receiverUserToken: receiverUserToken,
                 senderUserData: value,
                 messageEnum: messageEnum,
                 imageUrl: audioUrl,
@@ -118,6 +123,7 @@ class ChatController extends StateNotifier<bool> {
                 context: context,
                 file: file,
                 receiverUserId: receiverUserId,
+                receiverUserToken: receiverUserToken,
                 senderUserData: value,
                 messageEnum: messageEnum,
                 imageUrl: videoUrl,
