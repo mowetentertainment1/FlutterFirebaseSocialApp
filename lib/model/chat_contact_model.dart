@@ -5,6 +5,7 @@ class ChatContactModel {
   final String token;
   final DateTime timeSent;
   final String lastMessage;
+  final int unreadMessagesCount;
   ChatContactModel({
     required this.name,
     required this.profilePic,
@@ -12,6 +13,7 @@ class ChatContactModel {
     required this.token,
     required this.timeSent,
     required this.lastMessage,
+    required this.unreadMessagesCount,
   });
 
   Map<String, dynamic> toMap() {
@@ -22,6 +24,7 @@ class ChatContactModel {
       'token': token,
       'timeSent': timeSent.millisecondsSinceEpoch,
       'lastMessage': lastMessage,
+      'unreadMessagesCount': unreadMessagesCount,
     };
   }
 
@@ -33,6 +36,7 @@ class ChatContactModel {
       token: map['token'] ?? '',
       timeSent: DateTime.fromMillisecondsSinceEpoch(map['timeSent']),
       lastMessage: map['lastMessage'] ?? '',
+      unreadMessagesCount: map['unreadMessagesCount'] as int,
     );
   }
 }

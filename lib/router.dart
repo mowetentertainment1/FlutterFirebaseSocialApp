@@ -30,11 +30,11 @@ final loggedInRoute = RouteMap(routes: {
           EditCommunityScreen(communityName: routeData.pathParameters['communityName']!)),
   '/add_mods/:communityName': (routeData) => MaterialPage(
       child: AddModsScreen(communityName: routeData.pathParameters['communityName']!)),
-  '/u/:name/:uid': (routeData) =>
-      MaterialPage(child: UserProfileScreen(
+  '/u/:name/:uid/:token': (routeData) => MaterialPage(
+      child: UserProfileScreen(
           uid: routeData.pathParameters['uid']!,
-          name: routeData.pathParameters['name']!),
-),
+          name: routeData.pathParameters['name']!,
+          token: routeData.queryParameters['token']!)),
   '/edit-profile/:uid': (routeData) =>
       MaterialPage(child: EditProfileScreen(uid: routeData.pathParameters['uid']!)),
   '/post/:postId/comments': (routeData) =>
@@ -50,16 +50,15 @@ final loggedInRoute = RouteMap(routes: {
     );
   },
   '/chat/:name/:uid/:token': (routeData) => MaterialPage(
-      child: MobileContactChatScreen(
+        child: MobileContactChatScreen(
           uid: routeData.pathParameters['uid']!,
           name: routeData.pathParameters['name']!,
           token: routeData.pathParameters['token']!,
-          ),
-  ),
+        ),
+      ),
   '/community-chat/:name': (routeData) => MaterialPage(
-      child: MobileCommunityChatScreen(
+        child: MobileCommunityChatScreen(
           name: routeData.pathParameters['name']!,
-          ),
-  ),
+        ),
+      ),
 });
-

@@ -130,11 +130,15 @@ class NotificationRepo {
     String? token = await _firebaseMessaging.getToken();
     return token!;
   }
-
+  void updateToken(String token)  {
+     _users
+        .doc(_auth.currentUser!.uid).update({
+      'token': token,
+    });
+  }
   void isTokenRefresh() {
     _firebaseMessaging.onTokenRefresh.listen((event) {
-      event.toString();
-      print('isTokenRefresh: $event');
+      updateToken(event);
     });
   }
 

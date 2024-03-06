@@ -43,6 +43,7 @@ class ChatRepo {
         var chatContact = ChatContactModel.fromMap(document.data());
         var userData =
             await _firestore.collection('users').doc(chatContact.contactId).get();
+
         var user = UserModel.fromMap(userData.data()!);
         contacts.add(
           ChatContactModel(
@@ -50,13 +51,58 @@ class ChatRepo {
             profilePic: user.profilePic,
             contactId: chatContact.contactId,
             timeSent: chatContact.timeSent,
-            lastMessage: chatContact.lastMessage, token: user.token,
+            lastMessage: chatContact.lastMessage,
+            token: user.token,
+            unreadMessagesCount: chatContact.unreadMessagesCount,
           ),
         );
       }
       return contacts;
     });
   }
+  void updateReceiverUnreadMessagesCount(String receiverUserId) {
+    _users
+        .doc(receiverUserId)
+        .collection('chats')
+        .doc(_auth.currentUser!.uid)
+        .collection('messages')
+        .where('isRead', isEqualTo: false)
+        .get()
+        .then((querySnapshot) {
+      int count = querySnapshot.size;
+      _users
+          .doc(receiverUserId)
+          .collection('chats')
+          .doc(_auth.currentUser!.uid)
+          .update({'unreadMessagesCount': count});
+    });
+  }
+  void updateCurrentUnreadMessagesCount(String receiverUserId) {
+    _users
+        .doc(_auth.currentUser!.uid)
+        .collection('chats')
+        .doc(receiverUserId)
+        .collection('messages')
+        .where('isRead', isEqualTo: false)
+        .get()
+        .then((querySnapshot) {
+      int count = querySnapshot.size;
+      _users
+          .doc(_auth.currentUser!.uid)
+          .collection('chats')
+          .doc(receiverUserId)
+          .update({'unreadMessagesCount': count});
+    });
+  }
+  Stream<int> getTotalUnreadMessagesCount() {
+    return _users
+        .doc(_auth.currentUser!.uid)
+        .collection(FirebaseConstants.chatsCollection)
+        .where('unreadMessagesCount', isGreaterThan: 0)
+        .snapshots()
+        .map((event) => event.docs.length);
+  }
+
   Stream<List<MessageModel>> getChatStream(String receiverUserId) {
     return _users
         .doc(_auth.currentUser!.uid)
@@ -92,15 +138,15 @@ class ChatRepo {
       _saveDataToContactsSubCollection(
           senderUser, receiverUserData, message, timeSent, receiverUserId);
       _saveChatToMessagesSubCollection(
-          receiverUserId: receiverUserId,
-          text: message,
-          timeSent: timeSent,
-          messageId: messageId,
-          username: receiverUserData.name,
-          messageType: MessageEnum.text,
-          senderUsername: senderUser.name,
-          receiverUserName: receiverUserData.name,
-          );
+        receiverUserId: receiverUserId,
+        text: message,
+        timeSent: timeSent,
+        messageId: messageId,
+        username: receiverUserData.name,
+        messageType: MessageEnum.text,
+        senderUsername: senderUser.name,
+        receiverUserName: receiverUserData.name,
+      );
       var data = {
         'to': receiverUserToken,
         'priority': 'high',
@@ -118,7 +164,8 @@ class ChatRepo {
         body: jsonEncode(data),
         headers: {
           'Content-Type': 'application/json; charset=UTF-8',
-          'Authorization': 'key=AAAAGsP2NR8:APA91bHtsAcxrHePGTKReAcE5f5HvSHkmdWjUpdjqEWEBqjTRr3JGYqLbzNVzm9IZD6JLABdMpqPY9rH7xLrI2crH2fZOYcJFaMOsHY-jsEeC_rWMyYQjBEWXf88rWiDUeUbM_77h4gs',
+          'Authorization':
+              'key=AAAAGsP2NR8:APA91bHtsAcxrHePGTKReAcE5f5HvSHkmdWjUpdjqEWEBqjTRr3JGYqLbzNVzm9IZD6JLABdMpqPY9rH7xLrI2crH2fZOYcJFaMOsHY-jsEeC_rWMyYQjBEWXf88rWiDUeUbM_77h4gs',
         },
       );
     } on FirebaseException catch (e) {
@@ -139,7 +186,9 @@ class ChatRepo {
       profilePic: senderUserData.profilePic,
       contactId: senderUserData.uid,
       timeSent: timeSent,
-      lastMessage: message, token: senderUserData.token,
+      lastMessage: message,
+      token: senderUserData.token,
+      unreadMessagesCount: 0,
     );
     await _users
         .doc(receiverUserId)
@@ -151,7 +200,9 @@ class ChatRepo {
       profilePic: receiverUserData.profilePic,
       contactId: receiverUserData.uid,
       timeSent: timeSent,
-      lastMessage: message, token: receiverUserData.token,
+      lastMessage: message,
+      token: receiverUserData.token,
+      unreadMessagesCount: 0,
     );
     await _users
         .doc(senderUserData.uid)
@@ -177,6 +228,7 @@ class ChatRepo {
       type: messageType,
       timeSent: timeSent,
       messageId: messageId,
+      isRead: false,
     );
     await _users
         .doc(_auth.currentUser!.uid)
@@ -192,6 +244,7 @@ class ChatRepo {
       type: messageType,
       timeSent: timeSent,
       messageId: messageId,
+      isRead: false,
     );
     await _users
         .doc(receiverUserId)
@@ -251,7 +304,8 @@ class ChatRepo {
         body: jsonEncode(data),
         headers: {
           'Content-Type': 'application/json; charset=UTF-8',
-          'Authorization': 'key=AAAAGsP2NR8:APA91bHtsAcxrHePGTKReAcE5f5HvSHkmdWjUpdjqEWEBqjTRr3JGYqLbzNVzm9IZD6JLABdMpqPY9rH7xLrI2crH2fZOYcJFaMOsHY-jsEeC_rWMyYQjBEWXf88rWiDUeUbM_77h4gs',
+          'Authorization':
+              'key=AAAAGsP2NR8:APA91bHtsAcxrHePGTKReAcE5f5HvSHkmdWjUpdjqEWEBqjTRr3JGYqLbzNVzm9IZD6JLABdMpqPY9rH7xLrI2crH2fZOYcJFaMOsHY-jsEeC_rWMyYQjBEWXf88rWiDUeUbM_77h4gs',
         },
       );
       _saveDataToContactsSubCollection(
@@ -319,15 +373,32 @@ class ChatRepo {
       throw e.toString();
     }
   }
-Stream<bool> isNewMessage(String receiverUserId) {
-    return _users
-        .doc(_auth.currentUser!.uid)
-        .collection(FirebaseConstants.chatsCollection)
-        .doc(receiverUserId)
-        .collection(FirebaseConstants.messagesCollection)
-        .snapshots()
-        .map((event) {
-      return event.docs.isNotEmpty;
-    });
+
+  void setChatMessageSeen(
+    String receiverUserId,
+    String messageId,
+  ) async {
+    try {
+      await _users
+          .doc(_auth.currentUser!.uid)
+          .collection('chats')
+          .doc(receiverUserId)
+          .collection('messages')
+          .doc(messageId)
+          .update({'isRead': true});
+
+      await _users
+          .doc(receiverUserId)
+          .collection('chats')
+          .doc(_auth.currentUser!.uid)
+          .collection('messages')
+          .doc(messageId)
+          .update({'isRead': true});
+    } catch (e) {
+      throw e.toString();
+    }
   }
+
+
+
 }

@@ -16,7 +16,6 @@ class ContactsList extends ConsumerWidget {
       child: SingleChildScrollView(
         child: Column(
           children: [
-
             StreamBuilder<List<ChatContactModel>>(
                 stream: ref.watch(chatControllerProvider.notifier).chatContactList(),
                 builder: (context, snapshot) {
@@ -36,7 +35,6 @@ class ContactsList extends ConsumerWidget {
                     itemCount: snapshot.data!.length,
                     itemBuilder: (context, index) {
                       var chatContactData = snapshot.data![index];
-
                       return Column(
                         children: [
                           InkWell(
@@ -47,24 +45,24 @@ class ContactsList extends ConsumerWidget {
                                 builder: (BuildContext dialogContext) {
                                   return AlertDialog(
                                     title: const Text('Delete Chat'),
-                                    content: const Text('Are you sure you want to delete this chat?'),
+                                    content: const Text(
+                                        'Are you sure you want to delete this chat?'),
                                     actions: <Widget>[
                                       TextButton(
                                         child: const Text('Cancel'),
                                         onPressed: () {
-                                          Navigator.of(dialogContext)
-                                              .pop();
+                                          Navigator.of(dialogContext).pop();
                                         },
                                       ),
                                       TextButton(
                                         child: const Text('Delete',
                                             style: TextStyle(color: Colors.red)),
                                         onPressed: () {
-                                          Navigator.of(dialogContext)
-                                              .pop();
+                                          Navigator.of(dialogContext).pop();
                                           ref
                                               .read(chatControllerProvider.notifier)
-                                              .deleteChat(chatContactData.contactId, context);
+                                              .deleteChat(
+                                                  chatContactData.contactId, context);
                                         },
                                       ),
                                     ],
@@ -79,18 +77,45 @@ class ContactsList extends ConsumerWidget {
                             child: Padding(
                               padding: const EdgeInsets.only(bottom: 8.0),
                               child: ListTile(
-                                title: Text(
-                                  chatContactData.name,
-                                  style: const TextStyle(
-                                    fontSize: 18,
-                                  ),
+                                title: Row(
+                                  children: [
+                                    Text(
+                                      chatContactData.name,
+                                      style: const TextStyle(
+                                        fontSize: 18,
+                                      ),
+                                    ),
+                                    if (chatContactData.unreadMessagesCount > 0)
+                                      Padding(
+                                        padding: const EdgeInsets.only(left: 8.0),
+                                        child: Container(
+                                          padding: const EdgeInsets.all(5),
+                                          decoration: BoxDecoration(
+                                            color: Colors.red,
+                                            borderRadius: BorderRadius.circular(20),
+                                          ),
+                                          child: Text(
+                                            chatContactData.unreadMessagesCount
+                                                .toString(),
+                                            style: const TextStyle(
+                                              color: Colors.white,
+                                              fontSize: 12,
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                  ],
                                 ),
                                 subtitle: Padding(
                                   padding: const EdgeInsets.only(top: 6.0),
                                   child: Text(
                                     chatContactData.lastMessage,
-                                    style: const TextStyle(fontSize: 15),
-                                  ),
+                                    style: TextStyle(
+                                      color: chatContactData.unreadMessagesCount > 0
+                                          ? Colors.blue
+                                          : Colors.grey,
+                                    ),
+                                  )
                                 ),
                                 leading: CircleAvatar(
                                   backgroundImage: NetworkImage(
@@ -101,7 +126,7 @@ class ContactsList extends ConsumerWidget {
                                 trailing: Text(
                                   formatDate(chatContactData.timeSent, [HH, ':', nn]),
                                   style: const TextStyle(
-                                    color: Colors.grey,
+                                    color:Colors.grey,
                                     fontSize: 13,
                                   ),
                                 ),

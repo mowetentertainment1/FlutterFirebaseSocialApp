@@ -26,15 +26,17 @@ class _CommunityChatListState extends ConsumerState<CommunityChatList> {
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      scrollController.jumpTo(scrollController.position.maxScrollExtent);
-    });
-  }
 
+    _scrollToBottom();
+  }
   void _scrollToBottom() {
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      scrollController.jumpTo(scrollController.position.maxScrollExtent);
-    });
+    if (scrollController.hasClients) {
+      scrollController.animateTo(
+        scrollController.position.maxScrollExtent,
+        duration: const Duration(milliseconds: 100),
+        curve: Curves.easeOut,
+      );
+    }
   }
 
   @override

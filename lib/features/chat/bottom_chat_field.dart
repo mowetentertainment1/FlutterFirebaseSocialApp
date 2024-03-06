@@ -57,7 +57,6 @@ class _BottomChatFieldState extends ConsumerState<BottomChatField> {
             widget.receiverUserId,
             widget.receiverUserToken,
           );
-
       setState(() {
         _messageController.text = '';
         isShowSendButton = false;

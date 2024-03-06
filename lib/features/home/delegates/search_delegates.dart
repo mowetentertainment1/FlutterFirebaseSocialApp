@@ -61,8 +61,8 @@ class SearchCommunityScreen extends SearchDelegate {
                       leading: CircleAvatar(
                         backgroundImage: NetworkImage(users[index].profilePic),
                       ),
-                      onTap: () => navigateToUserProfile(
-                          context, users[index].uid, users[index].name),
+                      onTap: () => navigateToUserProfile(context, users[index].uid,
+                          users[index].name, users[index].token),
                     );
                   }
                 });
@@ -82,7 +82,8 @@ class SearchCommunityScreen extends SearchDelegate {
     Routemaster.of(context).push('/r/$communityName');
   }
 
-  void navigateToUserProfile(BuildContext context, String uid, String name) {
-    Routemaster.of(context).push('/u/$name/$uid');
+  void navigateToUserProfile(
+      BuildContext context, String uid, String name, String token) {
+    Routemaster.of(context).push('/u/$name/$uid/$token');
   }
 }

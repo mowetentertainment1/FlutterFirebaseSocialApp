@@ -50,7 +50,7 @@ class SelectContactScreen extends SearchDelegate {
                   ),
                   title: Text(user.name),
                   onTap: () {
-                    navigateToChatBox(context, user.name, user.uid);
+                    navigateToChatBox(context, user.name, user.uid, user.token);
                   },
                 );
               });
@@ -61,7 +61,8 @@ class SelectContactScreen extends SearchDelegate {
             ));
   }
 
-  void navigateToChatBox(BuildContext context, String userName, String userId) {
-    Routemaster.of(context).push('/chat/$userName/$userId');
+  void navigateToChatBox(
+      BuildContext context, String userName, String userId, String userToken) {
+    Routemaster.of(context).push('/chat/$userName/$userId/$userToken');
   }
 }

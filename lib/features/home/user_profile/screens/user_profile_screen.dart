@@ -12,14 +12,16 @@ import '../../../auth/controller/auth_controller.dart';
 class UserProfileScreen extends ConsumerWidget {
   final String uid;
   final String name;
+  final String token;
 
-  const UserProfileScreen({super.key, required this.uid, required this.name});
+
+  const UserProfileScreen({super.key, required this.uid, required this.name, required this.token});
 
   void navigateToEditProfile(BuildContext context) {
     Routemaster.of(context).push('/edit-profile/$uid');
   }
   void navigateToChat(BuildContext context) {
-    Routemaster.of(context).push('/chat/$name/$uid');
+    Routemaster.of(context).push('/chat/$name/$uid/$token');
   }
   void followUser(String uidForFollow, WidgetRef ref) {
     ref.read(userProfileControllerProvider.notifier).followUser(uidForFollow);

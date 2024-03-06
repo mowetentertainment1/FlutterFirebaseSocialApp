@@ -24,13 +24,20 @@ final chatControllerProvider = StateNotifierProvider<ChatController, bool>((ref)
 final chatStream = StreamProvider.family<List<MessageModel>, String>((ref, receiverUserId) {
   return ref.read(chatControllerProvider.notifier).getChatStream(receiverUserId);
 });
-
+final getUnreadMessagesCount = StreamProvider<int>((ref) {
+  return ref.read(chatControllerProvider.notifier).getUnreadMessagesCount();
+});
 class ChatController extends StateNotifier<bool> {
   final ChatRepo _chatRepo;
   final Ref _ref;
   final StorageRepository _storageRepository;
   Stream<List<ChatContactModel>> chatContactList() {
     return _chatRepo.getChatContacts();
+  }
+  void updateReceiverUnreadMessagesCount(receiverUserId) {
+    _chatRepo.updateReceiverUnreadMessagesCount(receiverUserId);
+  } void updateCurrentUnreadMessagesCount(receiverUserId) {
+    _chatRepo.updateCurrentUnreadMessagesCount(receiverUserId);
   }
 
   ChatController({
@@ -64,6 +71,9 @@ class ChatController extends StateNotifier<bool> {
 
   Stream<List<MessageModel>> getChatStream(String receiverUserId) {
     return _chatRepo.getChatStream(receiverUserId);
+  }
+  Stream<int> getUnreadMessagesCount() {
+    return _chatRepo.getTotalUnreadMessagesCount();
   }
 
   Future<void> sendFileMessage(
@@ -147,4 +157,14 @@ class ChatController extends StateNotifier<bool> {
       showSnackBar(context, 'Deleted successfully!');
     });
   }
+  void setChatMessageSeen(
+      String receiverUserId,
+      String messageId,
+      ) {
+    _chatRepo.setChatMessageSeen(
+      receiverUserId,
+      messageId,
+    );
+  }
+
 }

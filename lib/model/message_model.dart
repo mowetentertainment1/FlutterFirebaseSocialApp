@@ -8,6 +8,7 @@ class MessageModel {
   final MessageEnum type;
   final DateTime timeSent;
   final String messageId;
+  final bool isRead;
 
   MessageModel({
     required this.senderId,
@@ -16,6 +17,8 @@ class MessageModel {
     required this.type,
     required this.timeSent,
     required this.messageId,
+    required this.isRead,
+
   });
 
   Map<String, dynamic> toMap() {
@@ -26,6 +29,7 @@ class MessageModel {
       'type': type.type,
       'timeSent': timeSent.millisecondsSinceEpoch,
       'messageId': messageId,
+      'isRead': isRead,
     };
   }
 
@@ -37,6 +41,7 @@ class MessageModel {
       type: (map['type'] as String).toEnum(),
       timeSent: DateTime.fromMillisecondsSinceEpoch(map['timeSent']),
       messageId: map['messageId'] ?? '',
+      isRead: map['isRead'] as bool,
     );
   }
 }

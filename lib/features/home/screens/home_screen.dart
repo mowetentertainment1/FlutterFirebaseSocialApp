@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../core/constants/constants.dart';
 import '../../../theme/palette.dart';
 import '../../auth/controller/auth_controller.dart';
+import '../../chat/controller/chat_controller.dart';
 import '../../notification/controller/notification_controller.dart';
 
 class HomeScreen extends ConsumerStatefulWidget {
@@ -23,7 +24,8 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
     WidgetsBinding.instance.addObserver(this);
     ref.read(notificationController.notifier).requestPermission();
     ref.read(notificationController.notifier).getToken().then((value) {
-      ref.read(authControllerProvider.notifier).updateToken(value);
+      print('Token: $value');
+      ref.read(notificationController.notifier).updateToken(value);
     });
     ref.read(notificationController.notifier).onMessage(context);
 
@@ -94,8 +96,44 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
                   icon: Icon(CupertinoIcons.add),
                   label: 'Create',
                 ),
-                const BottomNavigationBarItem(
-                  icon: Icon(CupertinoIcons.chat_bubble),
+                 BottomNavigationBarItem(
+                  icon: ref.watch(getUnreadMessagesCount).when(
+                    data: (count) {
+                      return count == 0
+                          ? const Icon(CupertinoIcons.bubble_left_bubble_right)
+                          : Stack(
+                        alignment: Alignment.center,
+                        children: [
+                          const Icon(CupertinoIcons.bubble_left_bubble_right),
+                          Positioned(
+                            right: 0,
+                            top: 0,
+                            child: Container(
+                              padding: const EdgeInsets.all(1),
+                              decoration: BoxDecoration(
+                                color: Colors.red,
+                                borderRadius: BorderRadius.circular(6),
+                              ),
+                              constraints: const BoxConstraints(
+                                minWidth: 12,
+                                minHeight: 12,
+                              ),
+                              child: Text(
+                                count.toString(),
+                                style: const TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 10,
+                                ),
+                                textAlign: TextAlign.center,
+                              ),
+                            ),
+                          ),
+                        ],
+                      );
+                    },
+                    loading: () => const Icon(CupertinoIcons.bell),
+                    error: (error, stackTrace) => const Icon(CupertinoIcons.bell),
+                  ),
                   label: 'Chat',
                 ),
                 BottomNavigationBarItem(

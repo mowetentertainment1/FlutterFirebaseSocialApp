@@ -26,17 +26,21 @@ class _ChatListState extends ConsumerState<ChatList> {
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      scrollController.jumpTo(scrollController.position.maxScrollExtent);
-    });
-  }
-  void _scrollToBottom() {
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      scrollController.jumpTo(scrollController.position.maxScrollExtent);
-    });
+
+    _scrollToBottom();
   }
 
-  @override 
+  void _scrollToBottom() {
+    if (scrollController.hasClients) {
+      scrollController.animateTo(
+        scrollController.position.maxScrollExtent,
+        duration: const Duration(milliseconds: 100),
+        curve: Curves.easeOut,
+      );
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
     final isLoading = ref.watch(chatControllerProvider);
     return isLoading
@@ -56,6 +60,19 @@ class _ChatListState extends ConsumerState<ChatList> {
                     final message = chatList[index];
                     final isMyMessage =
                         message.senderId == FirebaseAuth.instance.currentUser!.uid;
+                    if (!message.isRead &&
+                        message.receiverId == FirebaseAuth.instance.currentUser!.uid) {
+                      ref.read(chatControllerProvider.notifier).setChatMessageSeen(
+                            widget.receiverId,
+                            message.messageId,
+                          );
+                      ref.read(chatControllerProvider.notifier).updateCurrentUnreadMessagesCount(
+                        widget.receiverId,
+                      );
+                    }
+                    ref.read(chatControllerProvider.notifier).updateReceiverUnreadMessagesCount(
+                      widget.receiverId,
+                    );
                     return isMyMessage
                         ? MyMessageCard(
                             message: message.text,
@@ -65,7 +82,7 @@ class _ChatListState extends ConsumerState<ChatList> {
                         : SenderMessageCard(
                             message: message.text,
                             date: formatDate(message.timeSent, [HH, ':', nn]),
-                      type: message.type,
+                            type: message.type,
                           );
                   },
                 );

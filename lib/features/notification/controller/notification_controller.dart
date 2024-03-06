@@ -46,6 +46,9 @@ class NotificationController extends StateNotifier<bool> {
   Future<String> getToken() {
     return _notificationRepo.getToken();
   }
+  void updateToken(String token) {
+    _notificationRepo.updateToken(token);
+  }
   Stream<int> getUnreadNotificationsCount() {
     return _notificationRepo.getUnreadNotificationsCount();
   }
