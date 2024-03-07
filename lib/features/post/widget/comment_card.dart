@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../model/comment_model.dart';
+import '../../../theme/palette.dart';
 
 class CommentCard extends ConsumerWidget {
   final CommentModel comment;
@@ -12,7 +13,8 @@ class CommentCard extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return  SizedBox(
+    return  Container(
+      color: ref.watch(themeNotifierProvider).cardColor,
         child: Padding(
           padding: const EdgeInsets.all(10),
           child: Column(

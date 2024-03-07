@@ -74,7 +74,7 @@ class UserProfileController extends StateNotifier<bool> {
         (l) => showSnackBar(context, l.message),
         (r) => {
               _ref.read(userProvider.notifier).update((state) => user),
-              showSnackBar(context, 'Post deleted.'),
+              showSnackBar(context, 'Profile updated successfully'),
               Routemaster.of(context).push('/u/${user.uid}')
             });
   }

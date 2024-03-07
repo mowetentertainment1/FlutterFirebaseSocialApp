@@ -14,18 +14,21 @@ class UserProfileScreen extends ConsumerWidget {
   final String name;
   final String token;
 
-
-  const UserProfileScreen({super.key, required this.uid, required this.name, required this.token});
+  const UserProfileScreen(
+      {super.key, required this.uid, required this.name, required this.token});
 
   void navigateToEditProfile(BuildContext context) {
     Routemaster.of(context).push('/edit-profile/$uid');
   }
+
   void navigateToChat(BuildContext context) {
     Routemaster.of(context).push('/chat/$name/$uid/$token');
   }
+
   void followUser(String uidForFollow, WidgetRef ref) {
     ref.read(userProfileControllerProvider.notifier).followUser(uidForFollow);
   }
+
   void unfollowUser(String uidForUnfollow, WidgetRef ref) {
     ref.read(userProfileControllerProvider.notifier).unFollowUser(uidForUnfollow);
   }
@@ -74,10 +77,20 @@ class UserProfileScreen extends ConsumerWidget {
                                       Text(
                                         'Karma: ${user.karma}',
                                         style: const TextStyle(fontSize: 12),
-                                      ),const SizedBox(height: 5),
-                                      Text(
-                                        'Follower: ${user.followers.length}',
-                                        style: const TextStyle(fontSize: 12),
+                                      ),
+                                      const SizedBox(height: 5),
+                                      Row(
+                                        children: [
+                                          Text(
+                                            'Follower: ${user.followers.length}',
+                                            style: const TextStyle(fontSize: 12),
+                                          ),
+                                          const SizedBox(width: 5),
+                                          Text(
+                                            'Following: ${user.following.length}',
+                                            style: const TextStyle(fontSize: 12),
+                                          ),
+                                        ],
                                       ),
                                       const SizedBox(height: 10),
                                     ],
@@ -88,7 +101,6 @@ class UserProfileScreen extends ConsumerWidget {
                             const SizedBox(height: 20),
                             SizedBox(
                               child: Text(
-
                                 ' ${user.description}',
                                 style: const TextStyle(fontSize: 15),
                               ),
@@ -110,25 +122,25 @@ class UserProfileScreen extends ConsumerWidget {
                                       )
                                     : isGuest
                                         ? const SizedBox()
-                                    :
-                                currentUser.following.contains(uid)
-                                        ? ElevatedButton(
-                                            style: ElevatedButton.styleFrom(
-                                              backgroundColor: Colors.grey,
-                                            ),
-                                            onPressed: () => unfollowUser(uid, ref),
-                                            child: const Text('Unfollow',
-                                                style: TextStyle(color: Colors.white)),
-                                          )
-                                        :
-                                ElevatedButton(
-                                        style: ElevatedButton.styleFrom(
-                                          backgroundColor: Colors.blueAccent,
-                                        ),
-                                        onPressed: () => followUser(uid, ref),
-                                        child: const Text('Follow',
-                                            style: TextStyle(color: Colors.white)),
-                                      ),
+                                        : currentUser.following.contains(uid)
+                                            ? ElevatedButton(
+                                                style: ElevatedButton.styleFrom(
+                                                  backgroundColor: Colors.grey,
+                                                ),
+                                                onPressed: () => unfollowUser(uid, ref),
+                                                child: const Text('Unfollow',
+                                                    style:
+                                                        TextStyle(color: Colors.white)),
+                                              )
+                                            : ElevatedButton(
+                                                style: ElevatedButton.styleFrom(
+                                                  backgroundColor: Colors.blueAccent,
+                                                ),
+                                                onPressed: () => followUser(uid, ref),
+                                                child: const Text('Follow',
+                                                    style:
+                                                        TextStyle(color: Colors.white)),
+                                              ),
                                 const SizedBox(width: 10),
                                 isOwner
                                     ? const SizedBox()

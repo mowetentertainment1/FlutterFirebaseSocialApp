@@ -73,6 +73,7 @@ class ContactsList extends ConsumerWidget {
                             onTap: () {
                               Routemaster.of(context).push(
                                   '/chat/${chatContactData.name}/${chatContactData.contactId}/${chatContactData.token}');
+                              print('chat${chatContactData.contactId}');
                             },
                             child: Padding(
                               padding: const EdgeInsets.only(bottom: 8.0),

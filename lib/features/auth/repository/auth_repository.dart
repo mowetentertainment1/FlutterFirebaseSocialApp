@@ -123,8 +123,7 @@ class AuthRepository {
   void logOut() async {
     await _auth.signOut();
     await _googleSignIn.signOut();
-    Restart.restartApp(webOrigin: '/');
-
+   await Restart.restartApp(webOrigin:'/');
   }
   void setUserState(bool isOnline) async {
     await _firestore.collection('users').doc(_auth.currentUser!.uid).update({

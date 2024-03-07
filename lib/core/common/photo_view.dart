@@ -117,7 +117,6 @@ class _ImageZoomScreenState extends State<ImageZoomScreen> {
       });
       pageController.jumpToPage(nextIndex);
     } else {
-      // Optional: Handle when there are no more images
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
           content: Text('No more images'),

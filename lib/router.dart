@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:routemaster/routemaster.dart';
 import 'package:untitled/features/community/screens/add_mods_sreen.dart';
@@ -8,7 +10,9 @@ import 'package:untitled/features/community/screens/mod_tool_screen.dart';
 import 'package:untitled/features/home/screens/home_screen.dart';
 import 'package:untitled/features/home/user_profile/screens/edit_profile_screen.dart';
 import 'package:untitled/features/home/user_profile/screens/user_profile_screen.dart';
+import 'package:untitled/features/post/screens/create_post_screen.dart';
 import 'package:untitled/features/post/screens/comment_screen.dart';
+import 'package:untitled/features/story/screens/create_story_screen.dart';
 import 'core/common/photo_view.dart';
 import 'features/auth/screens/login_screen.dart';
 import 'features/chat/screens/mobile_community_chatbox.dart';
@@ -21,6 +25,7 @@ final loggedOutRoute = RouteMap(routes: {
 final loggedInRoute = RouteMap(routes: {
   '/': (_) => const MaterialPage(child: HomeScreen()),
   '/create-community': (_) => const MaterialPage(child: CreateCommunityScreen()),
+  '/add-post': (_) => const MaterialPage(child: AddPostScreen()),
   '/r/:communityName': (route) => MaterialPage(
       child: CommunityScreen(communityName: route.pathParameters['communityName']!)),
   '/mod-tools/:communityName': (routeData) => MaterialPage(
@@ -31,10 +36,12 @@ final loggedInRoute = RouteMap(routes: {
   '/add_mods/:communityName': (routeData) => MaterialPage(
       child: AddModsScreen(communityName: routeData.pathParameters['communityName']!)),
   '/u/:name/:uid/:token': (routeData) => MaterialPage(
-      child: UserProfileScreen(
+        child: UserProfileScreen(
           uid: routeData.pathParameters['uid']!,
           name: routeData.pathParameters['name']!,
-          token: routeData.queryParameters['token']!)),
+          token: routeData.pathParameters['token']!,
+        ),
+      ),
   '/edit-profile/:uid': (routeData) =>
       MaterialPage(child: EditProfileScreen(uid: routeData.pathParameters['uid']!)),
   '/post/:postId/comments': (routeData) =>
@@ -49,6 +56,7 @@ final loggedInRoute = RouteMap(routes: {
       ),
     );
   },
+  '/create-story': (_) => const MaterialPage(child: CreateStoryScreen()),
   '/chat/:name/:uid/:token': (routeData) => MaterialPage(
         child: MobileContactChatScreen(
           uid: routeData.pathParameters['uid']!,

@@ -15,9 +15,6 @@ import '../../../core/utils.dart';
 import '../../../model/community_model.dart';
 import '../../../theme/palette.dart';
 import '../../auth/controller/auth_controller.dart';
-import '../../home/delegates/search_delegates.dart';
-import '../../home/drawers/community_list_drawer.dart';
-import '../../home/drawers/profile_drawer.dart';
 import '../controller/post_controller.dart';
 
 class AddPostScreen extends ConsumerStatefulWidget {
@@ -119,40 +116,13 @@ class _CreateAddPostScreenState extends ConsumerState<AddPostScreen> {
   Widget build(BuildContext context) {
     final currentTheme = ref.watch(themeNotifierProvider);
     final isLoading = ref.watch(postControllerProvider);
-
     final user = ref.watch(userProvider)!;
     return isLoading
         ? const Loader()
         : Scaffold(
-      drawer: const CommunityListDrawer(),
-      endDrawer: const ProfileDrawer(),
       appBar: AppBar(
-        leading: Builder(builder: (context) {
-          return IconButton(
-            icon: const Icon(Icons.menu),
-            onPressed: () => displayDrawer(context),
-          );
-        }),
         title: Text('Create Post', style: GoogleFonts.poppins()),
-        actions: [
-          IconButton(
-            icon: const Icon(CupertinoIcons.search),
-            onPressed: () {
-              showSearch(context: context, delegate: SearchCommunityScreen(ref: ref));
-            },
-          ),
-          Builder(builder: (context) {
-            return IconButton(
-              icon: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 5.0),
-                child: CircleAvatar(
-                  backgroundImage: NetworkImage(user.profilePic),
-                ),
-              ),
-              onPressed: () => displayEndDrawer(context),
-            );
-          })
-        ],
+
       ),
           body: Wrap(children: [
 

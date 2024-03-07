@@ -1,11 +1,15 @@
+import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:routemaster/routemaster.dart';
 import 'package:untitled/core/common/error_text.dart';
 import 'package:untitled/core/common/loader.dart';
+import 'package:untitled/features/story/screens/story_list_screen.dart';
 
 import '../../core/common/posts/post_card.dart';
+import '../../theme/palette.dart';
 import '../auth/controller/auth_controller.dart';
 import '../community/controller/community_controller.dart';
 import '../home/delegates/search_delegates.dart';
@@ -27,6 +31,7 @@ class FeedScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final user = ref.watch(userProvider)!;
     final isGuest = !user.isAuthenticated;
+    final currentTheme = ref.watch(themeNotifierProvider);
     return Scaffold(
         drawer: isGuest ? null : const CommunityListDrawer(),
         endDrawer: const ProfileDrawer(),
@@ -77,46 +82,104 @@ class FeedScreen extends ConsumerWidget {
                         },
                       );
                 }
-                return ref.watch(userPostsProvider(communities)).when(
-                      data: (posts) {
-                        if (posts.isEmpty) {
-                          return const Center(
-                            child: Text(
-                              'No posts yet',
-                              style: TextStyle(
-                                fontSize: 20,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                          );
-                        }
-                        return ListView.builder(
-                          itemCount: posts.length,
-                          itemBuilder: (context, index) {
-                            final post = posts[index];
-                            return PostCard(post: post);
+                return NestedScrollView(
+                  headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
+                    return [
+                       SliverToBoxAdapter(
+                        child: GestureDetector(
+                          onTap: () {
+                            Routemaster.of(context).push('/add-post');
                           },
-                        );
-                      },
-                      loading: () {
-                        if (communities.isEmpty) {
-                          return const Center(
-                            child: Text(
-                              'Please join a community to see posts',
-                              style: TextStyle(
-                                fontSize: 20,
-                                fontWeight: FontWeight.bold,
+                          child: isGuest
+                              ? const SizedBox()
+                              : Container(
+                            color: currentTheme.backgroundColor,
+                            child: Container(
+                              margin: const EdgeInsets.all(10),
+                              child: DottedBorder(
+                                borderType: BorderType.RRect,
+                                radius: const Radius.circular(10),
+                                dashPattern: const [12, 4],
+                                strokeCap: StrokeCap.round,
+                                color: currentTheme.textTheme.bodyMedium!.color!,
+                                child: Container(
+                                    height: 50,
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(10),
+                                    ),
+                                    width: double.infinity,
+                                    child: Row(
+                                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                      children: [
+                                        const SizedBox(width: 10),
+                                        CircleAvatar(
+                                          backgroundImage: NetworkImage(user.profilePic),
+                                        ),
+                                        const SizedBox(width: 10),
+                                        Text(
+                                          'What\'s on your mind?',
+                                          style: GoogleFonts.poppins(
+                                            fontSize: 20,
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                        ),
+                                        const SizedBox(width: 10),
+                                        const Icon(
+                                          CupertinoIcons.photo_fill_on_rectangle_fill,
+                                          color: Colors.grey,
+                                        )
+                                      ],
+                                    )),
                               ),
                             ),
-                          );
-
-                        }
-                        return const Loader();
-                      },
-                      error: (e, s) {
-                        return ErrorText(error: e.toString());
-                      },
-                    );
+                          ),
+                        ),
+                      ),
+                      const SliverToBoxAdapter(
+                        child: StoryListScreen(),
+                      ),
+                    ];
+                  },
+                  body: ref.watch(userPostsProvider(communities)).when(
+                    data: (posts) {
+                      if (posts.isEmpty) {
+                        return const Center(
+                          child: Text(
+                            'No posts yet',
+                            style: TextStyle(
+                              fontSize: 20,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        );
+                      }
+                      return ListView.builder(
+                        itemCount: posts.length,
+                        itemBuilder: (context, index) {
+                          final post = posts[index];
+                          return PostCard(post: post);
+                        },
+                      );
+                    },
+                    loading: () {
+                      if (communities.isEmpty) {
+                        return const Center(
+                          child: Text(
+                            'Please join a community to see posts',
+                            style: TextStyle(
+                              fontSize: 20,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        );
+                      }
+                      return const Loader();
+                    },
+                    error: (e, s) {
+                      return ErrorText(error: e.toString());
+                    },
+                  ),
+                );
               },
               loading: () => const Loader(),
               error: (e, s) => ErrorText(error: e.toString()),

@@ -50,6 +50,8 @@ class _DisplayMessageTypeState extends State<DisplayMessageType> {
   @override
   void dispose() {
     audioPlayer.dispose();
+    isPlaying = false;
+    duration = const Duration();
     super.dispose();
   }
 
