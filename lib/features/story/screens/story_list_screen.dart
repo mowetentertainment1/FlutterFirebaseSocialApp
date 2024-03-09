@@ -1,4 +1,3 @@
-import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -6,7 +5,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:routemaster/routemaster.dart';
 
-import '../../../core/utils.dart';
 import '../../../theme/palette.dart';
 import '../../auth/controller/auth_controller.dart';
 import '../controller/story_controller.dart';
@@ -22,6 +20,7 @@ class _StoryListScreenState extends ConsumerState<StoryListScreen> {
   void navigateToCreateStory() {
     Routemaster.of(context).push('/create-story');
   }
+
   @override
   Widget build(BuildContext context) {
     final user = ref.watch(userProvider)!;
@@ -37,8 +36,7 @@ class _StoryListScreenState extends ConsumerState<StoryListScreen> {
         : Container(
             color: currentTheme.backgroundColor,
             height: MediaQuery.of(context).size.height / 4.5,
-            child:
-            Row(
+            child: Row(
               children: [
                 GestureDetector(
                   onTap: navigateToCreateStory,
@@ -93,77 +91,92 @@ class _StoryListScreenState extends ConsumerState<StoryListScreen> {
                   ),
                 ),
                 ref.watch(userStoryProvider).when(
-                  data: (stories) {
-                    return Expanded(
-                      child: GridView.builder(
-                        scrollDirection: Axis.horizontal,
-                        gridDelegate:
-                        const SliverGridDelegateWithFixedCrossAxisCount(
-                          crossAxisCount: 1,
-                        ),
-                        itemCount: stories.length,
-                        itemBuilder: (context, index) {
-                          final story = stories[index];
-                          return GestureDetector(
-                            onTap: () {},
-                            child: AspectRatio(
-                              aspectRatio: 1.5 / 2,
-                              child: Container(
-                                margin: const EdgeInsets.all(10),
-                                decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(20),
-                                    image: DecorationImage(
-                                      image: NetworkImage(story.linkImage[0]),
-                                      fit: BoxFit.cover,
-                                    ),
-                                    color: Colors.cyan),
-                                child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.end,
-                                  children: [
-                                    Container(
-                                      padding: const EdgeInsets.all(10),
-                                      decoration: BoxDecoration(
-                                        color: Colors.black.withOpacity(0.5),
-                                        borderRadius: BorderRadius.circular(20),
-                                      ),
-                                      child: Column(
-                                        children: [
-                                          SizedBox(
-                                            width: double.infinity,
-                                            child: Column(
-                                              children: [
-                                                 CircleAvatar(
-                                                  radius: 20,
-                                                  backgroundImage: NetworkImage(
-                                                      story.userProfilePic),
-                                                ),
-                                                Text(
-                                                  story.username,
-                                                  textAlign: TextAlign.center,
-                                                  style: GoogleFonts.poppins(
-                                                    color: Colors.white,
-                                                    fontSize: 16,
-                                                    fontWeight: FontWeight.bold,
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
+                      data: (stories) {
+                        return Expanded(
+                          child: GridView.builder(
+                            scrollDirection: Axis.horizontal,
+                            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                              crossAxisCount: 1,
                             ),
-                          );
-                        },
-                      ),
-                    );
-                  },
-                  loading: () => const CircularProgressIndicator(),
-                  error: (error, _) => Text('Error: $error'),
-                ),
+                            itemCount: stories.length,
+                            itemBuilder: (context, index) {
+                              final story = stories[index];
+                              return GestureDetector(
+                                onTap: () {
+                                  Routemaster.of(context)
+                                      .push('/story-view/${story.userUid}');
+                                },
+                                child: AspectRatio(
+                                  aspectRatio: 1.5 / 2,
+                                  child: Container(
+                                    margin: const EdgeInsets.all(10),
+                                    decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(20),
+                                        image: DecorationImage(
+                                          image: NetworkImage(story.linkImage.last),
+                                          fit: BoxFit.cover,
+                                        ),
+                                        color: Colors.cyan),
+                                    child: Column(
+                                      mainAxisAlignment: MainAxisAlignment.end,
+                                      children: [
+                                        Container(
+                                          padding: const EdgeInsets.all(10),
+                                          decoration: BoxDecoration(
+                                            color: Colors.black.withOpacity(0.5),
+                                            borderRadius: BorderRadius.circular(20),
+                                          ),
+                                          child: Column(
+                                            children: [
+                                              SizedBox(
+                                                width: double.infinity,
+                                                child: Column(
+                                                  children: [
+                                                    CircleAvatar(
+                                                      radius: 20,
+                                                      backgroundImage: NetworkImage(
+                                                          story.userProfilePic),
+                                                    ),
+                                                    // Text(
+                                                    //   story.linkImage.length > 1
+                                                    //       ? '+${story.linkImage.length}'
+                                                    //       : '1 image',
+                                                    //   textAlign: TextAlign.center,
+                                                    //   style: GoogleFonts.poppins(
+                                                    //     color: Colors.white,
+                                                    //     fontSize: 16,
+                                                    //     fontWeight: FontWeight.bold,
+                                                    //   ),
+                                                    // ),
+                                                    Text(
+                                                      (story.userUid == user.uid)
+                                                          ? 'Your story'
+                                                          : story.username,
+                                                      textAlign: TextAlign.center,
+                                                      style: GoogleFonts.poppins(
+                                                        color: Colors.white,
+                                                        fontSize: 16,
+                                                        fontWeight: FontWeight.bold,
+                                                      ),
+                                                    ),
+                                                  ],
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                              );
+                            },
+                          ),
+                        );
+                      },
+                      loading: () => const CircularProgressIndicator(),
+                      error: (error, _) => Text('Error: $error'),
+                    ),
               ],
             ),
           );

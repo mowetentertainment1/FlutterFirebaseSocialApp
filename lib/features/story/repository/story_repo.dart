@@ -18,32 +18,30 @@ class StoryRepo {
 
   StoryRepo({required FirebaseFirestore firestore}) : _firestore = firestore;
 
-  CollectionReference get _stories => _firestore.collection(FirebaseConstants.storiesCollection);
+  CollectionReference get _stories =>
+      _firestore.collection(FirebaseConstants.storiesCollection);
 
   FutureVoid addOrUpdateStory(StoryModel story) async {
     try {
       final isCollectionExists = await _stories.doc(story.id).get();
       if (!isCollectionExists.exists) {
-        return right( _stories.doc(story.id).set(story.toMap()));
+        return right(_stories.doc(story.id).set(story.toMap()));
       } else {
         List<String> storyImageUrls = [];
         var statusesSnapshot = await _stories
             .where(
-          'id',
-          isEqualTo: FirebaseAuth.instance.currentUser!.uid,
-        )
+              'id',
+              isEqualTo: FirebaseAuth.instance.currentUser!.uid,
+            )
             .get();
 
-          storyImageUrls = List<String>.from(statusesSnapshot.docs[0].get('linkImage'));
-          for (var file in story.linkImage) {
-            storyImageUrls.add(file);
-          }
-          return right (_stories
-              .doc(statusesSnapshot.docs[0].id)
-              .update({
-            'linkImage': storyImageUrls,
-          }));
-
+        storyImageUrls = List<String>.from(statusesSnapshot.docs[0].get('linkImage'));
+        for (var file in story.linkImage) {
+          storyImageUrls.add(file);
+        }
+        return right(_stories.doc(statusesSnapshot.docs[0].id).update({
+          'linkImage': storyImageUrls,
+        }));
       }
     } on FirebaseException catch (e) {
       throw e.message!;
@@ -70,6 +68,10 @@ class StoryRepo {
     });
   }
 
-
-
+  Stream<StoryModel> getStoryById(String storyId) {
+    return _stories
+        .doc(storyId)
+        .snapshots()
+        .map((snapshot) => StoryModel.fromMap(snapshot.data() as Map<String, dynamic>));
+  }
 }

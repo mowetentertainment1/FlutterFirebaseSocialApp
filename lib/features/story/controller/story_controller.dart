@@ -26,6 +26,9 @@ final userStoryProvider = StreamProvider<List<StoryModel>>((ref) {
   final storyController = ref.watch(storyControllerProvider.notifier);
   return storyController.getStories();
 });
+final getStoryByIdProvider = StreamProvider.family<StoryModel, String>((ref, postId) {
+  return ref.watch(storyControllerProvider.notifier).getStoryById(postId);
+});
 
 class StoryController extends StateNotifier<bool> {
   final StoryRepo _storyRepo;
@@ -77,8 +80,8 @@ class StoryController extends StateNotifier<bool> {
       res.fold(
         (l) => throw l,
         (r) async {
-         Routemaster.of(context).pop();
-         showSnackBar(context, "Story created.");
+          Routemaster.of(context).pop();
+          showSnackBar(context, "Story created.");
           state = false;
         },
       );
@@ -90,5 +93,9 @@ class StoryController extends StateNotifier<bool> {
   Stream<List<StoryModel>> getStories() {
     final user = _ref.read(userProvider)!;
     return _storyRepo.getStories(user.following);
+  }
+
+  Stream<StoryModel> getStoryById(String storyId) {
+    return _storyRepo.getStoryById(storyId);
   }
 }

@@ -1,4 +1,3 @@
-import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:routemaster/routemaster.dart';
@@ -13,6 +12,7 @@ import 'package:untitled/features/home/user_profile/screens/user_profile_screen.
 import 'package:untitled/features/post/screens/create_post_screen.dart';
 import 'package:untitled/features/post/screens/comment_screen.dart';
 import 'package:untitled/features/story/screens/create_story_screen.dart';
+import 'package:untitled/features/story/screens/story_view_screen.dart';
 import 'core/common/photo_view.dart';
 import 'features/auth/screens/login_screen.dart';
 import 'features/chat/screens/mobile_community_chatbox.dart';
@@ -57,6 +57,13 @@ final loggedInRoute = RouteMap(routes: {
     );
   },
   '/create-story': (_) => const MaterialPage(child: CreateStoryScreen()),
+  '/story-view/:storyId': (routeData) => MaterialPage(
+        child: StoryViewScreen(storyId: routeData.pathParameters['storyId']!),
+
+      ),
+
+
+
   '/chat/:name/:uid/:token': (routeData) => MaterialPage(
         child: MobileContactChatScreen(
           uid: routeData.pathParameters['uid']!,

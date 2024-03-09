@@ -85,6 +85,7 @@ class Assets {
   static const String screensNotificationScreen = 'lib/features/notification/screens/notification_screen.dart';
   static const String screensSelectContactScreen = 'lib/features/chat/screens/select_contact_screen.dart';
   static const String screensStoryListScreen = 'lib/features/story/screens/story_list_screen.dart';
+  static const String screensStoryView = 'lib/features/story/screens/story_view_screen.dart';
   static const String screensUserProfileScreen = 'lib/features/home/user_profile/screens/user_profile_screen.dart';
   static const String themePalette = 'lib/theme/palette.dart';
   static const String widgetCommentCard = 'lib/features/post/widget/comment_card.dart';
