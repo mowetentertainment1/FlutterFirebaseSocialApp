@@ -22,6 +22,10 @@ class PostCard extends ConsumerWidget {
     ref.read(postControllerProvider.notifier).deletePost(post.linkImage, post, context);
   }
 
+  void navigateToEditPost(BuildContext context) {
+    Routemaster.of(context).push('/post/edit/${post.id}');
+  }
+
   void upvotePost(WidgetRef ref) {
     ref.read(postControllerProvider.notifier).upVotePost(post);
   }
@@ -39,7 +43,8 @@ class PostCard extends ConsumerWidget {
   }
 
   void navigateToImgPost(BuildContext context, int index, List<String> imageUrls) {
-    Routemaster.of(context).push('/post/img?imageUrls=${Uri.encodeComponent(imageUrls.join(','))}&initialIndex=$index');
+    Routemaster.of(context).push(
+        '/post/img?imageUrls=${Uri.encodeComponent(imageUrls.join(','))}&initialIndex=$index');
   }
 
   @override
@@ -130,10 +135,6 @@ class PostCard extends ConsumerWidget {
                                                       Icons.admin_panel_settings),
                                                   itemBuilder: (context) => [
                                                         const PopupMenuItem(
-                                                          value: 'edit',
-                                                          child: Text('Edit'),
-                                                        ),
-                                                        const PopupMenuItem(
                                                           value: 'delete',
                                                           child: Text('Delete',
                                                               style: TextStyle(
@@ -141,17 +142,7 @@ class PostCard extends ConsumerWidget {
                                                         ),
                                                       ],
                                                   onSelected: (value) {
-                                                    if (value == 'edit') {
-                                                      // Navigator.push(
-                                                      //   context,
-                                                      //   MaterialPageRoute(
-                                                      //     builder: (context) =>
-                                                      //         EditPostScreen(post: post),
-                                                      //   ),
-                                                      // );
-                                                    } else {
-                                                      deletePost(context, ref);
-                                                    }
+                                                    deletePost(context, ref);
                                                   });
                                             }
                                             return const SizedBox();
@@ -174,7 +165,7 @@ class PostCard extends ConsumerWidget {
                                             ],
                                         onSelected: (value) {
                                           if (value == 'edit') {
-
+                                            navigateToEditPost(context);
                                           } else {
                                             deletePost(context, ref);
                                           }
@@ -206,7 +197,8 @@ class PostCard extends ConsumerWidget {
                                         padding: const EdgeInsets.all(8.0),
                                         child: InkWell(
                                           onTap: () {
-                                            navigateToImgPost(context, index, post.linkImage);
+                                            navigateToImgPost(
+                                                context, index, post.linkImage);
                                           },
                                           child: SizedBox(
                                             height: double.infinity,
@@ -216,9 +208,9 @@ class PostCard extends ConsumerWidget {
                                               fit: BoxFit.cover,
                                               placeholder: (context, url) =>
                                                   const Loader(),
-                                                useOldImageOnUrlChange: true,
+                                              useOldImageOnUrlChange: true,
                                               errorWidget: (context, url, error) =>
-                                                      const Icon(Icons.error),
+                                                  const Icon(Icons.error),
                                             ),
                                           ),
                                         ),

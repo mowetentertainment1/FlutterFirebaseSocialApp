@@ -138,6 +138,27 @@ class PostRepo {
       return left(Failure(e.toString()));
     }
   }
+  FutureVoid deleteComment(CommentModel comment) async {
+    try {
+      await _comments.doc(comment.id).delete();
 
+      return right(_posts.doc(comment.postId).update({
+        'commentCount': FieldValue.increment(-1),
+      }));
+    } on FirebaseException catch (e) {
+      throw e.message!;
+    } catch (e) {
+      return left(Failure(e.toString()));
+    }
+  }
+FutureVoid updatePost(PostModel post) async {
+    try {
+      return right(_posts.doc(post.id).update(post.toMap()));
+    } on FirebaseException catch (e) {
+      throw e.message!;
+    } catch (e) {
+      return left(Failure(e.toString()));
+    }
+  }
 
 }

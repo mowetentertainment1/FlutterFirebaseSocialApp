@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../model/comment_model.dart';
 import '../../../theme/palette.dart';
+import '../../auth/controller/auth_controller.dart';
 
 class CommentCard extends ConsumerWidget {
   final CommentModel comment;
@@ -13,8 +14,12 @@ class CommentCard extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return  Container(
-      color: ref.watch(themeNotifierProvider).cardColor,
+    final currentUserId = ref.watch(userProvider)!.name;
+    final currentTheme = ref.watch(themeNotifierProvider);
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 5),
+      child: Container(
+        color:currentTheme.backgroundColor,
         child: Padding(
           padding: const EdgeInsets.all(10),
           child: Column(
@@ -35,7 +40,9 @@ class CommentCard extends ConsumerWidget {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            'u/${comment.username}',
+                            (comment.username == ref.watch(userProvider)!.name)
+                                ? 'You'
+                                : comment.username,
                             style: const TextStyle(
                               fontWeight: FontWeight.bold,
                             ),
@@ -80,11 +87,14 @@ class CommentCard extends ConsumerWidget {
                   const Text('Reply'),
                 ],
               ),
-              const Divider()
-
+               Divider(
+                color: (currentUserId == comment.username)
+                    ? Colors.blueAccent.shade100
+                    : null),
             ],
           ),
         ),
+      ),
     );
   }
 }

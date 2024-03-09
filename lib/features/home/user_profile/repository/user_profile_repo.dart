@@ -44,7 +44,7 @@ class UserProfileRepo {
 
   Stream<List<PostModel>> getUserPosts(String uid) {
     return _posts
-        .where("uid", isEqualTo: uid)
+        .where("userUid", isEqualTo: uid)
         .orderBy("createdAt", descending: true)
         .snapshots()
         .map((event) => event.docs
@@ -113,4 +113,5 @@ class UserProfileRepo {
       throw Failure(e.toString());
     }
   }
+
 }

@@ -11,6 +11,7 @@ import 'package:untitled/features/home/user_profile/screens/edit_profile_screen.
 import 'package:untitled/features/home/user_profile/screens/user_profile_screen.dart';
 import 'package:untitled/features/post/screens/create_post_screen.dart';
 import 'package:untitled/features/post/screens/comment_screen.dart';
+import 'package:untitled/features/post/screens/edit_post_screen.dart';
 import 'package:untitled/features/story/screens/create_story_screen.dart';
 import 'package:untitled/features/story/screens/story_view_screen.dart';
 import 'core/common/photo_view.dart';
@@ -25,7 +26,7 @@ final loggedOutRoute = RouteMap(routes: {
 final loggedInRoute = RouteMap(routes: {
   '/': (_) => const MaterialPage(child: HomeScreen()),
   '/create-community': (_) => const MaterialPage(child: CreateCommunityScreen()),
-  '/add-post': (_) => const MaterialPage(child: AddPostScreen()),
+  '/add-post': (_) => const MaterialPage(child: CreatePostScreen()),
   '/r/:communityName': (route) => MaterialPage(
       child: CommunityScreen(communityName: route.pathParameters['communityName']!)),
   '/mod-tools/:communityName': (routeData) => MaterialPage(
@@ -56,6 +57,8 @@ final loggedInRoute = RouteMap(routes: {
       ),
     );
   },
+  '/post/edit/:postId': (routeData) =>
+      MaterialPage(child: EditPostScreen(postId: routeData.pathParameters['postId']!)),
   '/create-story': (_) => const MaterialPage(child: CreateStoryScreen()),
   '/story-view/:storyId': (routeData) => MaterialPage(
         child: StoryViewScreen(storyId: routeData.pathParameters['storyId']!),
@@ -76,4 +79,5 @@ final loggedInRoute = RouteMap(routes: {
           name: routeData.pathParameters['name']!,
         ),
       ),
+
 });

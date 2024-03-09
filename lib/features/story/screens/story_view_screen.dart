@@ -23,11 +23,10 @@ class _StoryViewScreenState extends ConsumerState<StoryViewScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final storyId = widget.storyId;
     if (storyItems.isEmpty) {
-      ref.read(getStoryByIdProvider(storyId)).whenData((story) {
+      ref.read(getStoryByIdProvider(widget.storyId)).whenData((story) {
         setState(() {
-          storyItems = story.linkImage
+          storyItems = story.linkImage.reversed
               .map((e) => story_view.StoryItem.pageImage(
             url: e,
             controller: controller,
@@ -35,7 +34,6 @@ class _StoryViewScreenState extends ConsumerState<StoryViewScreen> {
               .toList();
         });
       });
-
     }
     return Scaffold(
       body: storyItems.isEmpty

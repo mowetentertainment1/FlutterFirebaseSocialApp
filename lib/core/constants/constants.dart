@@ -16,7 +16,7 @@ class Constants {
   static const communityBannerPath = "community/banner";
   static const tabWidgets = [
     FeedScreen(),
-    AddPostScreen(),
+    CreatePostScreen(),
     ChatScreen(),
     NotificationScreen(),
 

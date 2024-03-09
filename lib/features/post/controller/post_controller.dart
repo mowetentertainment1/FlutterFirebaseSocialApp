@@ -359,7 +359,7 @@ class PostController extends StateNotifier<bool> {
         createdAt: DateTime.now(),
         uid: post.userUid,
         profilePic: post.userProfilePic,
-        text: '${user.name} commented on your post',
+        text: '${user.name} commented on your post: $text',
         isRead: false,
       );
       if (post.userUid != user.uid) {
@@ -369,4 +369,32 @@ class PostController extends StateNotifier<bool> {
       }
     });
   }
+  void deleteComment(CommentModel comment, BuildContext context) async {
+    final res = await _postRepo.deleteComment(comment);
+    res.fold((l) => showSnackBar(context, l.message), (r) {
+      showSnackBar(context, 'Comment Deleted');
+    });
+  }
+  void updatePost({
+    required BuildContext context,
+    required PostModel postModel,
+    required String title,
+    required CommunityModel selectedCommunity,
+
+  }) async {
+    state = true;
+    final PostModel post = postModel.copyWith(
+      title: title,
+      communityName: selectedCommunity.name,
+      communityProfilePic: selectedCommunity.avatar,
+      createdAt: DateTime.now(),
+    );
+
+    final res = await _postRepo.updatePost(post);
+    state = false;
+    res.fold((l) => showSnackBar(context, l.message), (r) {
+      showSnackBar(context, 'Updated.');
+    });
+  }
+
 }

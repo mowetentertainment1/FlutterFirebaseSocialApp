@@ -17,14 +17,14 @@ import '../../../theme/palette.dart';
 import '../../auth/controller/auth_controller.dart';
 import '../controller/post_controller.dart';
 
-class AddPostScreen extends ConsumerStatefulWidget {
-  const AddPostScreen({super.key});
+class CreatePostScreen extends ConsumerStatefulWidget {
+  const CreatePostScreen({super.key});
 
   @override
   ConsumerState createState() => _CreateAddPostScreenState();
 }
 
-class _CreateAddPostScreenState extends ConsumerState<AddPostScreen> {
+class _CreateAddPostScreenState extends ConsumerState<CreatePostScreen> {
   final titleController = TextEditingController();
   CommunityModel? selectedCommunity;
   List<CommunityModel> communitie = [];

@@ -28,10 +28,10 @@ class _CommentScreenState extends ConsumerState<CommentsScreen> {
 
   void addComment(PostModel post) {
     ref.read(postControllerProvider.notifier).addComment(
-      context: context,
-      text: _commentController.text.trim(),
-      post: post,
-    );
+          context: context,
+          text: _commentController.text.trim(),
+          post: post,
+        );
     setState(() {
       _commentController.text = '';
     });
@@ -46,82 +46,122 @@ class _CommentScreenState extends ConsumerState<CommentsScreen> {
         title: const Text('Comments'),
       ),
       body: ref.watch(getPostByIdProvider(widget.postId)).when(
-        data: (post) {
-          return NestedScrollView(
-            headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
-              return [
-                SliverToBoxAdapter(
-                  child: PostCard(post: post),
-                ),
-              ];
-            },
-            body: ref.watch(getPostCommentsProvider(widget.postId)).when(
-              data: (data) {
-                return Column(
-                  children: [
-                    Expanded(
-                      child: ListView.builder(
-                        itemCount: data.length,
-                        itemBuilder: (BuildContext context, int index) {
-                          final comment = data[index];
-                          return CommentCard(comment: comment);
-                        },
-                      ),
+            data: (post) {
+              return NestedScrollView(
+                headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
+                  return [
+                    SliverToBoxAdapter(
+                      child: PostCard(post: post),
                     ),
-                    if (!isGuest)
-                      Responsive(
-                        child: SizedBox(
-                          height: 50,
-                          child: TextField(
-                            controller: _commentController,
-                            decoration: InputDecoration(
-                              border: const OutlineInputBorder(
-                                borderRadius: BorderRadius.all(
-                                  Radius.circular(10),
-                                ),
-                              ),
-                              contentPadding: const EdgeInsets.symmetric(horizontal: 16),
-                              hintText: 'Add a comment',
-                              suffixIcon: GestureDetector(
-                                onTap: () {
-                                  addComment(post);
+                  ];
+                },
+                body: ref.watch(getPostCommentsProvider(widget.postId)).when(
+                      data: (data) {
+                        return Column(
+                          children: [
+                            Expanded(
+                              child: ListView.builder(
+                                itemCount: data.length,
+                                itemBuilder: (BuildContext context, int index) {
+                                  final comment = data[index];
+                                  return InkWell(
+                                    onLongPress: () {
+                                      if (comment.username == user.name) {
+                                        showDialog<void>(
+                                          context: context,
+                                          barrierDismissible: true,
+                                          builder: (BuildContext dialogContext) {
+                                            return AlertDialog(
+                                              title: const Text('Delete Comment'),
+                                              content: const Text(
+                                                  'Are you sure you want to delete this comment?'),
+                                              actions: <Widget>[
+                                                TextButton(
+                                                  child: const Text('Cancel'),
+                                                  onPressed: () {
+                                                    Navigator.of(dialogContext).pop();
+                                                  },
+                                                ),
+                                                TextButton(
+                                                  child: const Text('Delete',
+                                                      style:
+                                                          TextStyle(color: Colors.red)),
+                                                  onPressed: () {
+                                                    Navigator.of(dialogContext).pop();
+                                                    ref
+                                                        .read(postControllerProvider
+                                                            .notifier)
+                                                        .deleteComment(comment, context);
+                                                  },
+                                                ),
+                                              ],
+                                            );
+                                          },
+                                        );
+                                      }
+                                    },
+                                    child: CommentCard(comment: comment),
+                                  );
                                 },
-                                child: _commentController.text.trim().isEmpty
-                                    ? IconButton(
-                                  onPressed: () {},
-                                  icon: const Icon(Icons.send, color: Colors.grey),
-                                )
-                                    : IconButton(
-                                  onPressed: () {
-                                    addComment(post);
-                                  },
-                                  icon: const Icon(Icons.send, color: Colors.blue),
-                                ),
                               ),
                             ),
-                            onSubmitted: (value) {
-                              addComment(post);
-                            },
-                          ),
-                        ),
-                      ),
-                  ],
-                );
-              },
-              error: (error, stackTrace) {
-                return ErrorText(
-                  error: error.toString(),
-                );
-              },
-              loading: () => const Loader(),
-            ),
-          );
-        },
-        error: (Object error, StackTrace stackTrace) {
-          return ErrorText(error: error.toString());
-        },
-        loading: () => const Loader(),
-      ),
+                            if (!isGuest)
+                              Responsive(
+                                child: SizedBox(
+                                  height: 50,
+                                  child: TextField(
+                                    controller: _commentController,
+                                    decoration: InputDecoration(
+                                      border: const OutlineInputBorder(
+                                        borderRadius: BorderRadius.all(
+                                          Radius.circular(10),
+                                        ),
+                                      ),
+                                      contentPadding:
+                                          const EdgeInsets.symmetric(horizontal: 16),
+                                      hintText: 'Add a comment',
+                                      suffixIcon: GestureDetector(
+                                        onTap: () {
+                                          addComment(post);
+                                        },
+                                        child: _commentController.text.trim().isEmpty
+                                            ? IconButton(
+                                                onPressed: () {},
+                                                icon: const Icon(Icons.send,
+                                                    color: Colors.grey),
+                                              )
+                                            : IconButton(
+                                                onPressed: () {
+                                                  addComment(post);
+                                                },
+                                                icon: const Icon(Icons.send,
+                                                    color: Colors.blue),
+                                              ),
+                                      ),
+                                    ),
+                                    onSubmitted: (value) {
+                                      addComment(post);
+                                    },
+                                  ),
+                                ),
+                              ),
+                          ],
+                        );
+                      },
+                      error: (error, stackTrace) {
+                        return ErrorText(
+                          error: error.toString(),
+                        );
+                      },
+                      loading: () => const Loader(),
+                    ),
+              );
+            },
+            error: (Object error, StackTrace stackTrace) {
+              return ErrorText(error: error.toString());
+            },
+            loading: () => const Loader(),
+          ),
     );
   }
 }

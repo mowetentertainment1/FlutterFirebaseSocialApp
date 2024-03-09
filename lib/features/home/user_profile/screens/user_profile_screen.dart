@@ -160,13 +160,17 @@ class UserProfileScreen extends ConsumerWidget {
                   },
                   body: ref.watch(getUserPostsProvider(uid)).when(
                       data: (posts) {
-                        return ListView.builder(
-                          itemCount: posts.length,
-                          itemBuilder: (context, index) {
-                            final post = posts[index];
-                            return PostCard(post: post);
-                          },
-                        );
+                        return posts.isEmpty
+                            ? const Center(
+                                child: Text('No posts yet'),
+                              )
+                            : ListView.builder(
+                                itemCount: posts.length,
+                                itemBuilder: (BuildContext context, int index) {
+                                  final post = posts[index];
+                                  return PostCard(post: post);
+                                },
+                              );
                       },
                       error: (Object error, StackTrace stackTrace) =>
                           ErrorText(error: error.toString()),
