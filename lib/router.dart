@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:routemaster/routemaster.dart';
 import 'package:untitled/features/community/screens/add_mods_sreen.dart';
@@ -6,7 +5,7 @@ import 'package:untitled/features/community/screens/community_screen.dart';
 import 'package:untitled/features/community/screens/create_community_screen.dart';
 import 'package:untitled/features/community/screens/edit_community_screen.dart';
 import 'package:untitled/features/community/screens/mod_tool_screen.dart';
-import 'package:untitled/features/home/screens/home_screen.dart';
+import 'package:untitled/features/home/screens/tab_bar.dart';
 import 'package:untitled/features/home/user_profile/screens/edit_profile_screen.dart';
 import 'package:untitled/features/home/user_profile/screens/user_profile_screen.dart';
 import 'package:untitled/features/post/screens/create_post_screen.dart';
@@ -18,6 +17,7 @@ import 'core/common/photo_view.dart';
 import 'features/auth/screens/login_screen.dart';
 import 'features/chat/screens/mobile_community_chatbox.dart';
 import 'features/chat/screens/mobile_contact_chatbox.dart';
+import 'features/short_video/screens/create_short_video_screen.dart';
 
 final loggedOutRoute = RouteMap(routes: {
   '/': (_) => const MaterialPage(child: LoginScreen()),
@@ -62,11 +62,7 @@ final loggedInRoute = RouteMap(routes: {
   '/create-story': (_) => const MaterialPage(child: CreateStoryScreen()),
   '/story-view/:storyId': (routeData) => MaterialPage(
         child: StoryViewScreen(storyId: routeData.pathParameters['storyId']!),
-
       ),
-
-
-
   '/chat/:name/:uid/:token': (routeData) => MaterialPage(
         child: MobileContactChatScreen(
           uid: routeData.pathParameters['uid']!,
@@ -79,5 +75,5 @@ final loggedInRoute = RouteMap(routes: {
           name: routeData.pathParameters['name']!,
         ),
       ),
-
+  '/create-short-video': (_) => const MaterialPage(child: CreateShortVideoScreen()),
 });
