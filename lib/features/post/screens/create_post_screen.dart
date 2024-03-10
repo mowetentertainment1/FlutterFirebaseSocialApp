@@ -43,7 +43,7 @@ class _CreateAddPostScreenState extends ConsumerState<CreatePostScreen> {
 
   File? videoFile;
 
-  void pickImages() async {
+  void pickingImages() async {
     final res = await pickMultipleImages();
     if (res != null) {
       setState(() {
@@ -65,7 +65,7 @@ class _CreateAddPostScreenState extends ConsumerState<CreatePostScreen> {
     }
   }
 
-  void pickImageFromCamera() async {
+  void pickingImageFromCamera() async {
     final res = await pickImageCamera();
     if (res != null) {
       setState(() {
@@ -74,16 +74,16 @@ class _CreateAddPostScreenState extends ConsumerState<CreatePostScreen> {
     }
   }
 
-  void sharePost() {
+  void uploadPost() {
     if (imageFiles.isNotEmpty) {
-      ref.read(postControllerProvider.notifier).shareImagePost(
+      ref.read(postControllerProvider.notifier).uploadImagePost(
             context: context,
             title: titleController.text.trim(),
             selectedCommunity: selectedCommunity ?? communitie[0],
             files: imageFiles,
           );
     } else if (videoFile != null) {
-      ref.read(postControllerProvider.notifier).shareVideoPost(
+      ref.read(postControllerProvider.notifier).uploadVideoPost(
             context: context,
             title: titleController.text.trim(),
             selectedCommunity: selectedCommunity ?? communitie[0],
@@ -235,11 +235,11 @@ class _CreateAddPostScreenState extends ConsumerState<CreatePostScreen> {
                   children: [
                     IconButton(
                       icon: const Icon(Icons.image),
-                      onPressed: () => pickImages(),
+                      onPressed: () => pickingImages(),
                     ),
                     IconButton(
                       icon: const Icon(Icons.linked_camera),
-                      onPressed: () => pickImageFromCamera(),
+                      onPressed: () => pickingImageFromCamera(),
                     ),
                     IconButton(
                       icon: const Icon(Icons.video_collection),
@@ -255,7 +255,7 @@ class _CreateAddPostScreenState extends ConsumerState<CreatePostScreen> {
                     ),
                     const Spacer(),
                     ElevatedButton(
-                      onPressed: () => sharePost(),
+                      onPressed: () => uploadPost(),
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.blueAccent,
                       ),

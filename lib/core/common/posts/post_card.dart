@@ -37,6 +37,9 @@ class PostCard extends ConsumerWidget {
   void navigateToCommunity(BuildContext context) {
     Routemaster.of(context).push('/r/${post.communityName}');
   }
+  void navigateToUserProf(BuildContext context) {
+
+  }
 
   void navigateToComments(BuildContext context) {
     Routemaster.of(context).push('/post/${post.id}/comments');
@@ -82,11 +85,29 @@ class PostCard extends ConsumerWidget {
                                     onTap: () {
                                       navigateToCommunity(context);
                                     },
-                                    child: CircleAvatar(
-                                      radius: 25,
-                                      backgroundImage:
-                                          NetworkImage(post.communityProfilePic),
-                                    ),
+                                    child: Stack(children: [
+                                      CircleAvatar(
+                                        radius: 25,
+                                        backgroundImage:
+                                            NetworkImage(post.communityProfilePic),
+                                      ),
+                                      Positioned(
+                                        bottom: 0,
+                                        right: 0,
+                                        child: GestureDetector(
+                                          onTap: () {
+                                            ref.read(getUserDataProvider(post.userUid)).whenData((value) {
+                                              Routemaster.of(context).push('/u/${value.name}/${value.uid}/${value.token}');
+                                            });
+                                          },
+                                          child: CircleAvatar(
+                                            radius: 13,
+                                            backgroundImage:
+                                                NetworkImage(post.userProfilePic),
+                                          ),
+                                        ),
+                                      ),
+                                    ]),
                                   ),
                                   Padding(
                                     padding: const EdgeInsets.symmetric(horizontal: 8.0),
@@ -109,14 +130,21 @@ class PostCard extends ConsumerWidget {
                                         ),
                                         SizedBox(
                                           width: 160,
-                                          child: Text(
-                                            'u/${post.username}',
-                                            style: currentTheme.textTheme.bodyMedium!
-                                                .copyWith(
-                                              color: currentTheme
-                                                  .textTheme.bodyMedium!.color!
-                                                  .withOpacity(0.8),
-                                              fontSize: 12,
+                                          child: GestureDetector(
+                                            onTap: () {
+                                              ref.read(getUserDataProvider(post.userUid)).whenData((value) {
+                                                Routemaster.of(context).push('/u/${value.name}/${value.uid}/${value.token}');
+                                              });
+                                            },
+                                            child: Text(
+                                              'u/${post.username}',
+                                              style: currentTheme.textTheme.bodyMedium!
+                                                  .copyWith(
+                                                color: currentTheme
+                                                    .textTheme.bodyMedium!.color!
+                                                    .withOpacity(0.8),
+                                                fontSize: 12,
+                                              ),
                                             ),
                                           ),
                                         ),

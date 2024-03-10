@@ -7,7 +7,6 @@ class PostModel {
   final String linkVideo;
   final String communityName;
   final String communityProfilePic;
-
   final List<String> upvotes;
   final List<String> downvotes;
   final int commentCount;

@@ -5,15 +5,14 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:photo_view/photo_view.dart';
 import 'package:photo_view/photo_view_gallery.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:untitled/core/common/loader.dart';
 
 import '../../../core/utils.dart';
 import '../controller/story_controller.dart';
 
 class CreateStoryScreen extends ConsumerStatefulWidget {
   const CreateStoryScreen({
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   _CreateStoryScreenState createState() => _CreateStoryScreenState();
@@ -48,6 +47,7 @@ class _CreateStoryScreenState extends ConsumerState<CreateStoryScreen> {
   @override
   void initState() {
     super.initState();
+    pickImage();
     pageController = PageController(initialPage: initialIndex);
     currentIndex = initialIndex;
   }

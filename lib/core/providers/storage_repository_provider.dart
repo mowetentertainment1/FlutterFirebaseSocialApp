@@ -6,7 +6,6 @@ import 'package:fpdart/fpdart.dart';
 import 'package:untitled/core/providers/firebase_providers.dart';
 import 'package:untitled/core/type_defs.dart';
 import 'package:uuid/uuid.dart';
-
 import '../failure.dart';
 
 final storageRepositoryProvider = Provider(
@@ -103,5 +102,7 @@ class StorageRepository {
     } catch (e) {
       return left(Failure(e.toString()));
     }
+
   }
+
 }

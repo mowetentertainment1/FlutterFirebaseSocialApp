@@ -24,6 +24,7 @@ class Assets {
   static const String controllerCommunityController = 'lib/features/community/controller/community_controller.dart';
   static const String controllerNotificationController = 'lib/features/notification/controller/notification_controller.dart';
   static const String controllerPostController = 'lib/features/post/controller/post_controller.dart';
+  static const String controllerShortVideoController = 'lib/features/short_video/controller/short_video_controller.dart';
   static const String controllerStoryController = 'lib/features/story/controller/story_controller.dart';
   static const String controllerUserProfileController = 'lib/features/home/user_profile/controller/user_profile_controller.dart';
   static const String coreColors = 'lib/core/colors.dart';
@@ -52,6 +53,7 @@ class Assets {
   static const String modelMessageModel = 'lib/model/message_model.dart';
   static const String modelNotificationModel = 'lib/model/notification_model.dart';
   static const String modelPostModel = 'lib/model/post_model.dart';
+  static const String modelShortVideoModel = 'lib/model/short_video_model.dart';
   static const String modelStoryModel = 'lib/model/story_model.dart';
   static const String modelUserModel = 'lib/model/user_model.dart';
   static const String postsPostCard = 'lib/core/common/posts/post_card.dart';
@@ -63,6 +65,7 @@ class Assets {
   static const String repositoryCommunityRepo = 'lib/features/community/repository/community_repo.dart';
   static const String repositoryNotificationRepo = 'lib/features/notification/repository/notification_repo.dart';
   static const String repositoryPostRepo = 'lib/features/post/repository/post_repo.dart';
+  static const String repositoryShortVideoRepo = 'lib/features/short_video/repository/short_video_repo.dart';
   static const String repositoryStoryRepo = 'lib/features/story/repository/story_repo.dart';
   static const String repositoryUserProfileRepo = 'lib/features/home/user_profile/repository/user_profile_repo.dart';
   static const String responsiveResponsive = 'lib/responsive/responsive.dart';
@@ -75,19 +78,21 @@ class Assets {
   static const String screensContactsList = 'lib/features/chat/screens/contacts_list.dart';
   static const String screensCreateCommunityScreen = 'lib/features/community/screens/create_community_screen.dart';
   static const String screensCreatePostScreen = 'lib/features/post/screens/create_post_screen.dart';
+  static const String screensCreateShortVideo = 'lib/features/short_video/screens/create_short_video_screen.dart';
   static const String screensCreateStoryScreen = 'lib/features/story/screens/create_story_screen.dart';
   static const String screensEditCommunityScreen = 'lib/features/community/screens/edit_community_screen.dart';
   static const String screensEditPostScreen = 'lib/features/post/screens/edit_post_screen.dart';
   static const String screensEditProfileScreen = 'lib/features/home/user_profile/screens/edit_profile_screen.dart';
-  static const String screensHomeScreen = 'lib/features/home/screens/home_screen.dart';
   static const String screensLoginScreen = 'lib/features/auth/screens/login_screen.dart';
   static const String screensMobileCommunityChatbox = 'lib/features/chat/screens/mobile_community_chatbox.dart';
   static const String screensMobileContactChatbox = 'lib/features/chat/screens/mobile_contact_chatbox.dart';
   static const String screensModToolScreen = 'lib/features/community/screens/mod_tool_screen.dart';
   static const String screensNotificationScreen = 'lib/features/notification/screens/notification_screen.dart';
   static const String screensSelectContactScreen = 'lib/features/chat/screens/select_contact_screen.dart';
+  static const String screensShortVideoScreen = 'lib/features/short_video/screens/short_video_screen.dart';
   static const String screensStoryListScreen = 'lib/features/story/screens/story_list_screen.dart';
   static const String screensStoryViewScreen = 'lib/features/story/screens/story_view_screen.dart';
+  static const String screensTabBar = 'lib/features/home/screens/tab_bar.dart';
   static const String screensUserProfileScreen = 'lib/features/home/user_profile/screens/user_profile_screen.dart';
   static const String themePalette = 'lib/theme/palette.dart';
   static const String widgetCommentCard = 'lib/features/post/widget/comment_card.dart';

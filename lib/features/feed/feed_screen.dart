@@ -9,6 +9,7 @@ import 'package:untitled/core/common/loader.dart';
 import 'package:untitled/features/story/screens/story_list_screen.dart';
 
 import '../../core/common/posts/post_card.dart';
+import '../../core/constants/constants.dart';
 import '../../theme/palette.dart';
 import '../auth/controller/auth_controller.dart';
 import '../community/controller/community_controller.dart';
@@ -112,8 +113,8 @@ class FeedScreen extends ConsumerWidget {
                                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                                       children: [
                                         const SizedBox(width: 10),
-                                        CircleAvatar(
-                                          backgroundImage: NetworkImage(user.profilePic),
+                                         CircleAvatar(
+                                          backgroundImage: Image.asset(Constants.loginEmotePath).image,
                                         ),
                                         const SizedBox(width: 10),
                                         Text(
@@ -123,9 +124,9 @@ class FeedScreen extends ConsumerWidget {
                                             fontWeight: FontWeight.bold,
                                           ),
                                         ),
-                                        const SizedBox(width: 10),
+                                        const SizedBox(width: 5 ),
                                         const Icon(
-                                          CupertinoIcons.photo_fill_on_rectangle_fill,
+                                          CupertinoIcons.add_circled,
                                           color: Colors.grey,
                                         )
                                       ],

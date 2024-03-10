@@ -80,7 +80,11 @@ class UserProfileController extends StateNotifier<bool> {
   }
 
   Stream<List<PostModel>> getUserPosts(String uid) {
-    return _userRepo.getUserPosts(uid);
+    try {
+      return _userRepo.getUserPosts(uid);
+    } catch (e) {
+      return Stream.empty();
+    }
   }
   Stream<List<UserModel>> searchUser(String query) {
     return _userRepo.searchUser(query);
