@@ -13,7 +13,8 @@ import '../../auth/controller/auth_controller.dart';
 import '../../notification/repository/notification_repo.dart';
 import '../repository/short_video_repo.dart';
 
-final shortVideoControllerProvider = StateNotifierProvider<ShortVideoController, bool>((ref) {
+final shortVideoControllerProvider =
+    StateNotifierProvider<ShortVideoController, bool>((ref) {
   final shortVideoRepo = ref.watch(shortVideoRepoProvider);
   final notificationRepo = ref.watch(notificationRepoProvider);
   final storageRepository = ref.watch(storageRepositoryProvider);
@@ -24,10 +25,11 @@ final shortVideoControllerProvider = StateNotifierProvider<ShortVideoController,
     ref: ref,
   );
 });
-// final userShortVideosProvider =
-// StreamProvider.family<List<ShortVideoModel>, List<CommunityModel>>((ref, communities) {
-//   return ref.read(postControllerProvider.notifier).getShortVideos(communities);
-// });
+
+final getUserShortVideosProvider = StreamProvider<List<ShortVideoModel>>((ref) {
+  final storyController = ref.watch(shortVideoControllerProvider.notifier);
+  return storyController.getShortVideos();
+});
 // final guestShortVideosProvider = StreamProvider((ref) {
 //   return ref.read(postControllerProvider.notifier).getGuestShortVideos();
 // });
@@ -88,7 +90,7 @@ class ShortVideoController extends StateNotifier<bool> {
       final res = await _shortVideoRepo.uploadVideo(video);
       state = false;
       res.fold((l) => showSnackBar(context, l.message), (r) {
-        showSnackBar(context, 'ShortVideoed successfully!');
+        showSnackBar(context, 'Successfully!');
         Routemaster.of(context).pop();
         for (var uid in user.followers) {
           final NotificationModel notification = NotificationModel(
@@ -110,6 +112,7 @@ class ShortVideoController extends StateNotifier<bool> {
       });
     });
   }
+
   //
   // void deleteShortVideo(List<String> urls, ShortVideoModel post, BuildContext context) async {
   //   state = true;
@@ -173,14 +176,11 @@ class ShortVideoController extends StateNotifier<bool> {
   //   });
   // }
   //
-  // Stream<List<ShortVideoModel>> getShortVideos(List<CommunityModel> communities) {
-  //   if (communities.isNotEmpty) {
-  //     return _shortVideoRepo.getShortVideos(communities);
-  //   } else {
-  //     return const Stream.empty();
-  //   }
-  // }
-  //
+
+  Stream<List<ShortVideoModel>> getShortVideos() {
+    final user = _ref.read(userProvider)!;
+    return _shortVideoRepo.getShortVideos(user.following);
+  }
   // Stream<List<ShortVideoModel>> getGuestShortVideos() {
   //   return _shortVideoRepo.getGuestShortVideos();
   // }

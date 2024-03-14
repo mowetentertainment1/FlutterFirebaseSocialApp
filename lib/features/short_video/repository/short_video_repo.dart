@@ -21,44 +21,39 @@ class ShortVideoRepo {
 
   ShortVideoRepo({required FirebaseFirestore firestore}) : _firestore = firestore;
 
-  CollectionReference get _shortVideo => _firestore.collection(FirebaseConstants.shortVideosCollection);
-  CollectionReference get _comments => _firestore.collection(FirebaseConstants.commentsCollection);
-  CollectionReference get _user => _firestore.collection(FirebaseConstants.usersCollection);
-
-
+  CollectionReference get _shortVideo =>
+      _firestore.collection(FirebaseConstants.shortVideosCollection);
+  CollectionReference get _comments =>
+      _firestore.collection(FirebaseConstants.commentsCollection);
+  CollectionReference get _user =>
+      _firestore.collection(FirebaseConstants.usersCollection);
 
   // upload video
   FutureVoid uploadVideo(ShortVideoModel video) async {
     try {
-      String uid = FirebaseAuth.instance.currentUser!.uid;
-      DocumentSnapshot userDoc =
-      await _user.doc(uid).get();
-      // get id
-      var allDocs = await _shortVideo.get();
-      int len = allDocs.docs.length;
-      // String videoUrl = await _uploadVideoToStorage("Video $len", videoPath);
-      // String thumbnail = await _uploadImageToStorage("Video $len", videoPath);
-
-      // ShortVideoModel video = ShortVideoModel(
-      //   username: (userDoc.data()! as Map<String, dynamic>)['name'],
-      //   uid: uid,
-      //   id: "Video $len",
-      //   likes: [],
-      //   commentCount: 0,
-      //   shareCount: 0,
-      //   songName: songName,
-      //   caption: caption,
-      //   videoUrl: videoUrl,
-      //   profilePhoto: (userDoc.data()! as Map<String, dynamic>)['profilePhoto'],
-      //   thumbnail: thumbnail,
-      // );
-
-     return right(_shortVideo.doc(video.id).set(
-       video.toMap(),)
-      );
+      return right(FirebaseFirestore.instance
+          .collection('shortvideos').doc(video.userUid).set(
+            video.toMap(),
+          ));
     } catch (e) {
       return left(Failure(e.toString()));
     }
   }
-
+  Stream<List<ShortVideoModel>> getShortVideos(List<String> followingUids) {
+    String currentUserUid = FirebaseAuth.instance.currentUser!.uid;
+    followingUids.add(currentUserUid);
+    return FirebaseFirestore.instance
+        .collection('shortvideos')
+        .where('userUid', whereIn: followingUids)
+        .orderBy('createdAt', descending: true)
+        .snapshots()
+        .map((snapshot) {
+      try {
+        return snapshot.docs.map((doc) => ShortVideoModel.fromMap(doc.data())).toList();
+      } catch (e) {
+        print('Error fetching and mapping data: $e');
+        return [];
+      }
+    });
+  }
 }

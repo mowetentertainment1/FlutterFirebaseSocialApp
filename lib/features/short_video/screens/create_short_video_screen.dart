@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:routemaster/routemaster.dart';
 import 'package:video_player/video_player.dart';
 
 import '../controller/short_video_controller.dart';
@@ -57,6 +58,7 @@ void uploadVideo(String songName, String caption, String videoPath) async {
 
   @override
   Widget build(BuildContext context) {
+   final isLoading = ref.watch(shortVideoControllerProvider);
     return Scaffold(
       body: SingleChildScrollView(
         child: Column(
@@ -133,13 +135,14 @@ void uploadVideo(String songName, String caption, String videoPath) async {
                   ),
                         ),
                       onPressed: () {
-                        uploadVideo(
-                          _songController.text,
-                          _captionController.text,
-                          videoFile!.path,
-                        );
+                        isLoading
+                            ? null
+                            : uploadVideo(
+                            _songController.text, _captionController.text, videoFile!.path);
                       },
-                      child: const Icon(Icons.check,size: 45,),),
+                      child: isLoading
+                          ? const CircularProgressIndicator()
+                          : const Icon(Icons.check,size: 45,),),
                   const SizedBox(
                     height: 30,
                   ),

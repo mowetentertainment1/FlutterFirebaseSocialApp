@@ -71,6 +71,7 @@ class Assets {
   static const String responsiveResponsive = 'lib/responsive/responsive.dart';
   static const String screensAddModsSreen = 'lib/features/community/screens/add_mods_sreen.dart';
   static const String screensChatScreen = 'lib/features/chat/screens/chat_screen.dart';
+  static const String screensCircleAnimation = 'lib/features/short_video/screens/circle_animation.dart';
   static const String screensCommentScreen = 'lib/features/post/screens/comment_screen.dart';
   static const String screensCommunityBottomChatField = 'lib/features/chat/screens/community_bottom_chat_field.dart';
   static const String screensCommunityChatList = 'lib/features/chat/screens/community_chat_list.dart';
@@ -78,7 +79,7 @@ class Assets {
   static const String screensContactsList = 'lib/features/chat/screens/contacts_list.dart';
   static const String screensCreateCommunityScreen = 'lib/features/community/screens/create_community_screen.dart';
   static const String screensCreatePostScreen = 'lib/features/post/screens/create_post_screen.dart';
-  static const String screensCreateShortVideo = 'lib/features/short_video/screens/create_short_video_screen.dart';
+  static const String screensCreateShortVideoScreen = 'lib/features/short_video/screens/create_short_video_screen.dart';
   static const String screensCreateStoryScreen = 'lib/features/story/screens/create_story_screen.dart';
   static const String screensEditCommunityScreen = 'lib/features/community/screens/edit_community_screen.dart';
   static const String screensEditPostScreen = 'lib/features/post/screens/edit_post_screen.dart';
@@ -94,6 +95,7 @@ class Assets {
   static const String screensStoryViewScreen = 'lib/features/story/screens/story_view_screen.dart';
   static const String screensTabBar = 'lib/features/home/screens/tab_bar.dart';
   static const String screensUserProfileScreen = 'lib/features/home/user_profile/screens/user_profile_screen.dart';
+  static const String screensVideoCard = 'lib/features/short_video/screens/video_card.dart';
   static const String themePalette = 'lib/theme/palette.dart';
   static const String widgetCommentCard = 'lib/features/post/widget/comment_card.dart';
 

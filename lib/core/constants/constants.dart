@@ -1,5 +1,6 @@
 import 'package:untitled/features/chat/screens/chat_screen.dart';
 import 'package:untitled/features/feed/feed_screen.dart';
+import 'package:untitled/features/short_video/screens/short_video_screen.dart';
 
 import '../../features/notification/screens/notification_screen.dart';
 import '../../features/post/screens/create_post_screen.dart';
@@ -16,7 +17,7 @@ class Constants {
   static const communityBannerPath = "community/banner";
   static const tabWidgets = [
     FeedScreen(),
-    CreatePostScreen(),
+    ShortVideoScreen(),
     ChatScreen(),
     NotificationScreen(),
 

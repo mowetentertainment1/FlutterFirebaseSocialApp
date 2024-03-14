@@ -24,12 +24,9 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
     WidgetsBinding.instance.addObserver(this);
     ref.read(notificationController.notifier).requestPermission();
     ref.read(notificationController.notifier).getToken().then((value) {
-      print('Token: $value');
       ref.read(notificationController.notifier).updateToken(value);
     });
     ref.read(notificationController.notifier).onMessage(context);
-
-
   }
 
   @override
@@ -47,6 +44,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
         break;
       case AppLifecycleState.inactive:
         ref.read(authControllerProvider.notifier).setUserState(false);
+        break;
       case AppLifecycleState.detached:
         ref.read(authControllerProvider.notifier).setUserState(false);
         break;
@@ -58,6 +56,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
         break;
     }
   }
+
 
   int _page = 0;
 
@@ -93,8 +92,8 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
                   label: 'Home',
                 ),
                 const BottomNavigationBarItem(
-                  icon: Icon(CupertinoIcons.add),
-                  label: 'Create',
+                  icon: Icon(Icons.ondemand_video_rounded),
+                  label: 'Video',
                 ),
                  BottomNavigationBarItem(
                   icon: ref.watch(getUnreadMessagesCount).when(
