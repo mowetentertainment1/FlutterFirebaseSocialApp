@@ -49,17 +49,19 @@ Star⭐ the repo if you like what you see😉.
 ## Screenshots
 
 <p>
-<img src="ss/fead1.png" width="300"/> <img src="ss/fead2.png" width="300"/>
-<img src="ss/chatscreen1.png" width="300"> <img src="ss/chat_box2.png" width="300">
-<img src="ss/chat_box1.png" width="300"> <img src="ss/chat_box2.png" width="300">
+<img src="ss/fead1.png" width="300"/> <img src="ss/feed2.png" width="300"/>
+<img src="ss/cmt1.png" width="300"/> <img src="ss/cmt2.png" width="300"/>
+<img src="ss/deletecmt1.png" width="300"/> <img src="ss/deletechat2.png" width="300"/>
+<img src="ss/chatscreen1.png" width="300"> <img src="ss/comlist2.png" width="300">
+<img src="ss/chatboxd1.png" width="300"> <img src="ss/chat_box2.png" width="300">
 <img src="ss/community_chatd1.png" width="300"> <img src="ss/community_chat2.png" width="300">
 <img src="ss/noti1.png" width="300"> <img src="ss/noti2.png" width="300">
 <img src="ss/user_prifile.png" width="300"> <img src="ss/cs2.png" width="300">
 <img src="ss/svideo1.png" width="300"> <img src="ss/story_view.png" width="300">
 <img src="ss/mt2.png" width="300"> <img src="ss/search_user.png" width="300">
 <img src="ss/create_sv.png" width="300"> <img src="ss/createPost2.png" width="300">
-<img src="ss/svideo1.png" width="300"> <img src="ss/cmt2.png" width="300">
-<img src="ss/video_post.png.png" width="300"> <img src="ss/userpf2.png" width="300">
+<img src="ss/edPFd1.png" width="300"> <img src="ss/edc.png" width="300">
+<img src="ss/video_post.png" width="300"> <img src="ss/edp.png" width="300">
 </p>
 
 ## Installation

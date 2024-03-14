@@ -99,7 +99,7 @@ class AuthRepository {
         followers: [],
         following: [],
       );
-      // await _users.doc(userCredential.user!.uid).set(userModel.toMap());
+      await _users.doc(userCredential.user!.uid).set(userModel.toMap());
 
       return right(userModel);
     } on FirebaseException catch (e) {
