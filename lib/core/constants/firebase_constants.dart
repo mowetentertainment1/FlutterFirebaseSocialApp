@@ -7,6 +7,6 @@ class FirebaseConstants {
   static const messagesCollection = 'messages';
   static const chatsCollection = 'chats';
   static const notificationsCollection = 'notifications';
-  static const shortVideosCollection = 'shortVideos';
+  static const shortVideosCollection = 'shortvideos';
 
 }
