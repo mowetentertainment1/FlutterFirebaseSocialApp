@@ -132,50 +132,50 @@ class ShortVideoController extends StateNotifier<bool> {
   //   });
   // }
   //
-  // void upVoteShortVideo(ShortVideoModel post) async {
-  //   final user = _ref.read(userProvider)!;
-  //   final res = await _shortVideoRepo.upVoteShortVideo(post, user.uid);
-  //   final NotificationModel notification = NotificationModel(
-  //     id: post.id,
-  //     type: NotificationEnum.post,
-  //     name: post.username,
-  //     createdAt: DateTime.now(),
-  //     uid: post.userUid,
-  //     profilePic: post.userProfilePic,
-  //     text: '${user.name} upvoted your post',
-  //     isRead: false,
-  //   );
-  //   res.fold((l) => (l), (r) {
-  //     if (post.userUid != user.uid) {
-  //       _notificationRepo.sendNotification(
-  //         notification: notification,
-  //       );
-  //     }
-  //   });
-  // }
-  //
-  // void downVoteShortVideo(ShortVideoModel post) async {
-  //   final user = _ref.read(userProvider)!;
-  //   final res = await _shortVideoRepo.downVoteShortVideo(post, user.uid);
-  //   final NotificationModel notification = NotificationModel(
-  //     id: post.id,
-  //     type: NotificationEnum.post,
-  //     name: post.id,
-  //     createdAt: DateTime.now(),
-  //     uid: post.userUid,
-  //     profilePic: '',
-  //     text: '${user.name} downvoted your post',
-  //     isRead: false,
-  //   );
-  //   res.fold((l) => (l), (r) {
-  //     if (post.userUid != user.uid) {
-  //       _notificationRepo.sendNotification(
-  //         notification: notification,
-  //       );
-  //     }
-  //   });
-  // }
-  //
+  void upVoteShortVideo(ShortVideoModel video) async {
+    final user = _ref.read(userProvider)!;
+    final res = await _shortVideoRepo.upVoteShortVideo(video, user.uid);
+    final NotificationModel notification = NotificationModel(
+      id: video.id,
+      type: NotificationEnum.upvote,
+      name: video.userName,
+      createdAt: DateTime.now(),
+      uid: video.userUid,
+      profilePic: video.userProfilePic,
+      text: '${user.name} upvoted your video',
+      isRead: false,
+    );
+    res.fold((l) => (l), (r) {
+      if (video.userUid != user.uid) {
+        _notificationRepo.sendNotification(
+          notification: notification,
+        );
+      }
+    });
+  }
+
+  void downVoteShortVideo(ShortVideoModel video) async {
+    final user = _ref.read(userProvider)!;
+    final res = await _shortVideoRepo.downVoteShortVideo(video, user.uid);
+    final NotificationModel notification = NotificationModel(
+      id: video.id,
+      type: NotificationEnum.downvote,
+      name: video.userName,
+      createdAt: DateTime.now(),
+      uid: video.userUid,
+      profilePic: '',
+      text: '${user.name} downvoted your video',
+      isRead: false,
+    );
+    res.fold((l) => (l), (r) {
+      if (video.userUid != user.uid) {
+        _notificationRepo.sendNotification(
+          notification: notification,
+        );
+      }
+    });
+  }
+
 
   Stream<List<ShortVideoModel>> getShortVideos() {
     final user = _ref.read(userProvider)!;

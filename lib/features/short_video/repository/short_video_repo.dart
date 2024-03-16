@@ -3,14 +3,11 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:fpdart/fpdart.dart';
 import 'package:untitled/core/type_defs.dart';
-import 'package:untitled/model/community_model.dart';
 import 'package:untitled/model/short_video_model.dart';
 
 import '../../../core/constants/firebase_constants.dart';
 import '../../../core/failure.dart';
 import '../../../core/providers/firebase_providers.dart';
-import '../../../model/comment_model.dart';
-import '../../../model/post_model.dart';
 
 final shortVideoRepoProvider = Provider((ref) {
   return ShortVideoRepo(firestore: ref.watch(firestoreProvider));
@@ -28,11 +25,10 @@ class ShortVideoRepo {
   CollectionReference get _user =>
       _firestore.collection(FirebaseConstants.usersCollection);
 
-  // upload video
   FutureVoid uploadVideo(ShortVideoModel video) async {
     try {
       return right(FirebaseFirestore.instance
-          .collection('shortvideos').doc(video.userUid).set(
+          .collection('shortvideos').doc(video.id).set(
             video.toMap(),
           ));
     } catch (e) {
@@ -55,5 +51,53 @@ class ShortVideoRepo {
         return [];
       }
     });
+  }
+
+  FutureVoid upVoteShortVideo(ShortVideoModel video, String userId) async {
+    try {
+      if (video.downVotes.contains(userId)) {
+        _shortVideo.doc(video.id).update({
+          'downVotes': FieldValue.arrayRemove([userId]),
+        });
+      }
+      if (video.upVotes.contains(userId)) {
+        _shortVideo.doc(video.id).update({
+          'upVotes': FieldValue.arrayRemove([userId]),
+        });
+      } else {
+        _shortVideo.doc(video.id).update({
+          'upVotes': FieldValue.arrayUnion([userId]),
+        });
+      }
+      return right(unit);
+    } on FirebaseException catch (e) {
+      throw e.message!;
+    } catch (e) {
+      return left(Failure(e.toString()));
+    }
+  }
+  FutureVoid downVoteShortVideo(ShortVideoModel video, String userId) async {
+    try {
+      if (video.upVotes.contains(userId)) {
+        _shortVideo.doc(video.id).update({
+          'upVotes': FieldValue.arrayRemove([userId]),
+        });
+      }
+
+      if (video.downVotes.contains(userId)) {
+        _shortVideo.doc(video.id).update({
+          'downVotes': FieldValue.arrayRemove([userId]),
+        });
+      } else {
+        _shortVideo.doc(video.id).update({
+          'downVotes': FieldValue.arrayUnion([userId]),
+        });
+      }
+      return right(unit);
+    } on FirebaseException catch (e) {
+      throw e.message!;
+    } catch (e) {
+      return left(Failure(e.toString()));
+    }
   }
 }
