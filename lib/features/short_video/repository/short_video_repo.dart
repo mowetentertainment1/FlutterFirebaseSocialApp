@@ -8,6 +8,7 @@ import 'package:untitled/model/short_video_model.dart';
 import '../../../core/constants/firebase_constants.dart';
 import '../../../core/failure.dart';
 import '../../../core/providers/firebase_providers.dart';
+import '../../../model/comment_model.dart';
 
 final shortVideoRepoProvider = Provider((ref) {
   return ShortVideoRepo(firestore: ref.watch(firestoreProvider));
@@ -94,6 +95,43 @@ class ShortVideoRepo {
         });
       }
       return right(unit);
+    } on FirebaseException catch (e) {
+      throw e.message!;
+    } catch (e) {
+      return left(Failure(e.toString()));
+    }
+  }
+  Stream<List<CommentModel>> getCommentsOfShortVideo(String postId) {
+    return _comments.where('postId', isEqualTo: postId).orderBy('createdAt', descending: true).snapshots().map(
+          (event) => event.docs
+          .map(
+            (e) => CommentModel.fromMap(
+          e.data() as Map<String, dynamic>,
+        ),
+      )
+          .toList(),
+    );
+  }
+  FutureVoid addComment(CommentModel comment) async {
+    try {
+      await _comments.doc(comment.id).set(comment.toMap());
+
+      return right(_shortVideo.doc(comment.postId).update({
+        'commentCount': FieldValue.increment(1),
+      }));
+    } on FirebaseException catch (e) {
+      throw e.message!;
+    } catch (e) {
+      return left(Failure(e.toString()));
+    }
+  }
+  FutureVoid deleteComment(CommentModel comment) async {
+    try {
+      await _comments.doc(comment.id).delete();
+
+      return right(_shortVideo.doc(comment.postId).update({
+        'commentCount': FieldValue.increment(-1),
+      }));
     } on FirebaseException catch (e) {
       throw e.message!;
     } catch (e) {

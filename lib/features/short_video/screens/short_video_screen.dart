@@ -2,9 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:routemaster/routemaster.dart';
 import 'package:untitled/features/short_video/screens/video_card.dart';
+import 'package:untitled/model/comment_model.dart';
 
 import '../../../model/short_video_model.dart';
+import '../../../responsive/responsive.dart';
+import '../../../theme/palette.dart';
 import '../../auth/controller/auth_controller.dart';
+import '../../post/controller/post_controller.dart';
+import '../../post/widget/comment_card.dart';
 import '../controller/short_video_controller.dart';
 import 'circle_animation.dart';
 
@@ -16,6 +21,24 @@ class ShortVideoScreen extends ConsumerStatefulWidget {
 }
 
 class _ShortVideoScreenState extends ConsumerState<ShortVideoScreen> {
+  final TextEditingController _commentController = TextEditingController();
+  @override
+  void dispose() {
+    _commentController.dispose();
+    super.dispose();
+  }
+
+  void addComment(ShortVideoModel video) {
+    ref.read(shortVideoControllerProvider.notifier).addComment(
+          context: context,
+          text: _commentController.text.trim(),
+          post: video,
+        );
+    setState(() {
+      _commentController.text = '';
+    });
+  }
+
   void navigateToCreateShortVideo(BuildContext context) {
     Routemaster.of(context).push('/create-short-video');
   }
@@ -32,6 +55,7 @@ class _ShortVideoScreenState extends ConsumerState<ShortVideoScreen> {
   Widget build(BuildContext context) {
     final user = ref.watch(userProvider)!;
     final isGuest = !user.isAuthenticated;
+    final currentTheme = ref.watch(themeNotifierProvider);
     return Scaffold(
       appBar: AppBar(
         title: const Text('Short Video'),
@@ -178,13 +202,187 @@ class _ShortVideoScreenState extends ConsumerState<ShortVideoScreen> {
                                               children: [
                                                 InkWell(
                                                   onTap: () {
-                                                    // Navigator.of(context).push(
-                                                    // MaterialPageRoute(
-                                                    // builder: (context) => CommentScreen(
-                                                    // id: data.id,
-                                                    // ),
-                                                    // ),
-                                                    // ),
+                                                    showBottomSheet(
+                                                      backgroundColor: currentTheme
+                                                          .backgroundColor,
+                                                      shape: const RoundedRectangleBorder(
+                                                        borderRadius: BorderRadius.only(
+                                                          topLeft: Radius.circular(20),
+                                                          topRight: Radius.circular(20),
+                                                        ),
+                                                      ),
+                                                        context: context,
+                                                        builder: (context) {
+                                                          return Container(
+                                                            padding: const EdgeInsets.all(20),
+                                                            height: 600,
+                                                            child: Column(
+                                                              children: [
+                                                                 Text(
+                                                                  'Comments',
+                                                                  style: TextStyle(
+                                                                    color: currentTheme.textTheme.bodyMedium!.color!,
+                                                                      fontSize: 20,
+                                                                      fontWeight:
+                                                                          FontWeight
+                                                                              .bold),
+                                                                ),
+                                                                Expanded(
+                                                                  child: StreamBuilder<
+                                                                      List<CommentModel>>(
+                                                                    stream: ref
+                                                                        .watch(
+                                                                            shortVideoControllerProvider
+                                                                                .notifier)
+                                                                        .fetchShortVideoComments(
+                                                                            data.id),
+                                                                    builder: (BuildContext
+                                                                            context,
+                                                                        AsyncSnapshot<
+                                                                                List<
+                                                                                    CommentModel>>
+                                                                            snapshot) {
+                                                                      if (snapshot
+                                                                              .connectionState ==
+                                                                          ConnectionState
+                                                                              .waiting) {
+                                                                        return const Center(
+                                                                            child:
+                                                                                CircularProgressIndicator());
+                                                                      }
+                                                                      if (snapshot.data!
+                                                                          .isEmpty) {
+                                                                        return const Center(
+                                                                            child: Text(
+                                                                                'No comments'));
+                                                                      }
+                                                                      return ListView
+                                                                          .builder(
+                                                                        itemCount:
+                                                                            snapshot.data!
+                                                                                .length,
+                                                                        itemBuilder:
+                                                                            (BuildContext
+                                                                                    context,
+                                                                                int index) {
+                                                                          final comment =
+                                                                              snapshot.data![
+                                                                                  index];
+                                                                          return InkWell(
+                                                                            onLongPress:
+                                                                                () {
+                                                                              if (comment
+                                                                                      .username ==
+                                                                                  user.name) {
+                                                                                showDialog<
+                                                                                    void>(
+                                                                                  context:
+                                                                                      context,
+                                                                                  barrierDismissible:
+                                                                                      true,
+                                                                                  builder:
+                                                                                      (BuildContext
+                                                                                          dialogContext) {
+                                                                                    return AlertDialog(
+                                                                                      title:
+                                                                                          const Text('Delete Comment'),
+                                                                                      content:
+                                                                                          const Text('Are you sure you want to delete this comment?'),
+                                                                                      actions: <Widget>[
+                                                                                        TextButton(
+                                                                                          child: const Text('Cancel'),
+                                                                                          onPressed: () {
+                                                                                            Navigator.of(dialogContext).pop();
+                                                                                          },
+                                                                                        ),
+                                                                                        TextButton(
+                                                                                          child: const Text('Delete', style: TextStyle(color: Colors.red)),
+                                                                                          onPressed: () {
+                                                                                            Navigator.of(dialogContext).pop();
+                                                                                            ref.read(postControllerProvider.notifier).deleteComment(comment, context);
+                                                                                          },
+                                                                                        ),
+                                                                                      ],
+                                                                                    );
+                                                                                  },
+                                                                                );
+                                                                              }
+                                                                            },
+                                                                            child: CommentCard(
+                                                                                comment:
+                                                                                    comment),
+                                                                          );
+                                                                        },
+                                                                      );
+                                                                    },
+                                                                  ),
+                                                                ),
+                                                                if (!isGuest)
+                                                                  Responsive(
+                                                                    child: SizedBox(
+                                                                      height: 50,
+                                                                      child: TextField(
+                                                                        controller:
+                                                                            _commentController,
+                                                                        decoration:
+                                                                            InputDecoration(
+                                                                          border:
+                                                                              const OutlineInputBorder(
+                                                                            borderRadius:
+                                                                                BorderRadius
+                                                                                    .all(
+                                                                              Radius
+                                                                                  .circular(
+                                                                                      10),
+                                                                            ),
+                                                                          ),
+                                                                          contentPadding:
+                                                                              const EdgeInsets
+                                                                                  .symmetric(
+                                                                                  horizontal:
+                                                                                      16),
+                                                                          hintText:
+                                                                              'Add a comment',
+                                                                          suffixIcon:
+                                                                              GestureDetector(
+                                                                            onTap: () {
+                                                                              addComment(
+                                                                                  data);
+                                                                            },
+                                                                            child: _commentController
+                                                                                    .text
+                                                                                    .trim()
+                                                                                    .isEmpty
+                                                                                ? IconButton(
+                                                                                    onPressed:
+                                                                                        () {},
+                                                                                    icon: const Icon(
+                                                                                        Icons.send,
+                                                                                        color: Colors.grey),
+                                                                                  )
+                                                                                : IconButton(
+                                                                                    onPressed:
+                                                                                        () {
+                                                                                      addComment(data);
+                                                                                    },
+                                                                                    icon: const Icon(
+                                                                                        Icons.send,
+                                                                                        color: Colors.blue),
+                                                                                  ),
+                                                                          ),
+                                                                        ),
+                                                                        onSubmitted:
+                                                                            (value) {
+                                                                          addComment(
+                                                                              data);
+                                                                        },
+                                                                      ),
+                                                                    ),
+                                                                  ),
+                                                              ],
+                                                            ),
+                                                          );
+                                                        });
                                                   },
                                                   child: const Icon(
                                                     Icons.comment,

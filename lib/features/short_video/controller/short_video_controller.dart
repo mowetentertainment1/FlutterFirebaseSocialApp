@@ -7,7 +7,7 @@ import 'package:uuid/uuid.dart';
 import '../../../core/enums/notification_enums.dart';
 import '../../../core/providers/storage_repository_provider.dart';
 import '../../../core/utils.dart';
-import '../../../model/community_model.dart';
+import '../../../model/comment_model.dart';
 import '../../../model/short_video_model.dart';
 import '../../auth/controller/auth_controller.dart';
 import '../../notification/repository/notification_repo.dart';
@@ -36,10 +36,10 @@ final getUserShortVideosProvider = StreamProvider<List<ShortVideoModel>>((ref) {
 // final getShortVideoByIdProvider = StreamProvider.family<ShortVideoModel, String>((ref, videoId) {
 //   return ref.watch(postControllerProvider.notifier).getShortVideo(videoId);
 // });
-// final getShortVideoCommentsProvider = StreamProvider.family((ref, String videoId) {
-//   final postController = ref.watch(postControllerProvider.notifier);
-//   return postController.fetchShortVideoComments(videoId);
-// });
+final getShortVideoCommentsProvider = StreamProvider.family((ref, String videoId) {
+  final postController = ref.watch(shortVideoControllerProvider.notifier);
+  return postController.fetchShortVideoComments(videoId);
+});
 
 class ShortVideoController extends StateNotifier<bool> {
   final ShortVideoRepo _shortVideoRepo;
@@ -189,51 +189,50 @@ class ShortVideoController extends StateNotifier<bool> {
   //   return _shortVideoRepo.getShortVideoById(videoId);
   // }
   //
-  // Stream<List<CommentModel>> fetchShortVideoComments(String videoId) {
-  //   return _shortVideoRepo.getCommentsOfShortVideo(videoId);
-  // }
-  //
-  // void addComment({
-  //   required BuildContext context,
-  //   required String text,
-  //   required ShortVideoModel post,
-  // }) async {
-  //   final user = _ref.read(userProvider)!;
-  //   String commentId = const Uuid().v1();
-  //   CommentModel comment = CommentModel(
-  //     id: commentId,
-  //     text: text,
-  //     createdAt: DateTime.now(),
-  //     videoId: post.id,
-  //     username: user.name,
-  //     profilePic: user.profilePic,
-  //   );
-  //   final res = await _shortVideoRepo.addComment(comment);
-  //   _ref.read(userProfileControllerProvider.notifier).updateUserKarma(UserKarma.comment);
-  //   res.fold((l) => showSnackBar(context, l.message), (r) {
-  //     final NotificationModel notification = NotificationModel(
-  //       id: post.id,
-  //       type: NotificationEnum.comment,
-  //       name: post.username,
-  //       createdAt: DateTime.now(),
-  //       uid: post.userUid,
-  //       profilePic: post.userProfilePic,
-  //       text: '${user.name} commented on your post: $text',
-  //       isRead: false,
-  //     );
-  //     if (post.userUid != user.uid) {
-  //       _notificationRepo.sendNotification(
-  //         notification: notification,
-  //       );
-  //     }
-  //   });
-  // }
-  // void deleteComment(CommentModel comment, BuildContext context) async {
-  //   final res = await _shortVideoRepo.deleteComment(comment);
-  //   res.fold((l) => showSnackBar(context, l.message), (r) {
-  //     showSnackBar(context, 'Comment Deleted');
-  //   });
-  // }
+  Stream<List<CommentModel>> fetchShortVideoComments(String videoId) {
+    return _shortVideoRepo.getCommentsOfShortVideo(videoId);
+  }
+
+  void addComment({
+    required BuildContext context,
+    required String text,
+    required ShortVideoModel post,
+  }) async {
+    final user = _ref.read(userProvider)!;
+    String commentId = const Uuid().v1();
+    CommentModel comment = CommentModel(
+      id: commentId,
+      text: text,
+      createdAt: DateTime.now(),
+      postId: post.id,
+      username: user.name,
+      profilePic: user.profilePic,
+    );
+    final res = await _shortVideoRepo.addComment(comment);
+    res.fold((l) => showSnackBar(context, l.message), (r) {
+      final NotificationModel notification = NotificationModel(
+        id: post.id,
+        type: NotificationEnum.comment,
+        name: post.userName,
+        createdAt: DateTime.now(),
+        uid: post.userUid,
+        profilePic: post.userProfilePic,
+        text: '${user.name} commented on your video: $text',
+        isRead: false,
+      );
+      if (post.userUid != user.uid) {
+        _notificationRepo.sendNotification(
+          notification: notification,
+        );
+      }
+    });
+  }
+  void deleteComment(CommentModel comment, BuildContext context) async {
+    final res = await _shortVideoRepo.deleteComment(comment);
+    res.fold((l) => showSnackBar(context, l.message), (r) {
+      showSnackBar(context, 'Comment Deleted');
+    });
+  }
   // void updateShortVideo({
   //   required BuildContext context,
   //   required ShortVideoModel postModel,
