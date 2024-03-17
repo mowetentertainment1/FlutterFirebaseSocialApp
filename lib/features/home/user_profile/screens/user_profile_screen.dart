@@ -10,8 +10,6 @@ import '../../../../core/colors.dart';
 import '../../../../core/common/loader.dart';
 import '../../../../core/common/posts/post_card.dart';
 import '../../../auth/controller/auth_controller.dart';
-import '../../../chat/card/community_message_list.dart';
-import '../../../chat/screens/contacts_list.dart';
 import '../../../short_video/controller/short_video_controller.dart';
 
 class UserProfileScreen extends ConsumerStatefulWidget {
@@ -241,9 +239,14 @@ class _UserProfileScreenState extends ConsumerState<UserProfileScreen> with Sing
                             itemBuilder: (context, index) {
                               String thumbnail =
                               videos[index].thumbnail;
-                              return CachedNetworkImage(
-                                imageUrl: thumbnail,
-                                fit: BoxFit.cover,
+                              return GestureDetector(
+                                onTap: () {
+                                  Routemaster.of(context).push('/short-video/${videos[index].userUid}/$index');
+                                },
+                                child: CachedNetworkImage(
+                                  imageUrl: thumbnail,
+                                  fit: BoxFit.cover,
+                                ),
                               );
                             },
                           );

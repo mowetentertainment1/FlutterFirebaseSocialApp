@@ -34,6 +34,9 @@ final getUserShortVideosProvider = StreamProvider<List<ShortVideoModel>>((ref) {
 final getUserShortVideosUidProvider = StreamProvider.family((ref, String uid) {
   return ref.read(shortVideoControllerProvider.notifier).getShortVideosByUid(uid);
 });
+final getUserShortVideoByIdProvider = StreamProvider.family((ref, String uid) {
+  return ref.read(shortVideoControllerProvider.notifier).getShortVideoById(uid);
+});
 // final guestShortVideosProvider = StreamProvider((ref) {
 //   return ref.read(postControllerProvider.notifier).getGuestShortVideos();
 // });
@@ -154,7 +157,7 @@ class ShortVideoController extends StateNotifier<bool> {
     final res = await _shortVideoRepo.upVoteShortVideo(video, user.uid);
     final NotificationModel notification = NotificationModel(
       id: video.id,
-      type: NotificationEnum.upvote,
+      type: NotificationEnum.video,
       name: video.userName,
       createdAt: DateTime.now(),
       uid: video.userUid,
@@ -176,7 +179,7 @@ class ShortVideoController extends StateNotifier<bool> {
     final res = await _shortVideoRepo.downVoteShortVideo(video, user.uid);
     final NotificationModel notification = NotificationModel(
       id: video.id,
-      type: NotificationEnum.downvote,
+      type: NotificationEnum.video,
       name: video.userName,
       createdAt: DateTime.now(),
       uid: video.userUid,
@@ -196,6 +199,13 @@ class ShortVideoController extends StateNotifier<bool> {
   Stream<List<ShortVideoModel>> getShortVideosByUid(String uid) {
     try {
       return _shortVideoRepo.getShortVideosByUid(uid);
+    } catch (e) {
+      return Stream.empty();
+    }
+  }
+  Stream<ShortVideoModel> getShortVideoById(String uid) {
+    try {
+      return _shortVideoRepo.getShortVideoById(uid);
     } catch (e) {
       return Stream.empty();
     }
@@ -235,8 +245,8 @@ class ShortVideoController extends StateNotifier<bool> {
     res.fold((l) => showSnackBar(context, l.message), (r) {
       final NotificationModel notification = NotificationModel(
         id: post.id,
-        type: NotificationEnum.comment,
-        name: post.userName,
+        type: NotificationEnum.video,
+        name: user.name,
         createdAt: DateTime.now(),
         uid: post.userUid,
         profilePic: post.userProfilePic,

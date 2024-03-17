@@ -11,6 +11,7 @@ import 'package:untitled/features/home/user_profile/screens/user_profile_screen.
 import 'package:untitled/features/post/screens/create_post_screen.dart';
 import 'package:untitled/features/post/screens/comment_screen.dart';
 import 'package:untitled/features/post/screens/edit_post_screen.dart';
+import 'package:untitled/features/short_video/screens/user_short_video.dart';
 import 'package:untitled/features/story/screens/create_story_screen.dart';
 import 'package:untitled/features/story/screens/story_view_screen.dart';
 import 'core/common/photo_view.dart';
@@ -18,6 +19,7 @@ import 'features/auth/screens/login_screen.dart';
 import 'features/chat/screens/mobile_community_chatbox.dart';
 import 'features/chat/screens/mobile_contact_chatbox.dart';
 import 'features/short_video/screens/create_short_video_screen.dart';
+import 'features/short_video/screens/short_video.dart';
 
 final loggedOutRoute = RouteMap(routes: {
   '/': (_) => const MaterialPage(child: LoginScreen()),
@@ -76,4 +78,15 @@ final loggedInRoute = RouteMap(routes: {
         ),
       ),
   '/create-short-video': (_) => const MaterialPage(child: CreateShortVideoScreen()),
+  '/short-video/:uid/:index': (routeData) => MaterialPage(
+        child: UserShortVideo(
+          uid: routeData.pathParameters['uid']!,
+          index: int.parse(routeData.pathParameters['index']!),
+        ),
+      ),
+  '/short-video/:uid/': (routeData) => MaterialPage(
+        child: ShortVideo(
+          uid: routeData.pathParameters['uid']!,
+        ),
+      ),
 });

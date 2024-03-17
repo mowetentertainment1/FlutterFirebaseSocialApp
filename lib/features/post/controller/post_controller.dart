@@ -354,7 +354,7 @@ class PostController extends StateNotifier<bool> {
     res.fold((l) => showSnackBar(context, l.message), (r) {
       final NotificationModel notification = NotificationModel(
         id: post.id,
-        type: NotificationEnum.comment,
+        type: NotificationEnum.post,
         name: post.username,
         createdAt: DateTime.now(),
         uid: post.userUid,

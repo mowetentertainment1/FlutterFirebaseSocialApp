@@ -90,11 +90,13 @@ class Assets {
   static const String screensModToolScreen = 'lib/features/community/screens/mod_tool_screen.dart';
   static const String screensNotificationScreen = 'lib/features/notification/screens/notification_screen.dart';
   static const String screensSelectContactScreen = 'lib/features/chat/screens/select_contact_screen.dart';
+  static const String screensShortVideo = 'lib/features/short_video/screens/short_video.dart';
   static const String screensShortVideoScreen = 'lib/features/short_video/screens/short_video_screen.dart';
   static const String screensStoryListScreen = 'lib/features/story/screens/story_list_screen.dart';
   static const String screensStoryViewScreen = 'lib/features/story/screens/story_view_screen.dart';
   static const String screensTabBar = 'lib/features/home/screens/tab_bar.dart';
   static const String screensUserProfileScreen = 'lib/features/home/user_profile/screens/user_profile_screen.dart';
+  static const String screensUserShortVideo = 'lib/features/short_video/screens/user_short_video.dart';
   static const String screensVideoCard = 'lib/features/short_video/screens/video_card.dart';
   static const String themePalette = 'lib/theme/palette.dart';
   static const String widgetCommentCard = 'lib/features/post/widget/comment_card.dart';

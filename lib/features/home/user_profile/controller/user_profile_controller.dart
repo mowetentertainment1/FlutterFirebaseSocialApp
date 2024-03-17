@@ -7,15 +7,19 @@ import 'package:untitled/core/enums/enums.dart';
 import 'package:untitled/features/home/user_profile/repository/user_profile_repo.dart';
 import 'package:untitled/model/user_model.dart';
 
+import '../../../../core/enums/notification_enums.dart';
 import '../../../../core/providers/storage_repository_provider.dart';
 import '../../../../core/utils.dart';
+import '../../../../model/notification_model.dart';
 import '../../../../model/post_model.dart';
 import '../../../auth/controller/auth_controller.dart';
+import '../../../notification/repository/notification_repo.dart';
 
 final userProfileControllerProvider =
     StateNotifierProvider<UserProfileController, bool>((ref) {
   return UserProfileController(
       userProfileRepo: ref.watch(userProfileRepoProvider),
+      notificationRepo: ref.watch(notificationRepoProvider),
       ref: ref,
       storageRepository: ref.watch(storageRepositoryProvider));
 });
@@ -27,16 +31,18 @@ final searchUserProvider = StreamProvider.family((ref, String query) {
 });
 class UserProfileController extends StateNotifier<bool> {
   final UserProfileRepo _userRepo;
-
+  final NotificationRepo _notificationRepo;
   final Ref _ref;
 
   final StorageRepository _storageRepository;
 
   UserProfileController({
     required UserProfileRepo userProfileRepo,
+    required NotificationRepo notificationRepo,
     required Ref ref,
     required StorageRepository storageRepository,
   })  : _userRepo = userProfileRepo,
+        _notificationRepo = notificationRepo,
         _ref = ref,
         _storageRepository = storageRepository,
         super(false);
@@ -98,8 +104,21 @@ class UserProfileController extends StateNotifier<bool> {
         (r) => _ref.read(userProvider.notifier).update((state) => user));
   }
   void followUser( String followUid) async {
-    final user = _ref.read(userProvider)!.uid;
-    _userRepo.followUser(user, followUid);
+    final user = _ref.read(userProvider)!;
+    _userRepo.followUser(user.uid, followUid);
+    final NotificationModel notification = NotificationModel(
+      id:user.uid,
+      type: NotificationEnum.follow,
+      name: user.name,
+      createdAt: DateTime.now(),
+      uid: followUid,
+      profilePic: user.profilePic,
+      text: '${user.name} started following you',
+      isRead: false,
+    );
+    _notificationRepo.sendNotification(
+      notification: notification,
+    );
   }
   void unFollowUser(String followUid) async {
     final user = _ref.read(userProvider)!.uid;

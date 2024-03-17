@@ -62,6 +62,10 @@ class ShortVideoRepo {
         .map((e) => ShortVideoModel.fromMap(e.data() as Map<String, dynamic>))
         .toList());
   }
+  Stream<ShortVideoModel> getShortVideoById(String postId) {
+    return _shortVideo.doc(postId).snapshots().map(
+            (event) => ShortVideoModel.fromMap(event.data() as Map<String, dynamic>));
+  }
   FutureVoid upVoteShortVideo(ShortVideoModel video, String userId) async {
     try {
       if (video.downVotes.contains(userId)) {
