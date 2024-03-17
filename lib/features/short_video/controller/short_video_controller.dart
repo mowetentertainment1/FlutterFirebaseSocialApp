@@ -133,25 +133,23 @@ class ShortVideoController extends StateNotifier<bool> {
     });
   }
 
-  //
-  // void deleteShortVideo(List<String> urls, ShortVideoModel post, BuildContext context) async {
-  //   state = true;
-  //   final res = await _shortVideoRepo.deleteShortVideo(post);
-  //   final imageDelRes = await _storageRepository.deleteMultipleFiles(
-  //     urls: urls,
-  //   );
-  //   _ref
-  //       .read(userProfileControllerProvider.notifier)
-  //       .updateUserKarma(UserKarma.deleteShortVideo);
-  //   state = false;
-  //   imageDelRes.fold((l) => showSnackBar(context, l.message), (r) {
-  //     showSnackBar(context, 'File Deleted');
-  //   });
-  //   res.fold((l) => showSnackBar(context, l.message), (r) {
-  //     showSnackBar(context, 'Deleted successfully!');
-  //   });
-  // }
-  //
+
+  void deleteShortVideo(ShortVideoModel videoModel, BuildContext context) async {
+    state = true;
+    List<String> urls = [videoModel.videoUrl, videoModel.thumbnail];
+    final res = await _shortVideoRepo.deleteShortVideo(videoModel);
+    final imageDelRes = await _storageRepository.deleteMultipleFiles(
+      urls: urls,
+    );
+    state = false;
+    imageDelRes.fold((l) => showSnackBar(context, l.message), (r) {
+      showSnackBar(context, 'File Deleted');
+    });
+    res.fold((l) => showSnackBar(context, l.message), (r) {
+      showSnackBar(context, 'Deleted successfully!');
+    });
+  }
+
   void upVoteShortVideo(ShortVideoModel video) async {
     final user = _ref.read(userProvider)!;
     final res = await _shortVideoRepo.upVoteShortVideo(video, user.uid);

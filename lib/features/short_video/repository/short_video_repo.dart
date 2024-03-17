@@ -66,6 +66,15 @@ class ShortVideoRepo {
     return _shortVideo.doc(postId).snapshots().map(
             (event) => ShortVideoModel.fromMap(event.data() as Map<String, dynamic>));
   }
+  FutureVoid deleteShortVideo(ShortVideoModel videoModel) async {
+    try {
+      return right(_shortVideo.doc(videoModel.id).delete());
+    } on FirebaseException catch (e) {
+      throw e.message!;
+    } catch (e) {
+      return left(Failure(e.toString()));
+    }
+  }
   FutureVoid upVoteShortVideo(ShortVideoModel video, String userId) async {
     try {
       if (video.downVotes.contains(userId)) {
