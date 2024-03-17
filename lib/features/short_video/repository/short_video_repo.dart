@@ -53,7 +53,15 @@ class ShortVideoRepo {
       }
     });
   }
-
+  Stream<List<ShortVideoModel>> getShortVideosByUid(String uid) {
+    return _shortVideo
+        .where("userUid", isEqualTo: uid)
+        .orderBy("createdAt", descending: true)
+        .snapshots()
+        .map((event) => event.docs
+        .map((e) => ShortVideoModel.fromMap(e.data() as Map<String, dynamic>))
+        .toList());
+  }
   FutureVoid upVoteShortVideo(ShortVideoModel video, String userId) async {
     try {
       if (video.downVotes.contains(userId)) {

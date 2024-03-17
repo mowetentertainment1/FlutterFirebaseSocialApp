@@ -1,5 +1,4 @@
 import 'package:date_format/date_format.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -8,9 +7,6 @@ import 'package:routemaster/routemaster.dart';
 import '../../../core/common/loader.dart';
 import '../../../theme/palette.dart';
 import '../../auth/controller/auth_controller.dart';
-import '../../home/delegates/search_delegates.dart';
-import '../../home/drawers/community_list_drawer.dart';
-import '../../home/drawers/profile_drawer.dart';
 import '../../post/controller/post_controller.dart';
 import '../controller/notification_controller.dart';
 
@@ -29,7 +25,6 @@ class NotificationScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final currentTheme = ref.watch(themeNotifierProvider);
     final isLoading = ref.watch(postControllerProvider);
-    final user = ref.watch(userProvider)!;
     return isLoading
         ? const Loader()
         : Scaffold(

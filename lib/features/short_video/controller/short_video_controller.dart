@@ -12,6 +12,7 @@ import '../../../model/short_video_model.dart';
 import '../../auth/controller/auth_controller.dart';
 import '../../notification/repository/notification_repo.dart';
 import '../repository/short_video_repo.dart';
+import 'package:video_compress_plus/video_compress_plus.dart';
 
 final shortVideoControllerProvider =
     StateNotifierProvider<ShortVideoController, bool>((ref) {
@@ -29,6 +30,9 @@ final shortVideoControllerProvider =
 final getUserShortVideosProvider = StreamProvider<List<ShortVideoModel>>((ref) {
   final storyController = ref.watch(shortVideoControllerProvider.notifier);
   return storyController.getShortVideos();
+});
+final getUserShortVideosUidProvider = StreamProvider.family((ref, String uid) {
+  return ref.read(shortVideoControllerProvider.notifier).getShortVideosByUid(uid);
 });
 // final guestShortVideosProvider = StreamProvider((ref) {
 //   return ref.read(postControllerProvider.notifier).getGuestShortVideos();
@@ -57,58 +61,71 @@ class ShortVideoController extends StateNotifier<bool> {
         _ref = ref,
         _storageRepository = storageRepository,
         super(false);
+  _getThumbnail(String videoPath) async {
+    final thumbnail = await VideoCompress.getFileThumbnail(videoPath);
+    return thumbnail;
+  }
   void uploadShortVideo({
     required BuildContext context,
     required String caption,
     required String songName,
     required File? file,
+    required String videoPath,
   }) async {
     state = true;
     String videoId = const Uuid().v1();
     final user = _ref.read(userProvider)!;
     final videoRes = await _storageRepository.storeVideo(
-      path: 'shortVideos/${user.name}/$videoId/',
+      path: 'shortVideos/videoRes/${user.name}/$videoId/',
       file: file!,
+    );
+    File thumbnail = await _getThumbnail(videoPath);
+    final thumbnailRes = await _storageRepository.storeFile(
+      path: 'shortVideos/thumbnailRes/${user.name}',
+      id: videoId,
+      file: thumbnail,
     );
 
     videoRes.fold((l) => showSnackBar(context, l.message), (r) async {
-      final ShortVideoModel video = ShortVideoModel(
-        id: videoId,
-        commentCount: 0,
-        songName: songName,
-        caption: caption,
-        videoUrl: r,
-        thumbnail: '',
-        createdAt: DateTime.now(),
-        upVotes: [],
-        downVotes: [],
-        userName: user.name,
-        userUid: user.uid,
-        userProfilePic: user.profilePic,
-      );
+      thumbnailRes.fold((l) => showSnackBar(context, l.message), (thumbnailUrl) async {
+        final ShortVideoModel video = ShortVideoModel(
+          id: videoId,
+          commentCount: 0,
+          songName: songName,
+          caption: caption,
+          videoUrl: r,
+          thumbnail: thumbnailUrl,
+          createdAt: DateTime.now(),
+          upVotes: [],
+          downVotes: [],
+          userName: user.name,
+          userUid: user.uid,
+          userProfilePic: user.profilePic,
+        );
 
-      final res = await _shortVideoRepo.uploadVideo(video);
-      state = false;
-      res.fold((l) => showSnackBar(context, l.message), (r) {
-        showSnackBar(context, 'Successfully!');
-        Routemaster.of(context).pop();
-        for (var uid in user.followers) {
-          final NotificationModel notification = NotificationModel(
-            id: videoId,
-            type: NotificationEnum.post,
-            name: user.name,
-            createdAt: DateTime.now(),
-            uid: uid,
-            profilePic: user.profilePic,
-            text: '${user.name} posted a new short video',
-            isRead: false,
-          );
-          if (user.uid != uid) {
-            _notificationRepo.sendNotification(
-              notification: notification,
+        final res = await _shortVideoRepo.uploadVideo(video);
+        state = false;
+        res.fold((l) => showSnackBar(context, l.message), (r) {
+          showSnackBar(context, 'Successfully!');
+          Routemaster.of(context).pop();
+          for (var uid in user.followers) {
+            final NotificationModel notification = NotificationModel(
+              id: videoId,
+              type: NotificationEnum.post,
+              name: user.name,
+              createdAt: DateTime.now(),
+              uid: uid,
+              profilePic: user.profilePic,
+              text: '${user.name} posted a new short video',
+              isRead: false,
             );
+            if (user.uid != uid) {
+              _notificationRepo.sendNotification(
+                notification: notification,
+              );
+            }
           }
-        }
+        });
       });
     });
   }
@@ -176,7 +193,13 @@ class ShortVideoController extends StateNotifier<bool> {
     });
   }
 
-
+  Stream<List<ShortVideoModel>> getShortVideosByUid(String uid) {
+    try {
+      return _shortVideoRepo.getShortVideosByUid(uid);
+    } catch (e) {
+      return Stream.empty();
+    }
+  }
   Stream<List<ShortVideoModel>> getShortVideos() {
     final user = _ref.read(userProvider)!;
     return _shortVideoRepo.getShortVideos(user.following);

@@ -43,6 +43,7 @@ void uploadVideo(String songName, String caption, String videoPath) async {
       caption: caption,
       songName: songName,
       file: File(videoPath),
+      videoPath: videoPath,
     );
   }
   @override
