@@ -72,7 +72,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
     final currentTheme = ref.watch(themeNotifierProvider);
     final isGuest = !user!.isAuthenticated;
     return Scaffold(
-      body: Constants.isGuestTabWidgets[_page],
+      body: Constants.tabWidgets[_page],
       bottomNavigationBar: isGuest
           ? CupertinoTabBar(
         height: 60,

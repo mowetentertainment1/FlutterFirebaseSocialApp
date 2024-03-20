@@ -20,8 +20,6 @@ class Constants {
     ShortVideoScreen(),
     ChatScreen(),
     NotificationScreen(),
-  ];  static const isGuestTabWidgets = [
-    FeedScreen(),
-    ShortVideoScreen(),
   ];
+
 }
