@@ -100,7 +100,6 @@ class AuthRepository {
         following: [],
       );
       await _users.doc(userCredential.user!.uid).set(userModel.toMap());
-
       return right(userModel);
     } on FirebaseException catch (e) {
       throw e.message!;
@@ -120,10 +119,11 @@ class AuthRepository {
     });
   }
 
-  void logOut() async {
+  Future<void> logOut() async {
     await _auth.signOut();
     await _googleSignIn.signOut();
-   await Restart.restartApp(webOrigin:'/');
+    await Future.delayed(const Duration(seconds: 1));
+    await Restart.restartApp();
   }
   void setUserState(bool isOnline) async {
     await _firestore.collection('users').doc(_auth.currentUser!.uid).update({

@@ -72,9 +72,31 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
     final currentTheme = ref.watch(themeNotifierProvider);
     final isGuest = !user!.isAuthenticated;
     return Scaffold(
-      body: Constants.tabWidgets[_page],
+      body: Constants.isGuestTabWidgets[_page],
       bottomNavigationBar: isGuest
-          ? null
+          ? CupertinoTabBar(
+        height: 60,
+        currentIndex: _page,
+        activeColor: currentTheme.iconTheme.color,
+        backgroundColor: currentTheme.colorScheme.background,
+        border: const Border(
+          top: BorderSide(
+            color: Colors.grey,
+            width: 0.5,
+          ),
+        ),
+        items: const [
+          BottomNavigationBarItem(
+            icon: Icon(CupertinoIcons.home),
+            label: 'Home',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.ondemand_video_rounded),
+            label: 'Video',
+          ),
+        ],
+        onTap: onPageChange,
+      )
           : CupertinoTabBar(
               height: 60,
               currentIndex: _page,

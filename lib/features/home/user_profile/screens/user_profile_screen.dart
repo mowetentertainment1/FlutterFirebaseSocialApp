@@ -170,14 +170,16 @@ class _UserProfileScreenState extends ConsumerState<UserProfileScreen>
                               const SizedBox(width: 10),
                               isOwner
                                   ? const SizedBox()
-                                  : ElevatedButton(
-                                      style: ElevatedButton.styleFrom(
-                                        backgroundColor: Colors.blueAccent,
-                                      ),
-                                      onPressed: () => navigateToChat(context),
-                                      child: const Text('Message',
-                                          style: TextStyle(color: Colors.white)),
-                                    )
+                                  : isGuest
+                                      ? const SizedBox()
+                                      : ElevatedButton(
+                                          style: ElevatedButton.styleFrom(
+                                            backgroundColor: Colors.blueAccent,
+                                          ),
+                                          onPressed: () => navigateToChat(context),
+                                          child: const Text('Message',
+                                              style: TextStyle(color: Colors.white)),
+                                        )
                             ],
                           ),
                         ]),

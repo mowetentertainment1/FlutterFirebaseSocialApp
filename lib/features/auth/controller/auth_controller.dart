@@ -50,15 +50,18 @@ class AuthController extends StateNotifier<bool> {
   void setUserState(bool isOnline) {
     _authRepository.setUserState(isOnline);
   }
+
   void updateToken(String token) {
     _authRepository.updateToken(token);
   }
 
   void signInAsGuest(BuildContext context) async {
+    state = true;
     final user = await _authRepository.signInAsGuest();
-    state = false;
-    user.fold((l) => showSnackBar(context, l.message),
-        (userModel) => _ref.read(userProvider.notifier).update((state) => userModel));
+    user.fold((l) => showSnackBar(context, l.message), (userModel) {
+      _ref.read(userProvider.notifier).update((state) => userModel);
+      state = false;
+    });
   }
 
   Stream<UserModel> getUserData(String uid) {
@@ -68,9 +71,9 @@ class AuthController extends StateNotifier<bool> {
   Stream<UserModel> getCurrentUserData() {
     return _authRepository.getCurrentUserData();
   }
-  void logOut() async {
-    _authRepository.logOut();
-    _ref.read(userProvider.notifier).update((state) => null);
 
+  void logOut() async {
+    _ref.read(userProvider.notifier).update((state) => null);
+    _authRepository.logOut();
   }
 }

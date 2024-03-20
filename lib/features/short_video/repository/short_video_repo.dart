@@ -41,7 +41,7 @@ class ShortVideoRepo {
     followingUids.add(currentUserUid);
     return FirebaseFirestore.instance
         .collection('shortvideos')
-        .where('userUid', whereIn: followingUids)
+        // .where('userUid', whereIn: followingUids)
         .orderBy('createdAt', descending: true)
         .snapshots()
         .map((snapshot) {
