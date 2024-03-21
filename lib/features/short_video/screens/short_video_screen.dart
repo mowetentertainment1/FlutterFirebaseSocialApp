@@ -56,402 +56,404 @@ class _ShortVideoScreenState extends ConsumerState<ShortVideoScreen> {
     final user = ref.watch(userProvider)!;
     final isGuest = !user.isAuthenticated;
     final currentTheme = ref.watch(themeNotifierProvider);
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Short Video'),
-        backgroundColor: Colors.transparent,
-        actions: [
-          ElevatedButton(
-            onPressed: () {
-              navigateToCreateShortVideo(context);
-            },
-            style: ElevatedButton.styleFrom(
-              foregroundColor: Colors.white,
-              backgroundColor: Colors.transparent,
-              padding: EdgeInsets.zero,
-              elevation: 0.0,
+    return Responsive(
+      child: Scaffold(
+        appBar: AppBar(
+          title: const Text('Short Video'),
+          backgroundColor: Colors.transparent,
+          actions: [
+            ElevatedButton(
+              onPressed: () {
+                navigateToCreateShortVideo(context);
+              },
+              style: ElevatedButton.styleFrom(
+                foregroundColor: Colors.white,
+                backgroundColor: Colors.transparent,
+                padding: EdgeInsets.zero,
+                elevation: 0.0,
+              ),
+              child: const Icon(Icons.add),
             ),
-            child: const Icon(Icons.add),
-          ),
-        ],
-      ),
-      body: ref.watch(getUserShortVideosProvider).when(
-            data: (shortVideos) {
-              return shortVideos.isEmpty
-                  ? const Center(
-                      child: Text('No Videos Found'),
-                    )
-                  : PageView.builder(
-                      itemCount: shortVideos.length,
-                      controller: PageController(initialPage: 0, viewportFraction: 1),
-                      scrollDirection: Axis.vertical,
-                      itemBuilder: (context, index) {
-                        final data = shortVideos[index];
-                        return Stack(
-                          children: [
-                            VideoPlayerItem(
-                              videoUrl: data.videoUrl,
-                            ),
-                            Column(
-                              children: [
-                                const SizedBox(
-                                  height: 100,
-                                ),
-                                Expanded(
-                                  child: Row(
-                                    mainAxisSize: MainAxisSize.max,
-                                    crossAxisAlignment: CrossAxisAlignment.end,
-                                    children: [
-                                      Expanded(
-                                        child: Container(
-                                          padding: const EdgeInsets.only(
-                                            left: 20,
-                                          ),
-                                          child: Column(
-                                            mainAxisSize: MainAxisSize.min,
-                                            crossAxisAlignment: CrossAxisAlignment.start,
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.spaceEvenly,
-                                            children: [
-                                              Text(
-                                                data.userName,
-                                                style: const TextStyle(
-                                                  fontSize: 20,
-                                                  color: Colors.white,
-                                                  fontWeight: FontWeight.bold,
-                                                ),
-                                              ),
-                                              Text(
-                                                data.caption,
-                                                style: const TextStyle(
-                                                  fontSize: 15,
-                                                  color: Colors.white,
-                                                ),
-                                              ),
-                                              Row(
-                                                children: [
-                                                  const Icon(
-                                                    Icons.music_note,
-                                                    size: 15,
-                                                    color: Colors.white,
-                                                  ),
-                                                  Text(
-                                                    data.songName,
-                                                    style: const TextStyle(
-                                                      fontSize: 15,
-                                                      color: Colors.white,
-                                                      fontWeight: FontWeight.bold,
-                                                    ),
-                                                  ),
-                                                ],
-                                              )
-                                            ],
-                                          ),
-                                        ),
-                                      ),
-                                      Container(
-                                        width: 100,
-                                        margin: const EdgeInsets.only(top: 20),
-                                        child: Column(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceEvenly,
-                                          children: [
-                                            ref.read(getUserDataProvider(data.userUid)).when(
-                                                  data: (user) {
-                                                    return buildProfile(
-                                                        user.profilePic,
-                                                        user.name,
-                                                        user.uid,
-                                                        user.token);
-                                                  },
-                                                  loading: () => const CircularProgressIndicator(),
-                                                  error: (error, stack) => const SizedBox(),
-                                                ),
-                                            Column(
-                                              children: [
-                                                IconButton(
-                                                  onPressed: isGuest
-                                                      ? () {}
-                                                      : () => upvotePost(ref, data),
-                                                  icon: Icon(
-                                                    Icons.arrow_upward,
-                                                    size: 40,
-                                                    color: data.upVotes.contains(user.uid)
-                                                        ? Colors.green
-                                                        : Colors.white,
-                                                  ),
-                                                ),
-                                                Text(
-                                                  (data.upVotes.length -
-                                                          data.downVotes.length)
-                                                      .toString(),
-                                                  style: const TextStyle(
-                                                    fontSize: 20,
-                                                    color: Colors.white,
-                                                  ),
-                                                ),
-                                                IconButton(
-                                                  onPressed: isGuest
-                                                      ? () {}
-                                                      : () => downVotePost(
-                                                          ref, shortVideos[index]),
-                                                  icon: Icon(
-                                                    Icons.arrow_downward,
-                                                    size: 40,
-                                                    color:
-                                                        data.downVotes.contains(user.uid)
-                                                            ? Colors.red
-                                                            : Colors.white,
-                                                  ),
-                                                ),
-                                              ],
+          ],
+        ),
+        body: ref.watch(getUserShortVideosProvider).when(
+              data: (shortVideos) {
+                return shortVideos.isEmpty
+                    ? const Center(
+                        child: Text('No Videos Found'),
+                      )
+                    : PageView.builder(
+                        itemCount: shortVideos.length,
+                        controller: PageController(initialPage: 0, viewportFraction: 1),
+                        scrollDirection: Axis.vertical,
+                        itemBuilder: (context, index) {
+                          final data = shortVideos[index];
+                          return Stack(
+                            children: [
+                              VideoPlayerItem(
+                                videoUrl: data.videoUrl,
+                              ),
+                              Column(
+                                children: [
+                                  const SizedBox(
+                                    height: 100,
+                                  ),
+                                  Expanded(
+                                    child: Row(
+                                      mainAxisSize: MainAxisSize.max,
+                                      crossAxisAlignment: CrossAxisAlignment.end,
+                                      children: [
+                                        Expanded(
+                                          child: Container(
+                                            padding: const EdgeInsets.only(
+                                              left: 20,
                                             ),
-                                            Column(
+                                            child: Column(
+                                              mainAxisSize: MainAxisSize.min,
+                                              crossAxisAlignment: CrossAxisAlignment.start,
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.spaceEvenly,
                                               children: [
-                                                InkWell(
-                                                  onTap: () {
-                                                    showBottomSheet(
-                                                        backgroundColor:
-                                                            currentTheme.backgroundColor,
-                                                        shape:
-                                                            const RoundedRectangleBorder(
-                                                          borderRadius: BorderRadius.only(
-                                                            topLeft: Radius.circular(20),
-                                                            topRight: Radius.circular(20),
-                                                          ),
-                                                        ),
-                                                        context: context,
-                                                        builder: (context) {
-                                                          return PopScope(
-                                                            canPop: false,
-                                                            onPopInvoked: (bool isPop) {
-                                                              Navigator.of(context).pop();
-                                                            },
-                                                            child: Container(
-                                                              padding:
-                                                                  const EdgeInsets.all(
-                                                                      20),
-                                                              height: 600,
-                                                              child: Column(
-                                                                children: [
-                                                                  Text(
-                                                                    'Comments',
-                                                                    style: TextStyle(
-                                                                        color: currentTheme
-                                                                            .textTheme
-                                                                            .bodyMedium!
-                                                                            .color!,
-                                                                        fontSize: 20,
-                                                                        fontWeight:
-                                                                            FontWeight
-                                                                                .bold),
-                                                                  ),
-                                                                  Expanded(
-                                                                    child: StreamBuilder<
-                                                                        List<
-                                                                            CommentModel>>(
-                                                                      stream: ref
-                                                                          .watch(
-                                                                              shortVideoControllerProvider
-                                                                                  .notifier)
-                                                                          .fetchShortVideoComments(
-                                                                              data.id),
-                                                                      builder: (BuildContext
-                                                                              context,
-                                                                          AsyncSnapshot<
-                                                                                  List<
-                                                                                      CommentModel>>
-                                                                              snapshot) {
-                                                                        if (snapshot
-                                                                                .connectionState ==
-                                                                            ConnectionState
-                                                                                .waiting) {
-                                                                          return const Center(
-                                                                              child:
-                                                                                  CircularProgressIndicator());
-                                                                        }
-                                                                        if (snapshot.data!
-                                                                            .isEmpty) {
-                                                                          return const Center(
-                                                                              child: Text(
-                                                                                  'No comments'));
-                                                                        }
-                                                                        return ListView
-                                                                            .builder(
-                                                                          itemCount:
-                                                                              snapshot
-                                                                                  .data!
-                                                                                  .length,
-                                                                          itemBuilder:
-                                                                              (BuildContext
-                                                                                      context,
-                                                                                  int index) {
-                                                                            final comment =
-                                                                                snapshot.data![
-                                                                                    index];
-                                                                            return InkWell(
-                                                                              onLongPress:
-                                                                                  () {
-                                                                                if (comment
-                                                                                        .username ==
-                                                                                    user.name) {
-                                                                                  showDialog<
-                                                                                      void>(
-                                                                                    context:
-                                                                                        context,
-                                                                                    barrierDismissible:
-                                                                                        true,
-                                                                                    builder:
-                                                                                        (BuildContext dialogContext) {
-                                                                                      return AlertDialog(
-                                                                                        title: const Text('Delete Comment'),
-                                                                                        content: const Text('Are you sure you want to delete this comment?'),
-                                                                                        actions: <Widget>[
-                                                                                          TextButton(
-                                                                                            child: const Text('Cancel'),
-                                                                                            onPressed: () {
-                                                                                              Navigator.of(dialogContext).pop();
-                                                                                            },
-                                                                                          ),
-                                                                                          TextButton(
-                                                                                            child: const Text('Delete', style: TextStyle(color: Colors.red)),
-                                                                                            onPressed: () {
-                                                                                              Navigator.of(dialogContext).pop();
-                                                                                              ref.read(postControllerProvider.notifier).deleteComment(comment, context);
-                                                                                            },
-                                                                                          ),
-                                                                                        ],
-                                                                                      );
-                                                                                    },
-                                                                                  );
-                                                                                }
-                                                                              },
-                                                                              child: CommentCard(
-                                                                                  comment:
-                                                                                      comment),
-                                                                            );
-                                                                          },
-                                                                        );
-                                                                      },
-                                                                    ),
-                                                                  ),
-                                                                  if (!isGuest)
-                                                                    Responsive(
-                                                                      child: SizedBox(
-                                                                        height: 50,
-                                                                        child: TextField(
-                                                                          controller:
-                                                                              _commentController,
-                                                                          decoration:
-                                                                              InputDecoration(
-                                                                            border:
-                                                                                const OutlineInputBorder(
-                                                                              borderRadius:
-                                                                                  BorderRadius
-                                                                                      .all(
-                                                                                Radius.circular(
-                                                                                    10),
-                                                                              ),
-                                                                            ),
-                                                                            contentPadding:
-                                                                                const EdgeInsets
-                                                                                    .symmetric(
-                                                                                    horizontal:
-                                                                                        16),
-                                                                            hintText:
-                                                                                'Add a comment',
-                                                                            suffixIcon:
-                                                                                GestureDetector(
-                                                                              onTap: () {
-                                                                                addComment(
-                                                                                    data);
-                                                                              },
-                                                                              child: _commentController
-                                                                                      .text
-                                                                                      .trim()
-                                                                                      .isEmpty
-                                                                                  ? IconButton(
-                                                                                      onPressed:
-                                                                                          () {},
-                                                                                      icon:
-                                                                                          const Icon(Icons.send, color: Colors.grey),
-                                                                                    )
-                                                                                  : IconButton(
-                                                                                      onPressed:
-                                                                                          () {
-                                                                                        addComment(data);
-                                                                                      },
-                                                                                      icon:
-                                                                                          const Icon(Icons.send, color: Colors.blue),
-                                                                                    ),
-                                                                            ),
-                                                                          ),
-                                                                          onSubmitted:
-                                                                              (value) {
-                                                                            addComment(
-                                                                                data);
-                                                                          },
-                                                                        ),
-                                                                      ),
-                                                                    ),
-                                                                ],
-                                                              ),
-                                                            ),
-                                                          );
-                                                        });
-                                                  },
-                                                  child: const Icon(
-                                                    Icons.comment,
-                                                    size: 40,
-                                                    color: Colors.white,
-                                                  ),
-                                                ),
-                                                const SizedBox(height: 7),
                                                 Text(
-                                                  data.commentCount.toString(),
+                                                  data.userName,
                                                   style: const TextStyle(
                                                     fontSize: 20,
                                                     color: Colors.white,
+                                                    fontWeight: FontWeight.bold,
                                                   ),
+                                                ),
+                                                Text(
+                                                  data.caption,
+                                                  style: const TextStyle(
+                                                    fontSize: 15,
+                                                    color: Colors.white,
+                                                  ),
+                                                ),
+                                                Row(
+                                                  children: [
+                                                    const Icon(
+                                                      Icons.music_note,
+                                                      size: 15,
+                                                      color: Colors.white,
+                                                    ),
+                                                    Text(
+                                                      data.songName,
+                                                      style: const TextStyle(
+                                                        fontSize: 15,
+                                                        color: Colors.white,
+                                                        fontWeight: FontWeight.bold,
+                                                      ),
+                                                    ),
+                                                  ],
                                                 )
                                               ],
                                             ),
-                                            Column(
-                                              children: [
-                                                InkWell(
-                                                  onTap: () {},
-                                                  child: const Icon(
-                                                    Icons.reply,
-                                                    size: 40,
-                                                    color: Colors.white,
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                            CircleAnimation(
-                                              child: buildMusicAlbum(data.userProfilePic),
-                                            ),
-                                          ],
+                                          ),
                                         ),
-                                      ),
-                                    ],
+                                        Container(
+                                          width: 100,
+                                          margin: const EdgeInsets.only(top: 20),
+                                          child: Column(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceEvenly,
+                                            children: [
+                                              ref.read(getUserDataProvider(data.userUid)).when(
+                                                    data: (user) {
+                                                      return buildProfile(
+                                                          user.profilePic,
+                                                          user.name,
+                                                          user.uid,
+                                                          user.token);
+                                                    },
+                                                    loading: () => const CircularProgressIndicator(),
+                                                    error: (error, stack) => const SizedBox(),
+                                                  ),
+                                              Column(
+                                                children: [
+                                                  IconButton(
+                                                    onPressed: isGuest
+                                                        ? () {}
+                                                        : () => upvotePost(ref, data),
+                                                    icon: Icon(
+                                                      Icons.arrow_upward,
+                                                      size: 40,
+                                                      color: data.upVotes.contains(user.uid)
+                                                          ? Colors.green
+                                                          : Colors.white,
+                                                    ),
+                                                  ),
+                                                  Text(
+                                                    (data.upVotes.length -
+                                                            data.downVotes.length)
+                                                        .toString(),
+                                                    style: const TextStyle(
+                                                      fontSize: 20,
+                                                      color: Colors.white,
+                                                    ),
+                                                  ),
+                                                  IconButton(
+                                                    onPressed: isGuest
+                                                        ? () {}
+                                                        : () => downVotePost(
+                                                            ref, shortVideos[index]),
+                                                    icon: Icon(
+                                                      Icons.arrow_downward,
+                                                      size: 40,
+                                                      color:
+                                                          data.downVotes.contains(user.uid)
+                                                              ? Colors.red
+                                                              : Colors.white,
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                              Column(
+                                                children: [
+                                                  InkWell(
+                                                    onTap: () {
+                                                      showBottomSheet(
+                                                          backgroundColor:
+                                                              currentTheme.backgroundColor,
+                                                          shape:
+                                                              const RoundedRectangleBorder(
+                                                            borderRadius: BorderRadius.only(
+                                                              topLeft: Radius.circular(20),
+                                                              topRight: Radius.circular(20),
+                                                            ),
+                                                          ),
+                                                          context: context,
+                                                          builder: (context) {
+                                                            return PopScope(
+                                                              canPop: false,
+                                                              onPopInvoked: (bool isPop) {
+                                                                Navigator.of(context).pop();
+                                                              },
+                                                              child: Container(
+                                                                padding:
+                                                                    const EdgeInsets.all(
+                                                                        20),
+                                                                height: 600,
+                                                                child: Column(
+                                                                  children: [
+                                                                    Text(
+                                                                      'Comments',
+                                                                      style: TextStyle(
+                                                                          color: currentTheme
+                                                                              .textTheme
+                                                                              .bodyMedium!
+                                                                              .color!,
+                                                                          fontSize: 20,
+                                                                          fontWeight:
+                                                                              FontWeight
+                                                                                  .bold),
+                                                                    ),
+                                                                    Expanded(
+                                                                      child: StreamBuilder<
+                                                                          List<
+                                                                              CommentModel>>(
+                                                                        stream: ref
+                                                                            .watch(
+                                                                                shortVideoControllerProvider
+                                                                                    .notifier)
+                                                                            .fetchShortVideoComments(
+                                                                                data.id),
+                                                                        builder: (BuildContext
+                                                                                context,
+                                                                            AsyncSnapshot<
+                                                                                    List<
+                                                                                        CommentModel>>
+                                                                                snapshot) {
+                                                                          if (snapshot
+                                                                                  .connectionState ==
+                                                                              ConnectionState
+                                                                                  .waiting) {
+                                                                            return const Center(
+                                                                                child:
+                                                                                    CircularProgressIndicator());
+                                                                          }
+                                                                          if (snapshot.data!
+                                                                              .isEmpty) {
+                                                                            return const Center(
+                                                                                child: Text(
+                                                                                    'No comments'));
+                                                                          }
+                                                                          return ListView
+                                                                              .builder(
+                                                                            itemCount:
+                                                                                snapshot
+                                                                                    .data!
+                                                                                    .length,
+                                                                            itemBuilder:
+                                                                                (BuildContext
+                                                                                        context,
+                                                                                    int index) {
+                                                                              final comment =
+                                                                                  snapshot.data![
+                                                                                      index];
+                                                                              return InkWell(
+                                                                                onLongPress:
+                                                                                    () {
+                                                                                  if (comment
+                                                                                          .username ==
+                                                                                      user.name) {
+                                                                                    showDialog<
+                                                                                        void>(
+                                                                                      context:
+                                                                                          context,
+                                                                                      barrierDismissible:
+                                                                                          true,
+                                                                                      builder:
+                                                                                          (BuildContext dialogContext) {
+                                                                                        return AlertDialog(
+                                                                                          title: const Text('Delete Comment'),
+                                                                                          content: const Text('Are you sure you want to delete this comment?'),
+                                                                                          actions: <Widget>[
+                                                                                            TextButton(
+                                                                                              child: const Text('Cancel'),
+                                                                                              onPressed: () {
+                                                                                                Navigator.of(dialogContext).pop();
+                                                                                              },
+                                                                                            ),
+                                                                                            TextButton(
+                                                                                              child: const Text('Delete', style: TextStyle(color: Colors.red)),
+                                                                                              onPressed: () {
+                                                                                                Navigator.of(dialogContext).pop();
+                                                                                                ref.read(postControllerProvider.notifier).deleteComment(comment, context);
+                                                                                              },
+                                                                                            ),
+                                                                                          ],
+                                                                                        );
+                                                                                      },
+                                                                                    );
+                                                                                  }
+                                                                                },
+                                                                                child: CommentCard(
+                                                                                    comment:
+                                                                                        comment),
+                                                                              );
+                                                                            },
+                                                                          );
+                                                                        },
+                                                                      ),
+                                                                    ),
+                                                                    if (!isGuest)
+                                                                      Responsive(
+                                                                        child: SizedBox(
+                                                                          height: 50,
+                                                                          child: TextField(
+                                                                            controller:
+                                                                                _commentController,
+                                                                            decoration:
+                                                                                InputDecoration(
+                                                                              border:
+                                                                                  const OutlineInputBorder(
+                                                                                borderRadius:
+                                                                                    BorderRadius
+                                                                                        .all(
+                                                                                  Radius.circular(
+                                                                                      10),
+                                                                                ),
+                                                                              ),
+                                                                              contentPadding:
+                                                                                  const EdgeInsets
+                                                                                      .symmetric(
+                                                                                      horizontal:
+                                                                                          16),
+                                                                              hintText:
+                                                                                  'Add a comment',
+                                                                              suffixIcon:
+                                                                                  GestureDetector(
+                                                                                onTap: () {
+                                                                                  addComment(
+                                                                                      data);
+                                                                                },
+                                                                                child: _commentController
+                                                                                        .text
+                                                                                        .trim()
+                                                                                        .isEmpty
+                                                                                    ? IconButton(
+                                                                                        onPressed:
+                                                                                            () {},
+                                                                                        icon:
+                                                                                            const Icon(Icons.send, color: Colors.grey),
+                                                                                      )
+                                                                                    : IconButton(
+                                                                                        onPressed:
+                                                                                            () {
+                                                                                          addComment(data);
+                                                                                        },
+                                                                                        icon:
+                                                                                            const Icon(Icons.send, color: Colors.blue),
+                                                                                      ),
+                                                                              ),
+                                                                            ),
+                                                                            onSubmitted:
+                                                                                (value) {
+                                                                              addComment(
+                                                                                  data);
+                                                                            },
+                                                                          ),
+                                                                        ),
+                                                                      ),
+                                                                  ],
+                                                                ),
+                                                              ),
+                                                            );
+                                                          });
+                                                    },
+                                                    child: const Icon(
+                                                      Icons.comment,
+                                                      size: 40,
+                                                      color: Colors.white,
+                                                    ),
+                                                  ),
+                                                  const SizedBox(height: 7),
+                                                  Text(
+                                                    data.commentCount.toString(),
+                                                    style: const TextStyle(
+                                                      fontSize: 20,
+                                                      color: Colors.white,
+                                                    ),
+                                                  )
+                                                ],
+                                              ),
+                                              Column(
+                                                children: [
+                                                  InkWell(
+                                                    onTap: () {},
+                                                    child: const Icon(
+                                                      Icons.reply,
+                                                      size: 40,
+                                                      color: Colors.white,
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                              CircleAnimation(
+                                                child: buildMusicAlbum(data.userProfilePic),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      ],
+                                    ),
                                   ),
-                                ),
-                              ],
-                            ),
-                          ],
-                        );
-                      },
-                    );
-            },
-            loading: () => const Center(child: CircularProgressIndicator()),
-            error: (error, stack) => Center(
-              child: Text(
-                'Error: $error',
-                style: const TextStyle(color: Colors.red),
+                                ],
+                              ),
+                            ],
+                          );
+                        },
+                      );
+              },
+              loading: () => const Center(child: CircularProgressIndicator()),
+              error: (error, stack) => Center(
+                child: Text(
+                  'Error: $error',
+                  style: const TextStyle(color: Colors.red),
+                ),
               ),
             ),
-          ),
+      ),
     );
   }
 

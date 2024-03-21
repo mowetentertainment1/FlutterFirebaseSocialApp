@@ -58,8 +58,7 @@ class PostCard extends ConsumerWidget {
     final user = ref.watch(userProvider)!;
     final isGuest = !user.isAuthenticated;
     final currentTheme = ref.watch(themeNotifierProvider);
-    return Responsive(
-      child: Column(
+    return Column(
         children: [
           Container(
               decoration: BoxDecoration(
@@ -317,7 +316,6 @@ class PostCard extends ConsumerWidget {
                 ],
               )),
         ],
-      ),
-    );
+      );
   }
 }

@@ -31,12 +31,12 @@ final loggedInRoute = RouteMap(routes: {
   '/add-post': (_) => const MaterialPage(child: CreatePostScreen()),
   '/r/:communityName': (route) => MaterialPage(
       child: CommunityScreen(communityName: route.pathParameters['communityName']!)),
-  '/mod-tools/:communityName': (routeData) => MaterialPage(
+  '/r/:communityName/mod-tools': (routeData) => MaterialPage(
       child: ModToolScreen(communityName: routeData.pathParameters['communityName']!)),
-  '/edit-community/:communityName': (routeData) => MaterialPage(
+  '/r/:communityName/mod-tools/edit-community': (routeData) => MaterialPage(
       child:
           EditCommunityScreen(communityName: routeData.pathParameters['communityName']!)),
-  '/add_mods/:communityName': (routeData) => MaterialPage(
+  '/r/:communityName/mod-tools/add_mods': (routeData) => MaterialPage(
       child: AddModsScreen(communityName: routeData.pathParameters['communityName']!)),
   '/u/:name/:uid/:token': (routeData) => MaterialPage(
         child: UserProfileScreen(

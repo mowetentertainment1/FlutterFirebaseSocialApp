@@ -31,20 +31,19 @@ class UserProfileScreen extends ConsumerStatefulWidget {
 class _UserProfileScreenState extends ConsumerState<UserProfileScreen>
     with SingleTickerProviderStateMixin {
   late TabController _tabController;
+  @override
   void initState() {
     super.initState();
     _tabController = TabController(length: 2, vsync: this);
   }
-
+  @override
   void dispose() {
     _tabController.dispose();
     super.dispose();
   }
-
   void navigateToEditProfile(BuildContext context) {
     Routemaster.of(context).push('/edit-profile/${widget.uid}');
   }
-
   void navigateToChat(BuildContext context) {
     Routemaster.of(context).push('/chat/${widget.name}/${widget.uid}/${widget.token}');
   }

@@ -9,10 +9,7 @@ class ModToolScreen extends ConsumerStatefulWidget {
   final String communityName;
 
   const ModToolScreen({super.key, required this.communityName});
-
-
-
-
+  @override
   ConsumerState createState() => _ModToolScreen();
 }
 
@@ -41,10 +38,10 @@ class _ModToolScreen extends ConsumerState<ModToolScreen> {
         });
   }
   void navigateToEditCommunity(BuildContext context) {
-    Routemaster.of(context).push('/edit-community/$communityName');
+    Routemaster.of(context).push('/r/$communityName/mod-tools/edit-community');
   }
   void navigateToAddMods(BuildContext context) {
-    Routemaster.of(context).push('/add_mods/$communityName');
+    Routemaster.of(context).push('/r/$communityName/mod-tools/add_mods');
   }
 
   @override
@@ -52,6 +49,12 @@ class _ModToolScreen extends ConsumerState<ModToolScreen> {
     return Responsive(
       child: Scaffold(
           appBar: AppBar(
+            leading: IconButton(
+              icon: const Icon(Icons.arrow_back),
+              onPressed: () {
+                Routemaster.of(context).pop();
+              },
+            ),
             title: const Text('Mod Tools'),
           ),
           body: Column(children: [

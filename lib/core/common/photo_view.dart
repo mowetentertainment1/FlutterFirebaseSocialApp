@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_file_downloader/flutter_file_downloader.dart';
 import 'package:photo_view/photo_view.dart';
 import 'package:photo_view/photo_view_gallery.dart';
+import 'package:routemaster/routemaster.dart';
 
 class ImageZoomScreen extends StatefulWidget {
   final List<String> imageUrls;
@@ -31,6 +32,12 @@ class _ImageZoomScreenState extends State<ImageZoomScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back),
+          onPressed: () {
+            Routemaster.of(context).pop();
+          },
+        ),
       ),
       body: GestureDetector(
         onDoubleTap: () {

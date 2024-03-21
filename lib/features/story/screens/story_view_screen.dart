@@ -36,6 +36,14 @@ class _StoryViewScreenState extends ConsumerState<StoryViewScreen> {
       });
     }
     return Scaffold(
+      appBar: AppBar(
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back),
+          onPressed: () {
+            Routemaster.of(context).pop();
+          },
+        ),
+      ),
       body: storyItems.isEmpty
           ? const Loader()
           : story_view.StoryView(

@@ -14,7 +14,7 @@ class CommunityScreen extends ConsumerWidget {
   final String communityName;
 
   void navigateToModTools(BuildContext context) {
-    Routemaster.of(context).push('/mod-tools/$communityName');
+    Routemaster.of(context).push('/r/$communityName/mod-tools');
   }
 
   void joinCommunity(WidgetRef ref, CommunityModel community, BuildContext context) {

@@ -58,24 +58,6 @@ class _ShortVideoState extends ConsumerState<ShortVideo> {
     final isGuest = !user.isAuthenticated;
     final currentTheme = ref.watch(themeNotifierProvider);
     return Scaffold(
-      // appBar: AppBar(
-      //   title: const Text('Short Video'),
-      //   backgroundColor: Colors.transparent,
-      //   actions: [
-      //     ElevatedButton(
-      //       onPressed: () {
-      //         navigateToCreateShortVideo(context);
-      //       },
-      //       style: ElevatedButton.styleFrom(
-      //         foregroundColor: Colors.white,
-      //         backgroundColor: Colors.transparent,
-      //         padding: EdgeInsets.zero,
-      //         elevation: 0.0,
-      //       ),
-      //       child: const Icon(Icons.add),
-      //     ),
-      //   ],
-      // ),
       body: ref.watch(getUserShortVideoByIdProvider(widget.uid)).when(
             data: (shortVideos) {
               return Stack(

@@ -17,6 +17,12 @@ class MobileContactChatScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     return Scaffold(
       appBar: AppBar(
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back),
+          onPressed: () {
+            Routemaster.of(context).pop();
+          },
+        ),
         title: StreamBuilder<UserModel>(
           stream: ref.read(authControllerProvider.notifier).getUserData(uid),
           builder: (context, snapshot) {
