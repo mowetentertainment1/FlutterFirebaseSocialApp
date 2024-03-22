@@ -7,14 +7,21 @@ import '../bottom_chat_field.dart';
 import '../card/chats_list.dart';
 import '../controller/chat_controller.dart';
 
-class MobileContactChatScreen extends ConsumerWidget {
+class MobileContactChatScreen extends ConsumerStatefulWidget {
   final String uid;
   final String name;
   final String token;
-  const MobileContactChatScreen({super.key, required this.uid, required this.name, required this.token});
+  final bool blocked;
+  final bool muted;
+  const MobileContactChatScreen({Key? key, required this.uid, required this.name, required this.token, required this.blocked, required this.muted}) : super(key: key);
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  _MobileContactChatScreenState createState() => _MobileContactChatScreenState();
+}
+
+class _MobileContactChatScreenState extends ConsumerState<MobileContactChatScreen> {
+  @override
+  Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
@@ -24,7 +31,7 @@ class MobileContactChatScreen extends ConsumerWidget {
           },
         ),
         title: StreamBuilder<UserModel>(
-          stream: ref.read(authControllerProvider.notifier).getUserData(uid),
+          stream: ref.read(authControllerProvider.notifier).getUserData(widget.uid),
           builder: (context, snapshot) {
             if (snapshot.hasError) {
               return const Text('Something went wrong');
@@ -72,11 +79,13 @@ class MobileContactChatScreen extends ConsumerWidget {
         actions: [
           PopupMenuButton(
             itemBuilder: (context) => [
-              const PopupMenuItem(
-                child: Text('Mute'),
+              PopupMenuItem(
+                value: widget.muted ? 'unMute' : 'mute',
+                child: Text(widget.muted ? 'Unmute' : 'Mute'),
               ),
-              const PopupMenuItem(
-                child: Text('Block'),
+              PopupMenuItem(
+                value: widget.blocked ? 'unBlock' : 'block',
+                child: Text(widget.blocked ? 'Unblock' : 'Block'),
               ),
               const PopupMenuItem(
                 value: 'deleteChat',
@@ -101,19 +110,39 @@ class MobileContactChatScreen extends ConsumerWidget {
                         ),
                         TextButton(
                           child:
-                              const Text('Delete', style: TextStyle(color: Colors.red)),
+                          const Text('Delete', style: TextStyle(color: Colors.red)),
                           onPressed: () {
                             Navigator.of(dialogContext).pop();
                             Navigator.of(context).pop();
                             ref
                                 .read(chatControllerProvider.notifier)
-                                .deleteChat(uid, context);
+                                .deleteChat(widget.uid, context);
                           },
                         ),
                       ],
                     );
                   },
                 );
+              }
+              if (value == 'block') {
+                ref
+                    .read(chatControllerProvider.notifier)
+                    .blockUser(widget.uid);
+              }
+              if (value == 'mute') {
+                ref
+                    .read(chatControllerProvider.notifier)
+                    .muteUser(widget.uid);
+              }
+              if (value == 'unBlock') {
+                ref
+                    .read(chatControllerProvider.notifier)
+                    .unBlockUser(widget.uid);
+              }
+              if (value == 'unMute') {
+                ref
+                    .read(chatControllerProvider.notifier)
+                    .unMuteUser(widget.uid);
               }
             },
           ),
@@ -122,11 +151,12 @@ class MobileContactChatScreen extends ConsumerWidget {
       body: Column(
         children: [
           Expanded(
-            child: ChatList(receiverId: uid),
+            child: ChatList(receiverId: widget.uid),
           ),
           BottomChatField(
-            receiverUserId: uid,
-            receiverUserToken: token,
+            receiverUserId: widget.uid,
+            receiverUserToken: widget.token,
+            blocked: widget.blocked,
           ),
         ],
       ),

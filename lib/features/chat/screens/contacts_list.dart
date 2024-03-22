@@ -72,8 +72,7 @@ class ContactsList extends ConsumerWidget {
                             },
                             onTap: () {
                               Routemaster.of(context).push(
-                                  '/chat/${chatContactData.name}/${chatContactData.contactId}/${chatContactData.token}');
-                              print('chat${chatContactData.contactId}');
+                                  '/chat/${chatContactData.name}/${chatContactData.contactId}/${chatContactData.token}/${chatContactData.isBlocked}/${chatContactData.isMuted}');
                             },
                             child: Padding(
                               padding: const EdgeInsets.only(bottom: 8.0),
@@ -86,7 +85,9 @@ class ContactsList extends ConsumerWidget {
                                         fontSize: 18,
                                       ),
                                     ),
-                                    if (chatContactData.unreadMessagesCount > 0)
+                                    if (chatContactData.unreadMessagesCount > 0 &&
+                                        chatContactData.isBlocked == false &&
+                                        chatContactData.isMuted == false)
                                       Padding(
                                         padding: const EdgeInsets.only(left: 8.0),
                                         child: Container(
@@ -105,19 +106,52 @@ class ContactsList extends ConsumerWidget {
                                           ),
                                         ),
                                       ),
+                                    if (chatContactData.isBlocked &&
+                                        chatContactData.isMuted == false)
+                                      Padding(
+                                        padding: const EdgeInsets.only(left: 8.0),
+                                        child: Container(
+                                          padding: const EdgeInsets.all(5),
+                                          decoration: BoxDecoration(
+                                            color: Colors.red,
+                                            borderRadius: BorderRadius.circular(20),
+                                          ),
+                                          child: const Icon(
+                                            Icons.block,
+                                            color: Colors.white,
+                                            size: 15,
+                                          ),
+                                        ),
+                                      ),
+                                    if (chatContactData.isMuted &&
+                                        chatContactData.isBlocked == false)
+                                      Padding(
+                                        padding: const EdgeInsets.only(left: 8.0),
+                                        child: Container(
+                                          padding: const EdgeInsets.all(5),
+                                          decoration: BoxDecoration(
+                                            color: Colors.red,
+                                            borderRadius: BorderRadius.circular(20),
+                                          ),
+                                          child: const Icon(
+                                            Icons.volume_off,
+                                            color: Colors.white,
+                                            size: 15,
+                                          ),
+                                        ),
+                                      ),
                                   ],
                                 ),
                                 subtitle: Padding(
-                                  padding: const EdgeInsets.only(top: 6.0),
-                                  child: Text(
-                                    chatContactData.lastMessage,
-                                    style: TextStyle(
-                                      color: chatContactData.unreadMessagesCount > 0
-                                          ? Colors.blue
-                                          : Colors.grey,
-                                    ),
-                                  )
-                                ),
+                                    padding: const EdgeInsets.only(top: 6.0),
+                                    child: Text(
+                                      chatContactData.lastMessage,
+                                      style: TextStyle(
+                                        color: chatContactData.unreadMessagesCount > 0
+                                            ? Colors.blue
+                                            : Colors.grey,
+                                      ),
+                                    )),
                                 leading: CircleAvatar(
                                   backgroundImage: NetworkImage(
                                     chatContactData.profilePic,
@@ -127,7 +161,7 @@ class ContactsList extends ConsumerWidget {
                                 trailing: Text(
                                   formatDate(chatContactData.timeSent, [HH, ':', nn]),
                                   style: const TextStyle(
-                                    color:Colors.grey,
+                                    color: Colors.grey,
                                     fontSize: 13,
                                   ),
                                 ),

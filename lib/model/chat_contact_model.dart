@@ -6,6 +6,9 @@ class ChatContactModel {
   final DateTime timeSent;
   final String lastMessage;
   final int unreadMessagesCount;
+  final bool isMuted;
+  final bool isBlocked;
+
   ChatContactModel({
     required this.name,
     required this.profilePic,
@@ -14,6 +17,8 @@ class ChatContactModel {
     required this.timeSent,
     required this.lastMessage,
     required this.unreadMessagesCount,
+    required this.isMuted,
+    required this.isBlocked,
   });
 
   Map<String, dynamic> toMap() {
@@ -25,6 +30,8 @@ class ChatContactModel {
       'timeSent': timeSent.millisecondsSinceEpoch,
       'lastMessage': lastMessage,
       'unreadMessagesCount': unreadMessagesCount,
+      'isMuted': isMuted,
+      'isBlocked': isBlocked,
     };
   }
 
@@ -37,6 +44,8 @@ class ChatContactModel {
       timeSent: DateTime.fromMillisecondsSinceEpoch(map['timeSent']),
       lastMessage: map['lastMessage'] ?? '',
       unreadMessagesCount: map['unreadMessagesCount'] as int,
+      isMuted: map['isMuted'] as bool,
+      isBlocked: map['isBlocked'] as bool,
     );
   }
 }

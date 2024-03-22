@@ -54,12 +54,15 @@ class ChatRepo {
             lastMessage: chatContact.lastMessage,
             token: user.token,
             unreadMessagesCount: chatContact.unreadMessagesCount,
+            isMuted: chatContact.isMuted,
+            isBlocked: chatContact.isBlocked,
           ),
         );
       }
       return contacts;
     });
   }
+
   void updateReceiverUnreadMessagesCount(String receiverUserId) {
     _users
         .doc(receiverUserId)
@@ -77,6 +80,7 @@ class ChatRepo {
           .update({'unreadMessagesCount': count});
     });
   }
+
   void updateCurrentUnreadMessagesCount(String receiverUserId) {
     _users
         .doc(_auth.currentUser!.uid)
@@ -94,6 +98,7 @@ class ChatRepo {
           .update({'unreadMessagesCount': count});
     });
   }
+
   Stream<int> getTotalUnreadMessagesCount() {
     return _users
         .doc(_auth.currentUser!.uid)
@@ -135,8 +140,8 @@ class ChatRepo {
           .doc(receiverUserId)
           .get();
       receiverUserData = UserModel.fromMap(receiverData.data()!);
-      _saveDataToContactsSubCollection(
-          senderUser, receiverUserData, message, timeSent, receiverUserId);
+      _saveDataToContactsSubCollection(senderUser, receiverUserData, receiverUserToken,
+          message, timeSent, receiverUserId);
       _saveChatToMessagesSubCollection(
         receiverUserId: receiverUserId,
         text: message,
@@ -146,27 +151,6 @@ class ChatRepo {
         messageType: MessageEnum.text,
         senderUsername: senderUser.name,
         receiverUserName: receiverUserData.name,
-      );
-      var data = {
-        'to': receiverUserToken,
-        'priority': 'high',
-        'notification': {
-          'title': senderUser.name,
-          'body': message,
-        },
-        'data': {
-          'type': 'chat',
-          'id': senderUser.uid,
-        },
-      };
-      await http.post(
-        Uri.parse('https://fcm.googleapis.com/fcm/send'),
-        body: jsonEncode(data),
-        headers: {
-          'Content-Type': 'application/json; charset=UTF-8',
-          'Authorization':
-              'key=AAAAGsP2NR8:APA91bHtsAcxrHePGTKReAcE5f5HvSHkmdWjUpdjqEWEBqjTRr3JGYqLbzNVzm9IZD6JLABdMpqPY9rH7xLrI2crH2fZOYcJFaMOsHY-jsEeC_rWMyYQjBEWXf88rWiDUeUbM_77h4gs',
-        },
       );
     } on FirebaseException catch (e) {
       throw e.message!;
@@ -178,6 +162,7 @@ class ChatRepo {
   void _saveDataToContactsSubCollection(
       UserModel senderUserData,
       UserModel receiverUserData,
+      String receiverUserToken,
       String message,
       DateTime timeSent,
       String receiverUserId) async {
@@ -189,6 +174,8 @@ class ChatRepo {
       lastMessage: message,
       token: senderUserData.token,
       unreadMessagesCount: 0,
+      isBlocked: false,
+      isMuted: false,
     );
     await _users
         .doc(receiverUserId)
@@ -203,12 +190,98 @@ class ChatRepo {
       lastMessage: message,
       token: receiverUserData.token,
       unreadMessagesCount: 0,
+      isBlocked: false,
+      isMuted: false,
     );
     await _users
         .doc(senderUserData.uid)
         .collection(FirebaseConstants.chatsCollection)
         .doc(receiverUserData.uid)
         .set(senderChatContact.toMap());
+    if (!receiverChatContact.isBlocked) {
+      var data = {
+        'to': receiverUserToken,
+        'priority': 'high',
+        'notification': {
+          'title': senderUserData.name,
+          'body': message,
+        },
+        'data': {
+          'type': 'chat',
+          'id': senderUserData.uid,
+        },
+      };
+      await http.post(
+        Uri.parse('https://fcm.googleapis.com/fcm/send'),
+        body: jsonEncode(data),
+        headers: {
+          'Content-Type': 'application/json; charset=UTF-8',
+          'Authorization':
+              'key=AAAAGsP2NR8:APA91bHtsAcxrHePGTKReAcE5f5HvSHkmdWjUpdjqEWEBqjTRr3JGYqLbzNVzm9IZD6JLABdMpqPY9rH7xLrI2crH2fZOYcJFaMOsHY-jsEeC_rWMyYQjBEWXf88rWiDUeUbM_77h4gs',
+        },
+      );
+    }
+  }
+
+  void blockUserMessage(
+      String receiverUserUid,
+  ) {
+    _users
+        .doc(_auth.currentUser!.uid)
+        .collection(FirebaseConstants.chatsCollection)
+        .doc(receiverUserUid)
+        .update({'isBlocked': true});
+    // _users
+    //     .doc(receiverUserData.uid)
+    //     .collection(FirebaseConstants.chatsCollection)
+    //     .doc(senderUserData.uid)
+    //     .update({'isBlocked': true});
+  }
+
+  void unBlockUserMessage(
+      String receiverUserUid,
+      ) {
+    _users
+        .doc(_auth.currentUser!.uid)
+        .collection(FirebaseConstants.chatsCollection)
+        .doc(receiverUserUid)
+        .update({'isBlocked': false});
+    // _users
+    //     .doc(receiverUserData.uid)
+    //     .collection(FirebaseConstants.chatsCollection)
+    //     .doc(senderUserData.uid)
+    //     .update({'isBlocked': false});
+  }
+Stream<ChatContactModel> getReceiverChatContact(String receiverUserId) {
+    return _users
+        .doc(receiverUserId)
+        .collection(FirebaseConstants.chatsCollection)
+        .doc(_auth.currentUser!.uid)
+        .snapshots()
+        .map((event) {
+      return ChatContactModel.fromMap(event.data()!);
+    });
+  }
+  void muteUserMessage(
+      String receiverUserUid,
+
+  ) {
+    _users
+        .doc(_auth.currentUser!.uid)
+        .collection(FirebaseConstants.chatsCollection)
+        .doc(receiverUserUid)
+        .update({'isMuted': true});
+  }
+
+  void unMuteUserMessage(
+      String receiverUserUid,
+
+  ) {
+    _users
+        .doc(_auth.currentUser!.uid)
+        .collection(FirebaseConstants.chatsCollection)
+        .doc(receiverUserUid)
+        .update({'isMuted': false});
   }
 
   void _saveChatToMessagesSubCollection({
@@ -287,34 +360,8 @@ class ChatRepo {
         default:
           contactMsg = 'File';
       }
-      var data = {
-        'to': receiverUserToken,
-        'priority': 'high',
-        'notification': {
-          'title': senderUserData.name,
-          'body': contactMsg,
-        },
-        'data': {
-          'type': 'chat',
-          'id': senderUserData.uid,
-        },
-      };
-      await http.post(
-        Uri.parse('https://fcm.googleapis.com/fcm/send'),
-        body: jsonEncode(data),
-        headers: {
-          'Content-Type': 'application/json; charset=UTF-8',
-          'Authorization':
-              'key=AAAAGsP2NR8:APA91bHtsAcxrHePGTKReAcE5f5HvSHkmdWjUpdjqEWEBqjTRr3JGYqLbzNVzm9IZD6JLABdMpqPY9rH7xLrI2crH2fZOYcJFaMOsHY-jsEeC_rWMyYQjBEWXf88rWiDUeUbM_77h4gs',
-        },
-      );
-      _saveDataToContactsSubCollection(
-        senderUserData,
-        receiverUserData,
-        contactMsg,
-        timeSent,
-        receiverUserId,
-      );
+      _saveDataToContactsSubCollection(senderUserData, receiverUserData, contactMsg,
+          receiverUserId, timeSent, receiverUserToken);
 
       _saveChatToMessagesSubCollection(
         receiverUserId: receiverUserId,
@@ -398,7 +445,4 @@ class ChatRepo {
       throw e.toString();
     }
   }
-
-
-
 }
