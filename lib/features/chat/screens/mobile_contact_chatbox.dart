@@ -7,21 +7,14 @@ import '../bottom_chat_field.dart';
 import '../card/chats_list.dart';
 import '../controller/chat_controller.dart';
 
-class MobileContactChatScreen extends ConsumerStatefulWidget {
+class MobileContactChatScreen extends ConsumerWidget {
   final String uid;
   final String name;
   final String token;
-  final bool blocked;
-  final bool muted;
-  const MobileContactChatScreen({Key? key, required this.uid, required this.name, required this.token, required this.blocked, required this.muted}) : super(key: key);
+  const MobileContactChatScreen({super.key, required this.uid, required this.name, required this.token});
 
   @override
-  _MobileContactChatScreenState createState() => _MobileContactChatScreenState();
-}
-
-class _MobileContactChatScreenState extends ConsumerState<MobileContactChatScreen> {
-  @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
@@ -29,10 +22,9 @@ class _MobileContactChatScreenState extends ConsumerState<MobileContactChatScree
           onPressed: () {
             Routemaster.of(context).pop();
           },
-
         ),
         title: StreamBuilder<UserModel>(
-          stream: ref.read(authControllerProvider.notifier).getUserData(widget.uid),
+          stream: ref.read(authControllerProvider.notifier).getUserData(uid),
           builder: (context, snapshot) {
             if (snapshot.hasError) {
               return const Text('Something went wrong');
@@ -80,13 +72,11 @@ class _MobileContactChatScreenState extends ConsumerState<MobileContactChatScree
         actions: [
           PopupMenuButton(
             itemBuilder: (context) => [
-              PopupMenuItem(
-                value: widget.muted ? 'unMute' : 'mute',
-                child: Text(widget.muted ? 'Unmute' : 'Mute'),
+              const PopupMenuItem(
+                child: Text('Mute'),
               ),
-              PopupMenuItem(
-                value: widget.blocked ? 'unBlock' : 'block',
-                child: Text(widget.blocked ? 'Unblock' : 'Block'),
+              const PopupMenuItem(
+                child: Text('Block'),
               ),
               const PopupMenuItem(
                 value: 'deleteChat',
@@ -111,39 +101,19 @@ class _MobileContactChatScreenState extends ConsumerState<MobileContactChatScree
                         ),
                         TextButton(
                           child:
-                          const Text('Delete', style: TextStyle(color: Colors.red)),
+                              const Text('Delete', style: TextStyle(color: Colors.red)),
                           onPressed: () {
                             Navigator.of(dialogContext).pop();
                             Navigator.of(context).pop();
                             ref
                                 .read(chatControllerProvider.notifier)
-                                .deleteChat(widget.uid, context);
+                                .deleteChat(uid, context);
                           },
                         ),
                       ],
                     );
                   },
                 );
-              }
-              if (value == 'block') {
-                ref
-                    .read(chatControllerProvider.notifier)
-                    .blockUser(widget.uid);
-              }
-              if (value == 'mute') {
-                ref
-                    .read(chatControllerProvider.notifier)
-                    .muteUser(widget.uid);
-              }
-              if (value == 'unBlock') {
-                ref
-                    .read(chatControllerProvider.notifier)
-                    .unBlockUser(widget.uid);
-              }
-              if (value == 'unMute') {
-                ref
-                    .read(chatControllerProvider.notifier)
-                    .unMuteUser(widget.uid);
               }
             },
           ),
@@ -152,12 +122,11 @@ class _MobileContactChatScreenState extends ConsumerState<MobileContactChatScree
       body: Column(
         children: [
           Expanded(
-            child: ChatList(receiverId: widget.uid),
+            child: ChatList(receiverId: uid),
           ),
           BottomChatField(
-            receiverUserId: widget.uid,
-            receiverUserToken: widget.token,
-            blocked: widget.blocked,
+            receiverUserId: uid,
+            receiverUserToken: token,
           ),
         ],
       ),

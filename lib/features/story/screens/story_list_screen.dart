@@ -137,20 +137,26 @@ class _StoryListScreenState extends ConsumerState<StoryListScreen> {
                                                       backgroundImage: NetworkImage(
                                                           story.userProfilePic),
                                                     ),
-                                                    const SizedBox(height: 5),
-                                                    SizedBox(
-                                                      width: 160,
-                                                      child: Text(
-                                                        (story.userUid == user.uid)
-                                                            ? 'Your story'
-                                                            : story.username,
-                                                        textAlign: TextAlign.center,
-                                                        overflow: TextOverflow.ellipsis,
-                                                        style: GoogleFonts.poppins(
-                                                          color: Colors.white,
-                                                          fontSize: 12,
-                                                          fontWeight: FontWeight.bold,
-                                                        ),
+                                                    // Text(
+                                                    //   story.linkImage.length > 1
+                                                    //       ? '+${story.linkImage.length}'
+                                                    //       : '1 image',
+                                                    //   textAlign: TextAlign.center,
+                                                    //   style: GoogleFonts.poppins(
+                                                    //     color: Colors.white,
+                                                    //     fontSize: 16,
+                                                    //     fontWeight: FontWeight.bold,
+                                                    //   ),
+                                                    // ),
+                                                    Text(
+                                                      (story.userUid == user.uid)
+                                                          ? 'Your story'
+                                                          : story.username,
+                                                      textAlign: TextAlign.center,
+                                                      style: GoogleFonts.poppins(
+                                                        color: Colors.white,
+                                                        fontSize: 16,
+                                                        fontWeight: FontWeight.bold,
                                                       ),
                                                     ),
                                                   ],

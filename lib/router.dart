@@ -65,13 +65,11 @@ final loggedInRoute = RouteMap(routes: {
   '/story-view/:storyId': (routeData) => MaterialPage(
         child: StoryViewScreen(storyId: routeData.pathParameters['storyId']!),
       ),
-  '/chat/:name/:uid/:token/:blocked/:muted': (routeData) => MaterialPage(
+  '/chat/:name/:uid/:token': (routeData) => MaterialPage(
         child: MobileContactChatScreen(
           uid: routeData.pathParameters['uid']!,
           name: routeData.pathParameters['name']!,
           token: routeData.pathParameters['token']!,
-          blocked: routeData.pathParameters['blocked']! == 'true',
-          muted: routeData.pathParameters['muted']! == 'true',
         ),
       ),
   '/community-chat/:name': (routeData) => MaterialPage(
