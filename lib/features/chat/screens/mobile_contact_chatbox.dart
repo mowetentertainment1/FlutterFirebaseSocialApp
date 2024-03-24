@@ -22,6 +22,7 @@ class MobileContactChatScreen extends ConsumerWidget {
           onPressed: () {
             Routemaster.of(context).pop();
           },
+
         ),
         title: StreamBuilder<UserModel>(
           stream: ref.read(authControllerProvider.notifier).getUserData(uid),
