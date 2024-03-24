@@ -21,7 +21,7 @@ class SelectContactScreen extends SearchDelegate {
   @override
   Widget buildLeading(BuildContext context) {
     return IconButton(
-      onPressed: () => Navigator.pop(context),
+      onPressed: () =>  Routemaster.of(context).push('/'),
       icon: const Icon(Icons.arrow_back),
     );
   }

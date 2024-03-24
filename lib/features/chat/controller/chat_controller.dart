@@ -11,7 +11,6 @@ import '../../../model/chat_contact_model.dart';
 import '../../../model/message_model.dart';
 import '../../auth/controller/auth_controller.dart';
 import '../repository/chat_repo.dart';
-
 final chatControllerProvider = StateNotifierProvider<ChatController, bool>((ref) {
   final chatRepo = ref.watch(chatRepoProvider);
   final storageRepository = ref.watch(storageRepositoryProvider);
@@ -21,12 +20,18 @@ final chatControllerProvider = StateNotifierProvider<ChatController, bool>((ref)
     storageRepository: storageRepository,
   );
 });
-final chatStream = StreamProvider.family<List<MessageModel>, String>((ref, receiverUserId) {
+final chatStream =
+    StreamProvider.family<List<MessageModel>, String>((ref, receiverUserId) {
   return ref.read(chatControllerProvider.notifier).getChatStream(receiverUserId);
+});
+final getReceiverChatContact =
+    StreamProvider.family<ChatContactModel, String>((ref, receiverUserId) {
+  return ref.read(chatControllerProvider.notifier).getReceiverChatContact(receiverUserId);
 });
 final getUnreadMessagesCount = StreamProvider<int>((ref) {
   return ref.read(chatControllerProvider.notifier).getUnreadMessagesCount();
 });
+
 class ChatController extends StateNotifier<bool> {
   final ChatRepo _chatRepo;
   final Ref _ref;
@@ -34,9 +39,16 @@ class ChatController extends StateNotifier<bool> {
   Stream<List<ChatContactModel>> chatContactList() {
     return _chatRepo.getChatContacts();
   }
+
+  Stream<ChatContactModel> getReceiverChatContact(String receiverUserId) {
+    return _chatRepo.getReceiverChatContact(receiverUserId);
+  }
+
   void updateReceiverUnreadMessagesCount(receiverUserId) {
     _chatRepo.updateReceiverUnreadMessagesCount(receiverUserId);
-  } void updateCurrentUnreadMessagesCount(receiverUserId) {
+  }
+
+  void updateCurrentUnreadMessagesCount(receiverUserId) {
     _chatRepo.updateCurrentUnreadMessagesCount(receiverUserId);
   }
 
@@ -49,8 +61,8 @@ class ChatController extends StateNotifier<bool> {
         _storageRepository = storageRepository,
         super(false);
 
-  void sendTextMessage(
-      BuildContext context, String message, String receiverUserId, String receiverUserToken) async {
+  void sendTextMessage(BuildContext context, String message, String receiverUserId,
+      String receiverUserToken) async {
     state = true;
     try {
       _ref.read(getCurrentUserDataProvider).whenData(
@@ -61,7 +73,6 @@ class ChatController extends StateNotifier<bool> {
               context: context,
               receiverUserToken: receiverUserToken,
             ),
-
           );
       state = false;
     } catch (e) {
@@ -72,6 +83,7 @@ class ChatController extends StateNotifier<bool> {
   Stream<List<MessageModel>> getChatStream(String receiverUserId) {
     return _chatRepo.getChatStream(receiverUserId);
   }
+
   Stream<int> getUnreadMessagesCount() {
     return _chatRepo.getTotalUnreadMessagesCount();
   }
@@ -157,14 +169,27 @@ class ChatController extends StateNotifier<bool> {
       showSnackBar(context, 'Deleted successfully!');
     });
   }
+
   void setChatMessageSeen(
-      String receiverUserId,
-      String messageId,
-      ) {
+    String receiverUserId,
+    String messageId,
+  ) {
     _chatRepo.setChatMessageSeen(
       receiverUserId,
       messageId,
     );
+  }
+  void blockUser(String receiverUserId) {
+    _chatRepo.blockUserMessage(receiverUserId);
+  }
+  void unBlockUser(String receiverUserId) {
+    _chatRepo.unBlockUserMessage(receiverUserId);
+  }
+  void muteUser(String receiverUserId) {
+    _chatRepo.muteUserMessage(receiverUserId);
+  }
+  void unMuteUser(String receiverUserId) {
+    _chatRepo.unMuteUserMessage(receiverUserId);
   }
 
 }
