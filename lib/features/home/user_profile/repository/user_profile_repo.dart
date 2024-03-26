@@ -113,5 +113,14 @@ class UserProfileRepo {
       throw Failure(e.toString());
     }
   }
+  Stream<List<UserModel>> getUserFollowers(String uid) {
+    return _users
+        .where("followers", arrayContains: uid)
+        .snapshots()
+        .map((event) => event.docs
+            .map((e) => UserModel.fromMap(e.data() as Map<String, dynamic>))
+            .toList());
+  }
+
 
 }

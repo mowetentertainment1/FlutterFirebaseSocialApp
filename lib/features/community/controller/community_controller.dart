@@ -9,21 +9,21 @@ import 'package:untitled/model/community_model.dart';
 import 'package:untitled/model/post_model.dart';
 
 import '../../../core/enums/enums.dart';
+import '../../../core/enums/notification_enums.dart';
 import '../../../core/failure.dart';
 import '../../../core/providers/storage_repository_provider.dart';
 import '../../../core/utils.dart';
+import '../../../model/notification_model.dart';
 import '../../auth/controller/auth_controller.dart';
 import '../../home/user_profile/controller/user_profile_controller.dart';
+import '../../notification/repository/notification_repo.dart';
 import '../repository/community_repo.dart';
 
 final userCommunitiesProvider = StreamProvider((ref) {
   return ref.watch(communityControllerProvider.notifier).getCommunities();
 });
-final communityNameProvider =
-    StreamProvider.family((ref, String communityName) {
-  return ref
-      .watch(communityControllerProvider.notifier)
-      .getCommunityName(communityName);
+final communityNameProvider = StreamProvider.family((ref, String communityName) {
+  return ref.watch(communityControllerProvider.notifier).getCommunityName(communityName);
 });
 
 final communityControllerProvider =
@@ -31,6 +31,7 @@ final communityControllerProvider =
   return CommunityController(
       communityRepo: ref.watch(communityRepoProvider),
       ref: ref,
+      notificationRepo: ref.watch(notificationRepoProvider),
       storageRepository: ref.watch(storageRepositoryProvider));
 });
 
@@ -48,6 +49,7 @@ final getCommunityPostsProvider = StreamProvider.family((ref, String name) {
 
 class CommunityController extends StateNotifier<bool> {
   final CommunityRepo _communityRepo;
+  final NotificationRepo _notificationRepo;
 
   final Ref _ref;
 
@@ -57,9 +59,11 @@ class CommunityController extends StateNotifier<bool> {
     required CommunityRepo communityRepo,
     required Ref ref,
     required StorageRepository storageRepository,
+    required NotificationRepo notificationRepo,
   })  : _communityRepo = communityRepo,
         _ref = ref,
         _storageRepository = storageRepository,
+        _notificationRepo = notificationRepo,
         super(false);
 
   void createCommunity(String name, String des, BuildContext context) async {
@@ -76,10 +80,8 @@ class CommunityController extends StateNotifier<bool> {
     final res = await _communityRepo.createCommunity(community);
     res.fold(
         (l) => showSnackBar(context, l.message),
-        (r) => {
-              showSnackBar(context, "Community created."),
-              Routemaster.of(context).pop()
-            });
+        (r) =>
+            {showSnackBar(context, "Community created."), Routemaster.of(context).pop()});
     state = false;
   }
 
@@ -99,8 +101,7 @@ class CommunityController extends StateNotifier<bool> {
                   }
                 else
                   {
-                    showSnackBar(
-                        context, " Joined community ${community.name}"),
+                    showSnackBar(context, " Joined community ${community.name}"),
                   }
               });
     }
@@ -146,10 +147,8 @@ class CommunityController extends StateNotifier<bool> {
     state = false;
     res.fold(
         (l) => showSnackBar(context, l.message),
-        (r) => {
-              showSnackBar(context, "Community edited."),
-              Routemaster.of(context).pop()
-            });
+        (r) =>
+            {showSnackBar(context, "Community edited."), Routemaster.of(context).pop()});
   }
 
   void deleteCommunity(String communityName, BuildContext context) async {
@@ -167,27 +166,66 @@ class CommunityController extends StateNotifier<bool> {
     state = false;
     res.fold(
         (l) => showSnackBar(context, l.message),
-        (r) => {
-              showSnackBar(context, "Community deleted."),
-              Routemaster.of(context).pop()
-            });
-
+        (r) =>
+            {showSnackBar(context, "Community deleted."), Routemaster.of(context).pop()});
   }
 
   Stream<List<CommunityModel>> searchCommunity(String query) {
     return _communityRepo.searchCommunity(query);
   }
 
-  void addMods(
-      String communityName, List<String> uids, BuildContext context) async {
+  void inviteUser(String communityName, List<String> uids, BuildContext context) async {
+    state = true;
+    final user = _ref.read(userProvider)!;
+    for (var uid in uids) {
+      final NotificationModel notification = NotificationModel(
+        id: communityName,
+        type: NotificationEnum.invite,
+        name: user.name,
+        createdAt: DateTime.now(),
+        uid: uid,
+        profilePic: user.profilePic,
+        text: '${user.name} invited you to join $communityName.',
+        isRead: false,
+      );
+      final res = await _notificationRepo.sendNotification(
+        notification: notification,
+      );
+      res.fold(
+        (l) => showSnackBar(context, l.message),
+        (r) {
+          state = false;
+          showSnackBar(context, "Invitation sent.");
+          Routemaster.of(context).pop();
+        },
+      );
+    }
+  }
+
+  void addMods(String communityName, List<String> uids, BuildContext context) async {
     state = true;
     final res = await _communityRepo.addMod(communityName, uids);
-    res.fold(
-        (l) => showSnackBar(context, l.message),
-        (r) => {
-              showSnackBar(context, "Mod added."),
-              Routemaster.of(context).pop()
-            });
+    res.fold((l) => showSnackBar(context, l.message), (r) {
+      final user = _ref.read(userProvider)!;
+
+      for (var uid in uids) {
+        final NotificationModel notification = NotificationModel(
+          id: communityName,
+          type: NotificationEnum.invite,
+          name: user.name,
+          createdAt: DateTime.now(),
+          uid: uid,
+          profilePic: user.profilePic,
+          text: '${user.name} added you as mod to $communityName.',
+          isRead: false,
+        );
+        _notificationRepo.sendNotification(
+          notification: notification,
+        );
+      }
+      showSnackBar(context, "Mod added.");
+      Routemaster.of(context).pop();
+    });
     state = false;
   }
 

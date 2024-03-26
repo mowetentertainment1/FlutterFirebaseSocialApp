@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../model/comment_model.dart';
-import '../../../theme/palette.dart';
 import '../../auth/controller/auth_controller.dart';
 
 class CommentCard extends ConsumerWidget {

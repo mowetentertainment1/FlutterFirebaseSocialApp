@@ -4,6 +4,7 @@ import 'package:untitled/features/community/screens/add_mods_sreen.dart';
 import 'package:untitled/features/community/screens/community_screen.dart';
 import 'package:untitled/features/community/screens/create_community_screen.dart';
 import 'package:untitled/features/community/screens/edit_community_screen.dart';
+import 'package:untitled/features/community/screens/invite_screen.dart';
 import 'package:untitled/features/community/screens/mod_tool_screen.dart';
 import 'package:untitled/features/home/screens/tab_bar.dart';
 import 'package:untitled/features/home/user_profile/screens/edit_profile_screen.dart';
@@ -38,6 +39,8 @@ final loggedInRoute = RouteMap(routes: {
           EditCommunityScreen(communityName: routeData.pathParameters['communityName']!)),
   '/r/:communityName/mod-tools/add_mods': (routeData) => MaterialPage(
       child: AddModsScreen(communityName: routeData.pathParameters['communityName']!)),
+  '/r/:communityName/invite': (routeData) => MaterialPage(
+      child: InviteScreen(communityName: routeData.pathParameters['communityName']!)),
   '/u/:name/:uid/:token': (routeData) => MaterialPage(
         child: UserProfileScreen(
           uid: routeData.pathParameters['uid']!,
@@ -72,7 +75,7 @@ final loggedInRoute = RouteMap(routes: {
           token: routeData.pathParameters['token']!,
         ),
       ),
-  '/community-chat/:name': (routeData) => MaterialPage(
+  '/chats/:name': (routeData) => MaterialPage(
         child: MobileCommunityChatScreen(
           name: routeData.pathParameters['name']!,
         ),

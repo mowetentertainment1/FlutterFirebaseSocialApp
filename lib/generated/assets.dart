@@ -84,6 +84,7 @@ class Assets {
   static const String screensEditCommunityScreen = 'lib/features/community/screens/edit_community_screen.dart';
   static const String screensEditPostScreen = 'lib/features/post/screens/edit_post_screen.dart';
   static const String screensEditProfileScreen = 'lib/features/home/user_profile/screens/edit_profile_screen.dart';
+  static const String screensInviteScreen = 'lib/features/community/screens/invite_screen.dart';
   static const String screensLoginScreen = 'lib/features/auth/screens/login_screen.dart';
   static const String screensMobileCommunityChatbox = 'lib/features/chat/screens/mobile_community_chatbox.dart';
   static const String screensMobileContactChatbox = 'lib/features/chat/screens/mobile_contact_chatbox.dart';

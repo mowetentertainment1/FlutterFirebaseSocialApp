@@ -3,7 +3,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:routemaster/routemaster.dart';
 import 'package:untitled/features/chat/card/community_message_list.dart';
 import 'package:untitled/model/community_model.dart';
-import '../../../core/colors.dart';
 import '../../community/controller/community_controller.dart';
 import '../controller/chat_controller.dart';
 import 'community_bottom_chat_field.dart';

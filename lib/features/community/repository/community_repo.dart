@@ -11,15 +11,18 @@ import '../../../core/providers/storage_repository_provider.dart';
 import '../../../model/post_model.dart';
 
 final communityRepoProvider = Provider((ref) {
-  return CommunityRepo(firestore: ref.watch(firestoreProvider), storageRepository: ref.watch(storageRepositoryProvider));
+  return CommunityRepo(
+      firestore: ref.watch(firestoreProvider),
+      storageRepository: ref.watch(storageRepositoryProvider));
 });
 
 class CommunityRepo {
   final FirebaseFirestore _firestore;
-  final StorageRepository _storageRepository;
 
-  CommunityRepo({required FirebaseFirestore firestore,required StorageRepository storageRepository})
-      : _storageRepository = storageRepository,_firestore = firestore;
+  CommunityRepo(
+      {required FirebaseFirestore firestore,
+      required StorageRepository storageRepository})
+      : _firestore = firestore;
 
   FutureVoid createCommunity(CommunityModel community) async {
     try {
@@ -36,10 +39,7 @@ class CommunityRepo {
   }
 
   Stream<List<CommunityModel>> getCommunities(String uid) {
-    return _communities
-        .where("members", arrayContains: uid)
-        .snapshots()
-        .map((event) {
+    return _communities.where("members", arrayContains: uid).snapshots().map((event) {
       List<CommunityModel> communities = [];
       for (var doc in event.docs) {
         communities.add(CommunityModel.fromMap(doc.data() as Map<String, dynamic>));
@@ -63,6 +63,7 @@ class CommunityRepo {
       return left(Failure(e.toString()));
     }
   }
+
   FutureVoid leaveCommunity(String communityName, String uid) async {
     try {
       var communityDoc = await _communities.doc(communityName).get();
@@ -80,8 +81,10 @@ class CommunityRepo {
   }
 
   Stream<CommunityModel> getCommunityName(String communityName) {
-    return _communities.doc(communityName).snapshots().map(
-        (event) => CommunityModel.fromMap(event.data() as Map<String, dynamic>));
+    return _communities
+        .doc(communityName)
+        .snapshots()
+        .map((event) => CommunityModel.fromMap(event.data() as Map<String, dynamic>));
   }
 
   FutureVoid editCommunity(CommunityModel community) async {
@@ -120,24 +123,24 @@ class CommunityRepo {
       if (!communityDoc.exists) {
         throw Exception("Community doesn't exists");
       }
-      return right(_communities.doc(communityName).update({
-        "mods": uids
-      }));
+      return right(_communities.doc(communityName).update({"mods": uids}));
     } on FirebaseException catch (e) {
       throw e.message!;
     } catch (e) {
       return left(Failure(e.toString()));
     }
   }
+
   Stream<List<PostModel>> getCommunityPosts(String communityName) {
     return _posts
         .where("communityName", isEqualTo: communityName)
         .orderBy("createdAt", descending: true)
         .snapshots()
         .map((event) => event.docs
-        .map((e) => PostModel.fromMap(e.data() as Map<String, dynamic>))
-        .toList());
+            .map((e) => PostModel.fromMap(e.data() as Map<String, dynamic>))
+            .toList());
   }
+
   FutureVoid deleteCommunity(String communityName) async {
     try {
       var communityDoc = await _communities.doc(communityName).get();
@@ -148,10 +151,9 @@ class CommunityRepo {
       }
 
       for (var post in posts.docs) {
-        List<String> urls = ((post.data() as Map<String, dynamic>)["linkImage"] as List<String>?) ?? [];
+        List<String> urls =
+            ((post.data() as Map<String, dynamic>)["linkImage"] as List<String>?) ?? [];
         await post.reference.delete();
-        // final imageDelRes = await _storageRepository.deleteMultipleFiles(urls: urls);
-        // imageDelRes.fold((l) => throw Exception(l.message), (r) => {});
       }
 
       return right(_communities.doc(communityName).delete());
@@ -161,7 +163,6 @@ class CommunityRepo {
       throw Failure(e.toString());
     }
   }
-
 
   CollectionReference get _posts => _firestore.collection("posts");
   CollectionReference get _communities =>

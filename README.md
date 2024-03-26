@@ -3,7 +3,8 @@
 Amigo is a fully functional social media app with multiple features built with flutter and dart.
 
 Star⭐ the repo if you like what you see😉.
-
+## DEMO + App release
+https://drive.google.com/drive/folders/1cp5wFR1yv7yc6il8DqZxIZwWxI41v61m?usp=sharing
 ## ✨ Requirements
 
 * Any Operating System (ie. MacOS X, Linux, Windows)

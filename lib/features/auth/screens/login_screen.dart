@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:untitled/core/common/loader.dart';
 import 'package:untitled/core/common/sight_in_btn.dart';
 import 'package:untitled/responsive/responsive.dart';
 
@@ -16,10 +15,7 @@ class LoginScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final isLoading = ref.watch(authControllerProvider);
-    return isLoading
-        ? const Loader()
-        : Scaffold(
+    return Scaffold(
             appBar: AppBar(
               actions: [
                 TextButton(
@@ -37,9 +33,7 @@ class LoginScreen extends ConsumerWidget {
                 ),
               ],
             ),
-            body: isLoading
-                ? const Loader()
-                : Column(children: [
+            body: Column(children: [
                     const SizedBox(height: 60),
                     Padding(
                       padding: const EdgeInsets.all(8.0),

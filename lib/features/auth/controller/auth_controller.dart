@@ -11,7 +11,7 @@ final authControllerProvider =
           authRepository: ref.watch(authRepositoryProvider),
           ref: ref,
         ));
-final authStateChangeProvider = StreamProvider((ref) {
+  final authStateChangeProvider = StreamProvider((ref) {
   final authController = ref.watch(authControllerProvider.notifier);
   return authController.authStateChanges;
 });
