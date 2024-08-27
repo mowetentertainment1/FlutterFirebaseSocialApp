@@ -129,6 +129,7 @@ class _BottomChatFieldState extends ConsumerState<BottomChatField> {
       ),
       color: mobileChatBoxColor,
       child: Column(
+
         children: [
           Row(
             children: [

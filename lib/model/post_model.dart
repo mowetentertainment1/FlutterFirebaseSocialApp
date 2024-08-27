@@ -113,7 +113,7 @@ class PostModel {
 
   @override
   String toString() {
-    return 'Post(id: $id, title: $title, linkImage: $linkImage, linkVideo: $linkVideo, communityName: $communityName, communityProfilePic: $communityProfilePic, upvotes: $upvotes, downvotes: $downvotes, commentCount: $commentCount, username: $username, userUid: $userUid, userProfilePic: $userProfilePic, type: $type, createdAt: $createdAt, awards: $awards)';
+    return 'Post(id: $id, title: $title, linkImage: $linkImage, linkVideo: $linkVideo, communityName: $communityName, communityProfilePic: $communityProfilePic, upvotes: $upvotes, downvotes: $downvotes, commentCount: $commentCount, username: $username, userUid: $userUid, userProfilePic: $userProfilePic, type: $type, createdAt: $createdAt, awards: $awards,)';
   }
 
   @override
@@ -140,19 +140,19 @@ class PostModel {
   @override
   int get hashCode {
     return id.hashCode ^
-    title.hashCode ^
-    linkImage.hashCode ^
-    linkVideo.hashCode ^
-    communityName.hashCode ^
-    communityProfilePic.hashCode ^
-    upvotes.hashCode ^
-    downvotes.hashCode ^
-    commentCount.hashCode ^
-    username.hashCode ^
-    userUid.hashCode ^
-    userProfilePic.hashCode ^
-    type.hashCode ^
-    createdAt.hashCode ^
-    awards.hashCode;
+        title.hashCode ^
+        linkImage.hashCode ^
+        linkVideo.hashCode ^
+        communityName.hashCode ^
+        communityProfilePic.hashCode ^
+        upvotes.hashCode ^
+        downvotes.hashCode ^
+        commentCount.hashCode ^
+        username.hashCode ^
+        userUid.hashCode ^
+        userProfilePic.hashCode ^
+        type.hashCode ^
+        createdAt.hashCode ^
+        awards.hashCode;
   }
 }

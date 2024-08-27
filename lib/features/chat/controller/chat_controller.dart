@@ -21,12 +21,14 @@ final chatControllerProvider = StateNotifierProvider<ChatController, bool>((ref)
     storageRepository: storageRepository,
   );
 });
-final chatStream = StreamProvider.family<List<MessageModel>, String>((ref, receiverUserId) {
+final chatStream =
+    StreamProvider.family<List<MessageModel>, String>((ref, receiverUserId) {
   return ref.read(chatControllerProvider.notifier).getChatStream(receiverUserId);
 });
 final getUnreadMessagesCount = StreamProvider<int>((ref) {
   return ref.read(chatControllerProvider.notifier).getUnreadMessagesCount();
 });
+
 class ChatController extends StateNotifier<bool> {
   final ChatRepo _chatRepo;
   final Ref _ref;
@@ -34,9 +36,12 @@ class ChatController extends StateNotifier<bool> {
   Stream<List<ChatContactModel>> chatContactList() {
     return _chatRepo.getChatContacts();
   }
+
   void updateReceiverUnreadMessagesCount(receiverUserId) {
     _chatRepo.updateReceiverUnreadMessagesCount(receiverUserId);
-  } void updateCurrentUnreadMessagesCount(receiverUserId) {
+  }
+
+  void updateCurrentUnreadMessagesCount(receiverUserId) {
     _chatRepo.updateCurrentUnreadMessagesCount(receiverUserId);
   }
 
@@ -50,7 +55,11 @@ class ChatController extends StateNotifier<bool> {
         super(false);
 
   void sendTextMessage(
-      BuildContext context, String message, String receiverUserId, String receiverUserToken) async {
+    BuildContext context,
+    String message,
+    String receiverUserId,
+    String receiverUserToken,
+  ) async {
     state = true;
     try {
       _ref.read(getCurrentUserDataProvider).whenData(
@@ -61,7 +70,6 @@ class ChatController extends StateNotifier<bool> {
               context: context,
               receiverUserToken: receiverUserToken,
             ),
-
           );
       state = false;
     } catch (e) {
@@ -72,6 +80,7 @@ class ChatController extends StateNotifier<bool> {
   Stream<List<MessageModel>> getChatStream(String receiverUserId) {
     return _chatRepo.getChatStream(receiverUserId);
   }
+
   Stream<int> getUnreadMessagesCount() {
     return _chatRepo.getTotalUnreadMessagesCount();
   }
@@ -157,14 +166,14 @@ class ChatController extends StateNotifier<bool> {
       showSnackBar(context, 'Deleted successfully!');
     });
   }
+
   void setChatMessageSeen(
-      String receiverUserId,
-      String messageId,
-      ) {
+    String receiverUserId,
+    String messageId,
+  ) {
     _chatRepo.setChatMessageSeen(
       receiverUserId,
       messageId,
     );
   }
-
 }

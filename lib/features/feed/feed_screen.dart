@@ -63,7 +63,8 @@ class FeedScreen extends ConsumerWidget {
                   ),
                   onPressed: () => displayEndDrawer(context),
                 );
-              })
+              }
+              )
             ],
           ),
           body: ref.watch(userCommunitiesProvider).when(

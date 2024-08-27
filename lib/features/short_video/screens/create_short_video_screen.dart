@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:routemaster/routemaster.dart';
 import 'package:video_player/video_player.dart';
 
 import '../controller/short_video_controller.dart';
@@ -61,6 +60,9 @@ void uploadVideo(String songName, String caption, String videoPath) async {
   Widget build(BuildContext context) {
    final isLoading = ref.watch(shortVideoControllerProvider);
     return Scaffold(
+      appBar: AppBar(
+        title: const Text('Create Short Video'),
+      ),
       body: SingleChildScrollView(
         child: Column(
           children: [
